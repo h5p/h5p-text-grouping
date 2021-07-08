@@ -1,0 +1,22 @@
+[
+    {
+        "name": "behaviour",
+        "type": "group",
+        "label": "Behavioural settings",
+        "importance": "low",
+        "description": "These options will let you control how the task behaves.",
+        "fields": [
+
+        ]
+    },
+    {
+        "name": "l10n",
+        "type": "group",
+        "common": true,
+        "label": "User interface",
+        "importance": "low",
+        "fields": [
+
+        ]
+    }
+]
