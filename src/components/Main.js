@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function Main() {
+export default function Main(context) {
+
   //Dummy return statement
   return (
     <div>
