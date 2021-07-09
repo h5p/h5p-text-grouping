@@ -7,7 +7,6 @@ import './Button.scss';
  * @param params Parameters
  */
 export default function Button(params) {
-
-  //TODO: Dummy return statement
+  // TODO: Dummy return statement
   return (<div/>);
 }

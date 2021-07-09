@@ -4,8 +4,7 @@ import './Dropzone.scss';
 /**
  * A Dropzone indicating where textItems can be dragged to.
  */
- export default function Dropzone() {
-
-  //TODO: Dummy return statement
+export default function Dropzone() {
+  // TODO: Dummy return statement
   return (<div/>);
 }

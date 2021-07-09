@@ -52,7 +52,7 @@ H5P.TextGrouping = (() => {
     }
 
     const wrapper = document.createElement('div');
-    const main = (<div><Main context={context}/></div>)
+    const main = (<div><Main context={context}/></div>);
     this.setContent(ReactDOM.render(
       main,
       wrapper

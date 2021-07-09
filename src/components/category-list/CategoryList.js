@@ -6,8 +6,7 @@ import './CategoryList.scss';
  * determines their top-level layout and logic.
  * @param params Parameters
  */
- export default function CategoryList(params) {
-
-  //TODO: Dummy return statement
+export default function CategoryList(params) {
+  // TODO: Dummy return statement
   return (<div/>);
 }

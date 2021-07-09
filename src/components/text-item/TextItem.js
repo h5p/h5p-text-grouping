@@ -8,8 +8,7 @@ import './TextItem.scss';
  * and a button to move to a different category.
  * @param params Parameters
  */
- export default function TextItem(params) {
-
-  //TODO: Dummy return statement
+export default function TextItem(params) {
+  // TODO: Dummy return statement
   return (<div/>);
 }

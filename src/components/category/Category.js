@@ -7,8 +7,7 @@ import './Category.scss';
  * for collapsing and adding other TextElements.
  * @param params Parameters
  */
- export default function Category(params) {
-
-  //TODO: Dummy return statement
+export default function Category(params) {
+  // TODO: Dummy return statement
   return (<div/>);
 }
