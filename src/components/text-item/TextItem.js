@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './TextItem.scss';
 
 /**
@@ -6,9 +8,13 @@ import './TextItem.scss';
  * place in the correct category.
  * It renders the text received through parameters,
  * and a button to move to a different category.
- * @param params Parameters
+ * @param props Props object
+ * @returns {JSX.Element} A single text item element
  */
-export default function TextItem(params) {
-  // TODO: Dummy return statement
-  return (<p>Text Item</p>);
+export default function TextItem({ text }) {
+  return <div dangerouslySetInnerHTML={{ __html: text }} />;
 }
+
+TextItem.propTypes = {
+  text: PropTypes.string.isRequired
+};

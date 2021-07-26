@@ -18,7 +18,7 @@ export default function Main({ context }) {
       {categories.map((category, index) => (
         <Category key={`category-${index}`} title={category.groupName}>
           {category.textElements.map((textItem, index) => (
-            <TextItem key={`textItem-${index}`} />
+            <TextItem key={`textItem-${index}`} text={textItem} />
           ))}
         </Category>
       ))}
