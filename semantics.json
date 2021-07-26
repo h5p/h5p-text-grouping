@@ -268,6 +268,158 @@
         "label": "Hover text for the Move to Category button",
         "importance": "low",
         "default": "Move to category"
+      },
+      {
+        "name": "checkAnswerButtonText",
+        "type": "text",
+        "label": "Text for \"Check\" button",
+        "importance": "low",
+        "default": "Check"
+      },
+      {
+        "name": "checkAnswer",
+        "type": "text",
+        "label": "Assistive technology description for \"Check\" button",
+        "importance": "low",
+        "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+      },
+      {
+        "name": "showSolutionButtonText",
+        "type": "text",
+        "label": "Text for \"Show solution\" button",
+        "importance": "low",
+        "default": "Show solution"
+      },
+      {
+        "name": "showSolution",
+        "type": "text",
+        "label": "Assistive technology description for \"Show Solution\" button",
+        "importance": "low",
+        "default": "Show the solution. The correct options will be marked."
+      },
+      {
+        "name": "correctAnswer",
+        "type": "text",
+        "label": "Correct Answer (not displayed)",
+        "importance": "low",
+        "default": "Correct answer"
+      },
+      {
+        "name": "wrongAnswer",
+        "type": "text",
+        "label": "Wrong Answer (not displayed)",
+        "importance": "low",
+        "default": "Wrong answer"
+      },
+      {
+        "label": "Text for \"Requires answer\" message",
+        "importance": "low",
+        "name": "noAnswer",
+        "type": "text",
+        "default": "Please answer before viewing the solution",
+        "optional": true
+      },
+      {
+        "name": "retryText",
+        "type": "text",
+        "label": "Text for \"Retry\" button",
+        "importance": "low",
+        "default": "Retry"
+      },
+      {
+        "name": "retry",
+        "type": "text",
+        "label": "Assistive technology description for \"Retry\" button",
+        "importance": "low",
+        "default": "Retry the task. Reset all responses and start the task over again."
+      },
+      {
+        "name": "result",
+        "type": "text",
+        "label": "Your result",
+        "description": ":num and :total are variables and will be replaced by their respective values.",
+        "importance": "low",
+        "default": "You got :num out of :total points"
+      },
+      {
+        "label": "Check confirmation dialog",
+        "importance": "low",
+        "name": "confirmCheck",
+        "type": "group",
+        "common": "true",
+        "fields": [
+          {
+            "label": "Header text",
+            "importance": "low",
+            "name": "header",
+            "type": "text",
+            "default": "Finish?"
+          },
+          {
+            "label": "Body text",
+            "importance": "low",
+            "name": "body",
+            "type": "text",
+            "default": "Are you sure you want to finish?",
+            "widget": "html",
+            "enterMode": "p",
+            "tags": ["strong", "em", "del", "u", "code"]
+          },
+          {
+            "label": "Cancel button label",
+            "importance": "low",
+            "name": "cancelLabel",
+            "type": "text",
+            "default": "Cancel"
+          },
+          {
+            "label": "Confirm button label",
+            "importance": "low",
+            "name": "confirmLabel",
+            "type": "text",
+            "default": "Finish"
+          }
+        ]
+      },
+      {
+        "label": "Retry confirmation dialog",
+        "importance": "low",
+        "name": "confirmRetry",
+        "type": "group",
+        "common": true,
+        "fields": [
+          {
+            "label": "Header text",
+            "importance": "low",
+            "name": "header",
+            "type": "text",
+            "default": "Retry?"
+          },
+          {
+            "label": "Body text",
+            "importance": "low",
+            "name": "body",
+            "type": "text",
+            "default": "Are you sure you wish to retry?",
+            "widget": "html",
+            "enterMode": "p",
+            "tags": ["strong", "em", "del", "u", "code"]
+          },
+          {
+            "label": "Cancel button label",
+            "importance": "low",
+            "name": "cancelLabel",
+            "type": "text",
+            "default": "Cancel"
+          },
+          {
+            "label": "Confirm button label",
+            "importance": "low",
+            "name": "confirmLabel",
+            "type": "text",
+            "default": "Retry"
+          }
+        ]
       }
     ]
   }
