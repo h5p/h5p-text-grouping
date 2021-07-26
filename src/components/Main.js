@@ -15,16 +15,32 @@ import './Main.scss';
  */
 export default function Main({ context }) {
   const categories = context.params.textGroups;
+  const uncategorized = context.params.distractorGroup;
+  // TODO: get uncategorized title from l10n
   return (
-    <CategoryList
-      categories={categories.map((category, index) => (
-        <Category key={`category-${index}`} title={category.groupName}>
-          {category.textElements.map((textItem, index) => (
-            <TextItem key={`textItem-${index}`} displayedText={textItem} />
+    <div>
+      <CategoryList
+        categories={categories.map((category, index) => (
+          <Category key={`category-${index}`} title={category.groupName}>
+            {category.textElements.map((textItem, index) => (
+              <TextItem key={`textItem-${index}`} displayedText={textItem} />
+            ))}
+          </Category>
+        ))}
+      ></CategoryList>
+      <div className="uncategorized">
+        <div className="uncategorized-heading">
+          <strong>Uncategorized</strong>
+        </div>
+        <ul className="uncategorized-list">
+          {uncategorized.map((textItem, index) => (
+            <li key={index}>
+              <TextItem displayedText={textItem} />
+            </li>
           ))}
-        </Category>
-      ))}
-    ></CategoryList>
+        </ul>
+      </div>
+    </div>
   );
 }
 
