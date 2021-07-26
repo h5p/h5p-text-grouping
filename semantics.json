@@ -34,13 +34,74 @@
     ]
   },
   {
-    "name": "question",
-    "type": "text",
+    "name": "textGroups",
+    "type": "list",
     "importance": "high",
-    "widget": "html",
-    "label": "Question",
+    "label": "Text groups",
+    "entity": "option",
     "enterMode": "p",
-    "tags": ["strong", "em", "sub", "sup", "h2", "h3", "pre", "code"]
+    "min": 1,
+    "defaultNum": 2,
+    "field": {
+      "name": "textGroup",
+      "type": "group",
+      "label": "Group",
+      "importance": "high",
+      "fields": [
+        {
+          "name": "groupName",
+          "type": "text",
+          "importance": "medium",
+          "widget": "html",
+          "label": "Group name",
+          "tags": ["strong", "em", "sub", "sup", "code"]
+        },
+        {
+          "name": "textElements",
+          "type": "list",
+          "importance": "medium",
+          "label": "Words/paragraphs",
+          "entity": "option",
+          "enterMode": "p",
+          "min": 1,
+          "defaultNum": 1,
+          "field": {
+            "name": "textElement",
+            "type": "text",
+            "importance": "medium",
+            "widget": "html",
+            "label": "Word/paragraph",
+            "tags": ["strong", "em", "sub", "sup", "code"]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "distractorGroup",
+    "type": "group",
+    "label": "Words with no category",
+    "importance": "high",
+    "fields": [
+      {
+        "name": "distractorElements",
+        "type": "list",
+        "importance": "medium",
+        "label": "Words/paragraphs",
+        "entity": "option",
+        "enterMode": "p",
+        "min": 1,
+        "defaultNum": 1,
+        "field": {
+          "name": "distractorElement",
+          "type": "text",
+          "importance": "medium",
+          "widget": "html",
+          "label": "Word/paragraph",
+          "tags": ["strong", "em", "sub", "sup", "code"]
+        }
+      }
+    ]
   },
   {
     "name": "overallFeedback",
