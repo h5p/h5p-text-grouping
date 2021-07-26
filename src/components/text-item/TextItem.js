@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import './TextItem.scss';
-import PropTypes from 'prop-types';
 import Button from '../commons/Button';
 
 /**
@@ -23,7 +21,7 @@ export default function TextItem({displayedText}) {
   return (
     <div className='text-item-border'>
       <div className='text-item'>
-        {displayedText}
+        <div dangerouslySetInnerHTML={{__html: displayedText}}/>
         <Button iconName='icon-move-to-category' className='button-move-to-category'
         ariaLabel={'Move to category'} hoverText='Move to category' onClick={moveToCategory}/>
       </div>
