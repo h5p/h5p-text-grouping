@@ -21,7 +21,11 @@ export default function Category({ title, children }) {
         <strong>{heading}</strong>
       </p>
       <hr />
-      <div className="content">{children}</div>
+      <ul className="content">
+        {children.map((child, index) => (
+          <li key={index}>{child}</li>
+        ))}
+      </ul>
     </div>
   );
 }
