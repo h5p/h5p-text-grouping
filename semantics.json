@@ -247,6 +247,28 @@
     "common": true,
     "label": "User interface",
     "importance": "low",
-    "fields": []
+    "fields": [
+      {
+        "name": "uncategorizedLabel",
+        "type": "text",
+        "label": "Label for the group of distractor words",
+        "importance": "low",
+        "default": "Uncategorized"
+      },
+      {
+        "name": "ariaMoveToCategory",
+        "type": "text",
+        "label": "Aria label for the Move to Category button",
+        "importance": "low",
+        "default": "Move to category"
+      },
+      {
+        "name": "hoverMoveToCategory",
+        "type": "text",
+        "label": "Hover text for the Move to Category button",
+        "importance": "low",
+        "default": "Move to category"
+      }
+    ]
   }
 ]

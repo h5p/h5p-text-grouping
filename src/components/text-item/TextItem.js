@@ -10,20 +10,19 @@ import Button from '../commons/Button';
  * and a button to move to a different category.
  * @param {String} displayedText the text to be displayed
  */
-export default function TextItem({displayedText}) {
+export default function TextItem({displayedText, buttonAriaLabel, buttonHoverText}) {
 
   let moveToCategory = () => {
     // TODO: Dummy function
     console.log('Move to category button pressed');
   }
 
-  //TODO: get aria and hover text from l10n instead of hard code
   return (
     <div className='text-item-border'>
       <div className='text-item'>
         <div dangerouslySetInnerHTML={{__html: displayedText}}/>
         <Button iconName='icon-move-to-category' className='button-move-to-category'
-        ariaLabel={'Move to category'} hoverText='Move to category' onClick={moveToCategory}/>
+        ariaLabel={buttonAriaLabel} hoverText={buttonHoverText} onClick={moveToCategory}/>
       </div>
     </div>
     );
