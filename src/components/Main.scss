@@ -7,7 +7,7 @@
 }
 
 .uncategorized-heading {
-  padding: 0em 0.5em;
+  padding: 0.7em 0.5em 0em;
   overflow-wrap: anywhere;
 }
 
@@ -16,6 +16,10 @@
   list-style-type: none;
 
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 1fr;
   column-gap: 0.01em;
+
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 }
