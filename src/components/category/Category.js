@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import exact from 'prop-types-exact';
 
 import './Category.scss';
 
@@ -30,7 +29,7 @@ export default function Category({ title, children }) {
   );
 }
 
-Category.propTypes = exact({
+Category.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(PropTypes.element)
-});
+};
