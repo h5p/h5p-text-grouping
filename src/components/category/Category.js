@@ -7,18 +7,16 @@ import './Category.scss';
  * A Category renders a list of TextElements received
  * through parameters, a dropzone, a title and buttons
  * for collapsing and adding other TextElements.
- * @param {object} props Props object containing
- * @param {string} props.title The name of the category
- * @param {JSX.Element[]} props.children Elements to be rendered inside the category
+ * @param {object} props Props object
  * @returns {JSX.Element} A single category element
  */
 export default function Category({ title, children }) {
-  const heading = `${title} (${children.length})`;
+  const titleWithChildCount = `${title} (${children.length})`;
   return (
     <div className="category">
-      <p className="heading">
-        <strong>{heading}</strong>
-      </p>
+      <div className="heading">
+        <strong>{titleWithChildCount}</strong>
+      </div>
       <hr />
       <ul className="content">
         {children.map((child, index) => (

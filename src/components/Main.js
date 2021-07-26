@@ -1,24 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Category from './category/Category';
-import CategoryList from './category-list/CategoryList';
 import './Main.scss';
 import TextItem from './text-item/TextItem';
 
+import './Main.scss';
 /**
  * A component that defines the top-level layout and
  * functionality.
- * @param {object} context
- * @returns the main content to be displayed
+ * @param {object} props Props object
+ * @returns {JSX.Element} the main content to be displayed
  */
-export default function Main(context) {
-  // Dummy return statement
-  const categories = [
-    <Category key='category1' title='Category 1'><TextItem/><TextItem/><TextItem/></Category>,
-    <Category key='category2' title='Category 2'><TextItem/><TextItem/></Category>,
-    <Category key='category3' title='Category 3'><TextItem/><TextItem/><TextItem/></Category>,
-    <Category key='category4' title='Category 4'><TextItem/><TextItem/></Category>
-  ];
+export default function Main({ context }) {
+  const categories = context.params.textGroups;
   return (
-    <CategoryList title="Categories" categories={categories}/>
+    <div>
+      {categories.map((category, index) => (
+        <Category key={`category-${index}`} title={category.groupName}>
+          {category.textElements.map((textItem, index) => (
+            <TextItem key={`textItem-${index}`} displayedText={textItem} />
+          ))}
+        </Category>
+      ))}
+    </div>
   );
 }
+
+Category.propTypes = {
+  context: PropTypes.exact({
+    params: PropTypes.object,
+    l10n: PropTypes.object,
+    instance: PropTypes.object,
+    contentId: PropTypes.number
+  })
+};

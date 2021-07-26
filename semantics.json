@@ -52,9 +52,7 @@
           "name": "groupName",
           "type": "text",
           "importance": "medium",
-          "widget": "html",
-          "label": "Group name",
-          "tags": ["strong", "em", "sub", "sup", "code"]
+          "label": "Group name"
         },
         {
           "name": "textElements",
