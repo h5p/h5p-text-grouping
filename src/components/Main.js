@@ -19,7 +19,9 @@ export default function Main({ context }) {
   // TODO: get uncategorized title from l10n
   return (
     <div>
-      <CategoryList title='Categories' categories={categories.map((category, index) => (
+      <CategoryList
+        title='Categories'
+        categories={categories.map((category, index) => (
         <Category key={`category-${index}`} title={category.groupName}>
           {category.textElements.map((textItem, index) => (
             <TextItem key={`textItem-${index}`} displayedText={textItem} />
