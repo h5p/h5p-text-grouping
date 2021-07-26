@@ -8,13 +8,14 @@ import './CategoryList.scss';
  * determines their top-level layout and logic.
  * @param params Parameters
  */
-export default function CategoryList({ title, categories }) {
+export default function CategoryList({ title, categories, unsorted }) {
   return (
     <div className='categoryList'>
       <h2 className='categoriesHeading'>{title}</h2>
       <div className='categoriesWrapper'>
         {categories}
       </div>
+      {unsorted}
     </div>
   );
 }
