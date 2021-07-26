@@ -1,12 +1,12 @@
+@use '../../styles/h5p-text-grouping.scss' as styles;
+
 .categoryList {
   padding: 1em;
   display: grid;
   grid-gap: 2em;
-  @media only screen and (max-width: 800px) {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(2, 1fr);
 
-  @media only screen and (min-width: 799px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media only screen and (max-width: styles.$column-wrap-width) {
+    grid-template-columns: 1fr;
   }
 }

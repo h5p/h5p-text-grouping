@@ -1,3 +1,5 @@
+@use '../styles/h5p-text-grouping.scss' as styles;
+
 .uncategorized {
   padding: 0.5em 0.5em;
   border-style: solid;
@@ -19,7 +21,7 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 0.01em;
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: styles.$column-wrap-width) {
     grid-template-columns: 1fr;
   }
 }

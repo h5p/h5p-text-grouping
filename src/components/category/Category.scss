@@ -18,10 +18,11 @@
 .heading {
   padding: 0em 0.5em;
   overflow-wrap: anywhere;
+  color: styles.$black-ish;
 }
 
 .content {
-  padding: 0em 0.5em;
+  padding: 0em 0em;
   list-style-type: none;
 
   padding-bottom: styles.$text-item-height;
