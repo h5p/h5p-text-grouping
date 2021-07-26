@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './TextItem.scss';
+
 import Button from '../commons/Button';
+import './TextItem.scss';
 
 /**
  * A TextItem represents what the user is trying to
  * place in the correct category.
  * It renders the text received through parameters,
  * and a button to move to a different category.
- * @param {String} displayedText the text to be displayed
+ * @param {object} props Props object
+ * @returns {JSX.Element} A single text item with button
  */
 export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverText }) {
   let moveToCategory = () => {
@@ -33,5 +35,7 @@ export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverTe
 }
 
 TextItem.propTypes = {
-  displayedText: PropTypes.string.isRequired
+  displayedText: PropTypes.string.isRequired,
+  buttonAriaLabel: PropTypes.string,
+  buttonHoverText: PropTypes.string
 };
