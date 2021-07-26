@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Category from './category/Category';
+import CategoryList from './category-list/CategoryList';
 import './Main.scss';
 import TextItem from './text-item/TextItem';
 
@@ -15,15 +16,14 @@ import './Main.scss';
 export default function Main({ context }) {
   const categories = context.params.textGroups;
   return (
-    <div>
-      {categories.map((category, index) => (
-        <Category key={`category-${index}`} title={category.groupName}>
-          {category.textElements.map((textItem, index) => (
-            <TextItem key={`textItem-${index}`} displayedText={textItem} />
-          ))}
-        </Category>
-      ))}
-    </div>
+    <CategoryList title='Categories' categories={categories.map((category, index) => (
+      <Category key={`category-${index}`} title={category.groupName}>
+        {category.textElements.map((textItem, index) => (
+          <TextItem key={`textItem-${index}`} displayedText={textItem} />
+        ))}
+      </Category>
+    ))}>
+    </CategoryList>
   );
 }
 
