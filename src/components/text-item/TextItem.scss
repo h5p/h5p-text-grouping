@@ -1,28 +1,30 @@
 @use 'sass:math';
+@use '../../styles/h5p-text-grouping.scss' as styles;
 
 .text-item {
   background-color: #f5f7ff;
-  color: #1e2d47;
   border-radius: 5px;
   padding: 0.5em;
-
-  font-family: Arial;
-  font-size: 1em;
-  line-height: 2em;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  color: styles.$black-ish;
+  font-family: Arial;
+  font-size: 1em;
+  line-height: 2em;
 }
 
 .text-item-border {
-  border-radius: 5px;
-  box-shadow: 4px 4px 4px #cccccc8f;
-  border-width: 0.15em;
-  border-style: solid;
-  border-color: #dbe2e8;
-  margin: 0.4em;
+  margin: 0.4em 0em;
   padding: 0.25em;
+
+  border-style: solid;
+  border-width: 0.15em;
+  border-radius: 5px;
+  border-color: styles.$border-color-neutral;
+  box-shadow: 4px 4px 4px #cccccc8f;
 }
 
 .button-move-to-category {
