@@ -1,5 +1,7 @@
 import React from 'react';
+import Category from './category/Category';
 import './Main.scss';
+import TextItem from './text-item/TextItem';
 
 /**
  * A component that defines the top-level layout and
@@ -11,7 +13,11 @@ export default function Main(context) {
   // Dummy return statement
   return (
     <div>
-      Text Grouping
+      <Category title="Category">
+        <TextItem />
+        <TextItem />
+        <TextItem />
+      </Category>
     </div>
   );
 }

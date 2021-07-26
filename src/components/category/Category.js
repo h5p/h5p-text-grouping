@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './Category.scss';
 
 /**
@@ -7,7 +9,20 @@ import './Category.scss';
  * for collapsing and adding other TextElements.
  * @param params Parameters
  */
-export default function Category(params) {
-  // TODO: Dummy return statement
-  return (<div/>);
+export default function Category({ title, children }) {
+  const heading = `${title} (${children.length})`;
+  return (
+    <div className="category">
+      <p className="heading">
+        <strong>{heading}</strong>
+      </p>
+      <hr />
+      <div className="content">{children}</div>
+    </div>
+  );
 }
+
+Category.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.arrayOf(PropTypes.element)
+};

@@ -10,5 +10,5 @@ import './TextItem.scss';
  */
 export default function TextItem(params) {
   // TODO: Dummy return statement
-  return (<div/>);
+  return (<p>Text Item</p>);
 }
