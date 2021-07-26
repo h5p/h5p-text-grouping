@@ -1,0 +1,45 @@
+@use 'sass:math';
+
+.text-item {
+  background-color: #f5f7ff;
+  color: #1e2d47;
+  border-radius: 5px;
+  padding: 0.50em;
+
+  font-family: Arial;
+  font-size: 1em;
+  line-height: 2em;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-item-border {
+  border-radius: 5px;
+  box-shadow: 4px 4px 4px rgba(204,204,204,0.56);
+  border-width: 0.15em;
+  border-style: solid;
+  border-color: #dbe2e8;
+  margin: 1em;
+  padding: 0.25em;
+}
+
+.button-move-to-category {
+  border: none;
+  background: none;
+}
+
+.icon-move-to-category {
+  &:before {
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: 'more_horiz';
+    color: #4174cc;
+
+    border-radius: 5px;
+    border-width: 0.10em;
+    border-style: solid;
+    border-color: #4174cc;
+  }
+}

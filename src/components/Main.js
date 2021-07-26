@@ -14,9 +14,9 @@ export default function Main(context) {
   return (
     <div>
       <Category title="Category">
-        <TextItem />
-        <TextItem />
-        <TextItem />
+        <TextItem displayedText='Text item 1'/>
+        <TextItem displayedText='Text item 2'/>
+        <TextItem displayedText='Text item 3'/>
       </Category>
     </div>
   );
