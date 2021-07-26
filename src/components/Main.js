@@ -17,7 +17,6 @@ export default function Main({ context }) {
   const categories = context.params.textGroups;
   return (
     <CategoryList
-      title='Categories'
       categories={categories.map((category, index) => (
         <Category key={`category-${index}`} title={category.groupName}>
           {category.textElements.map((textItem, index) => (
@@ -25,13 +24,6 @@ export default function Main({ context }) {
           ))}
         </Category>
       ))}
-      unsorted={
-        <Category key={`category-${categories.length}`} title={'Unsorted'}>
-          {context.params.distractorGroup.map((textItem, index) => (
-            <TextItem key={`textItem-${index}`} displayedText={textItem} />
-          ))}
-        </Category>
-      }
     ></CategoryList>
   );
 }
