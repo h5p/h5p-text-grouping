@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Category from './category/Category';
+import CategoryList from './category-list/CategoryList';
+import './Main.scss';
 import TextItem from './text-item/TextItem';
 
 import './Main.scss';
@@ -17,13 +19,14 @@ export default function Main({ context }) {
   // TODO: get uncategorized title from l10n
   return (
     <div>
-      {categories.map((category, index) => (
+      <CategoryList title='Categories' categories={categories.map((category, index) => (
         <Category key={`category-${index}`} title={category.groupName}>
           {category.textElements.map((textItem, index) => (
             <TextItem key={`textItem-${index}`} displayedText={textItem} />
           ))}
         </Category>
-      ))}
+      ))}>
+      </CategoryList>
       <div className='uncategorized'>
         <div className='uncategorized-heading'>
           <strong>Uncategorized</strong>

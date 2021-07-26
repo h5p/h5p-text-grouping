@@ -1,0 +1,22 @@
+.categoryList {
+  border: solid 2px #c4c4c4; 
+  border-radius: 5px;
+  padding: 2em; 
+
+  .categoriesHeading {
+    margin: 0;
+    padding: 0 0 1.5rem 0;
+  }
+  
+  .categoriesWrapper {
+    display: grid;
+    grid-gap: 2em;
+    @media only screen and (max-width: 800px) {
+      grid-template-columns: 1fr;
+    }
+
+    @media only screen and (min-width: 799px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

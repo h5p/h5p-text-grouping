@@ -1,3 +1,5 @@
+@use '../../styles/h5p-text-grouping.scss' as styles;
+
 .category {
   padding: 0.5em 0.5em;
   border-style: solid;
@@ -21,4 +23,6 @@
 .content {
   padding: 0em 0.5em;
   list-style-type: none;
+
+  padding-bottom: styles.$text-item-height;
 }
