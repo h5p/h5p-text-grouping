@@ -13,6 +13,8 @@ import './Main.scss';
  */
 export default function Main({ context }) {
   const categories = context.params.textGroups;
+  const uncategorized = context.params.distractorGroup;
+  // TODO: get uncategorized title from l10n
   return (
     <div>
       {categories.map((category, index) => (
@@ -22,6 +24,16 @@ export default function Main({ context }) {
           ))}
         </Category>
       ))}
+      <div className='uncategorized'>
+        <div className='uncategorized-heading'>
+          <strong>Uncategorized</strong>
+        </div>
+        <ul className='uncategorized-list'>
+          {uncategorized.map((textItem, index) => (
+            <li key={index}><TextItem displayedText={textItem} /></li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
