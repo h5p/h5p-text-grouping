@@ -12,11 +12,12 @@ import './Category.scss';
 export default function Category({ title, children }) {
   const heading = `${title} (${children.length})`;
   return (
-    <div>
-      <p>
+    <div className="category">
+      <p className="heading">
         <strong>{heading}</strong>
       </p>
-      <div>{children}</div>
+      <hr />
+      <div className="content">{children}</div>
     </div>
   );
 }
