@@ -20,22 +20,23 @@ export default function Main({ context }) {
   return (
     <div>
       <CategoryList
-        title='Categories'
         categories={categories.map((category, index) => (
-        <Category key={`category-${index}`} title={category.groupName}>
-          {category.textElements.map((textItem, index) => (
-            <TextItem key={`textItem-${index}`} displayedText={textItem} />
-          ))}
-        </Category>
-      ))}>
-      </CategoryList>
-      <div className='uncategorized'>
-        <div className='uncategorized-heading'>
+          <Category key={`category-${index}`} title={category.groupName}>
+            {category.textElements.map((textItem, index) => (
+              <TextItem key={`textItem-${index}`} displayedText={textItem} />
+            ))}
+          </Category>
+        ))}
+      ></CategoryList>
+      <div className="uncategorized">
+        <div className="uncategorized-heading">
           <strong>Uncategorized</strong>
         </div>
-        <ul className='uncategorized-list'>
+        <ul className="uncategorized-list">
           {uncategorized.map((textItem, index) => (
-            <li key={index}><TextItem displayedText={textItem} /></li>
+            <li key={index}>
+              <TextItem displayedText={textItem} />
+            </li>
           ))}
         </ul>
       </div>
