@@ -24,26 +24,40 @@
   border-radius: 5px;
   border-color: styles.$border-color-neutral;
   box-shadow: 4px 4px 4px #cccccc8f;
-}
 
-.button-move-to-category {
-  border: none;
-  background: none;
-  padding: 0;
-  margin-left: 0.75em;
-}
-
-.icon-move-to-category {
-  &:before {
-    font-family: 'Material Icons';
-    font-size: 2em;
-    content: 'more_horiz';
-    color: #4174cc;
-    vertical-align: middle;
-
+  .text-item {
+    background-color: #f5f7ff;
     border-radius: 5px;
-    border-width: 0.1em;
-    border-style: solid;
-    border-color: #4174cc;
+    padding: 0.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: styles.$cornflower-blue-dark;
+    font-family: Arial;
+    font-size: 1em;
+    line-height: 2em;
+  }
+
+  .button-move-to-category {
+    border: none;
+    background: none;
+    padding: 0;
+    margin-left: 0.75em;
+  }
+  .icon-move-to-category {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'more_horiz';
+      color: #4174cc;
+      vertical-align: middle;
+
+      border-radius: 5px;
+      border-width: 0.1em;
+      border-style: solid;
+      border-color: #4174cc;
+    }
   }
 }

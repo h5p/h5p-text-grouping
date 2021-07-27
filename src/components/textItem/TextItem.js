@@ -13,7 +13,7 @@ import './TextItem.scss';
  * @returns {JSX.Element} A single text item with button
  */
 export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverText }) {
-  let moveToCategory = () => {
+  const moveToCategory = () => {
     // TODO: Dummy function
     console.log('Move to category button pressed');
   };
