@@ -15,10 +15,14 @@
   }
 
   .heading {
-    padding: 0em 0.5em;
+    padding: 0em 0em 0em 0.5em;
     overflow-wrap: anywhere;
     color: styles.$cornflower-blue-dark;
     font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .content {

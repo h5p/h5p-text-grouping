@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AssignItemsButton from './AssignItemsButton';
 
 import './Category.scss';
 
@@ -12,9 +13,16 @@ import './Category.scss';
  */
 export default function Category({ title, children }) {
   const titleWithChildCount = `${title} (${children.length})`;
+  const assignItemsToCategory = () => {
+    console.log('Button pressed');
+  };
+
   return (
     <div className="category">
-      <div className="heading">{titleWithChildCount}</div>
+      <div className="heading">
+        <div>{titleWithChildCount}</div>
+        <AssignItemsButton onClick={assignItemsToCategory} />
+      </div>
       <hr />
       <ul className="content">
         {children.map((child, index) => (
