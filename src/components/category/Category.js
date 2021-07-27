@@ -31,6 +31,7 @@ export default function Category({ context, title, children }) {
    */
   const handleAccordionToggle = () => {
     setAccordionOpen(!accordionOpen);
+    context.instance.trigger('resize');
   };
 
   return (
