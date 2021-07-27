@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 import './Uncategorized.scss';
 
 /**
@@ -13,9 +12,7 @@ import './Uncategorized.scss';
 export default function Uncategorized({ context, children }) {
   return (
     <div className="uncategorized">
-      <div className="uncategorized-heading">
-        {context.params.l10n.uncategorizedLabel}
-      </div>
+      <div className="uncategorized-heading">{context.params.l10n.uncategorizedLabel}</div>
       <ul className="uncategorized-list">
         {children.map((child, index) => (
           <li key={index}>{child}</li>
