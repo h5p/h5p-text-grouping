@@ -5,7 +5,8 @@ import AssignItemsButton from './AssignItemsButton';
 import Button from '../commons/Button';
 
 import './Category.scss';
-
+import DropdownSelect from '../commons/DropdownSelect';
+import { useDisclosure } from '../commons/useDisclosure';
 /**
  * A Category renders a list of TextElements received
  * through parameters, a dropzone, a title and buttons
@@ -14,38 +15,49 @@ import './Category.scss';
  * @returns {JSX.Element} A single category element
  */
 export default function Category({ context, title, children }) {
-  const [open, setOpen] = React.useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [accordionOpen, setAccordionOpen] = React.useState(false);
+
+  //TODO: Test data
+  const options = ['To run', 'Blue', 'Admiration', 'Cheerful'];
+  const selected = [true, false, false, false];
+  const multiSelectable = true;
 
   const titleWithChildCount = `${title} (${children.length})`;
-  const assignItemsToCategory = () => {
-    console.log('Button pressed');
-  };
 
   /**
    * Toggle whether the accordion is open or not
    * @param  {string} id
    */
   const handleAccordionToggle = () => {
-    setOpen(!open);
+    setAccordionOpen(!accordionOpen);
   };
 
   return (
     <div className="category">
       <div className="category-top">
         <Button
-          iconName={open ? 'second-state-icon' : 'start-state-icon'}
+          iconName={accordionOpen ? 'second-state-icon' : 'start-state-icon'}
           className="expand-collapse-button"
-          ariaLabel={open ? context.params.l10n.ariaCollapse : context.params.l10n.ariaExpand}
-          hoverText={open ? context.params.l10n.hoverCollapse : context.params.l10n.hoverExpand}
+          ariaLabel={accordionOpen ? context.params.l10n.ariaCollapse : context.params.l10n.ariaExpand}
+          hoverText={accordionOpen ? context.params.l10n.hoverCollapse : context.params.l10n.hoverExpand}
           onClick={() => handleAccordionToggle()}
-          aria-expanded={open}
+          aria-expanded={accordionOpen}
         />
         <div className="heading">
           <div>{titleWithChildCount}</div>
-          <AssignItemsButton onClick={assignItemsToCategory} />
+          <AssignItemsButton expanded={isOpen} onClick={onOpen} />
+          {isOpen ? (
+            <DropdownSelect
+              onClose={onClose}
+              options={options}
+              selected={selected}
+              multiSelectable={multiSelectable}
+            />
+          ) : null}
         </div>
       </div>
-      <div className={open ? 'second-state-content' : 'start-state-content'}>
+      <div className={accordionOpen ? 'second-state-content' : 'start-state-content'}>
         <hr />
         <ul className="content">
           {children}

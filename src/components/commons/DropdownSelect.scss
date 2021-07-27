@@ -1,0 +1,18 @@
+.dropdown-select {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  top: 2em; //TODO: find a way to compute this dynamically
+  right: 0;
+  max-height: 10em;
+  overflow-y: auto;
+  width: 148px;
+  background: #ffffff;
+
+  li {
+    display: block;
+    padding: 0 1em 0 1.5em;
+    position: relative;
+    line-height: 1.8em;
+  }
+}

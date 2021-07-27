@@ -9,11 +9,11 @@ import './CategoryList.scss';
  * @param params Parameters
  */
 export default function CategoryList({ categories }) {
-  return (
-    <div className='categoryList'>
-      {categories}
-    </div>
-  );
+  let classname = 'categoryList';
+  if (categories.length < 2) {
+    classname += ' singleCategory';
+  }
+  return <div className={classname}>{categories}</div>;
 }
 
 CategoryList.propTypes = {
