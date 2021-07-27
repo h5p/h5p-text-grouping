@@ -279,6 +279,34 @@
         "default": "Move to category"
       },
       {
+        "name": "ariaCollapse",
+        "type": "text",
+        "label": "Aria label for the Collapse Category button",
+        "importance": "low",
+        "default": "Collapse category"
+      },
+      {
+        "name": "ariaExpand",
+        "type": "text",
+        "label": "Aria label for the Expand Category button",
+        "importance": "low",
+        "default": "Expand category"
+      },
+      {
+        "name": "hoverCollapse",
+        "type": "text",
+        "label": "Hover text for the Collapse Category button",
+        "importance": "low",
+        "default": "Collapse category"
+      },
+      {
+        "name": "hoverExpand",
+        "type": "text",
+        "label": "hover text for the Expand Category button",
+        "importance": "low",
+        "default": "Expand category"
+      },
+      {
         "name": "checkAnswerButtonText",
         "type": "text",
         "label": "Text for \"Check\" button",

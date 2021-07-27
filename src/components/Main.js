@@ -23,7 +23,12 @@ export default function Main({ context }) {
       <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
       <CategoryList
         categories={categories.map((category, index) => (
-          <Category key={`category-${index}`} title={category.groupName}>
+          <Category
+            key={`category-${index}`}
+            context={context}
+            title={category.groupName}
+            id={`category-${index}`}
+          >
             {category.textElements.map((textItem, index) => (
               <TextItem
                 key={`textItem-${index}`}
@@ -35,7 +40,7 @@ export default function Main({ context }) {
           </Category>
         ))}
       ></CategoryList>
-      <Uncategorized context={context} >
+      <Uncategorized context={context}>
         {uncategorized.map((textItem, index) => (
           <TextItem
             key={`textItem-U-${index}`}
