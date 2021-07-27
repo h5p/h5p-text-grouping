@@ -13,17 +13,17 @@
     border-radius: 5px;
     border-bottom: 0px;
   }
-}
 
-.heading {
-  padding: 0em 0.5em;
-  overflow-wrap: anywhere;
-  color: styles.$cornflower-blue-dark;
-  font-weight: bold;
-}
+  .heading {
+    padding: 0em 0.5em;
+    overflow-wrap: anywhere;
+    color: styles.$cornflower-blue-dark;
+    font-weight: bold;
+  }
 
-.content {
-  padding: 0.25em 0.25em styles.$text-item-height 0.25em;
-  margin: 0;
-  list-style-type: none;
+  .content {
+    padding: 0.25em 0.25em styles.$text-item-height 0.25em;
+    margin: 0;
+    list-style-type: none;
+  }
 }
