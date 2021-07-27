@@ -18,7 +18,7 @@ export default function Category({ title, children }) {
 
   //TODO: Test data
   const options = ['To run', 'Blue', 'Admiration', 'Cheerful'];
-  const disabled = [false, false, false, false];
+  const selected = [true, false, false, false];
   const multiSelectable = true;
 
   const titleWithChildCount = `${title} (${children.length})`;
@@ -30,10 +30,9 @@ export default function Category({ title, children }) {
         <AssignItemsButton expanded={isOpen} onClick={onOpen} />
         {isOpen ? (
           <DropdownSelect
-            isOpen={isOpen}
             onClose={onClose}
             options={options}
-            disabled={disabled}
+            selected={selected}
             multiSelectable={multiSelectable}
           />
         ) : null}
@@ -41,7 +40,9 @@ export default function Category({ title, children }) {
       <hr />
       <ul className="content">
         {children}
-        <li key='key'><Dropzone key='key'/></li>
+        <li key="key">
+          <Dropzone key="key" />
+        </li>
       </ul>
     </div>
   );
