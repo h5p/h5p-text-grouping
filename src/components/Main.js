@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Category from './category/Category';
-import CategoryList from './category-list/CategoryList';
+import CategoryList from './categoryList/CategoryList';
 import './Main.scss';
-import TextItem from './text-item/TextItem';
+import TextItem from './textItem/TextItem';
 
 import './Main.scss';
 /**
