@@ -22,7 +22,7 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 1em;
 
-  @media screen and (max-width: styles.$column-wrap-width) {
+  @media screen and (max-width: styles.$small-screen-size) {
     grid-template-columns: 1fr;
   }
 }
