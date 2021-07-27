@@ -26,9 +26,8 @@ export default function Category({ title, children }) {
       </div>
       <hr />
       <ul className="content">
-        {[...children.map((child, index) => (
-          <li key={index}>{child}</li>
-        )), <li key='key'><Dropzone key='key'/></li>]}
+        {children}
+        <li key='key'><Dropzone key='key'/></li>
       </ul>
     </div>
   );

@@ -19,18 +19,20 @@ export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverTe
   };
 
   return (
-    <div className="text-item-border">
-      <div className="text-item">
-        <div dangerouslySetInnerHTML={{ __html: displayedText }} />
-        <Button
-          iconName="icon-move-to-category"
-          className="button-move-to-category"
-          ariaLabel={buttonAriaLabel}
-          hoverText={buttonHoverText}
-          onClick={moveToCategory}
-        />
+    <li className='text-item-wrapper'>
+      <div className="text-item-border">
+        <div className="text-item">
+          <div dangerouslySetInnerHTML={{ __html: displayedText }} />
+          <Button
+            iconName="icon-move-to-category"
+            className="button-move-to-category"
+            ariaLabel={buttonAriaLabel}
+            hoverText={buttonHoverText}
+            onClick={moveToCategory}
+          />
+        </div>
       </div>
-    </div>
+    </li>
   );
 }
 

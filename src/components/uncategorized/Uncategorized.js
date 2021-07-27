@@ -14,9 +14,7 @@ export default function Uncategorized({ context, children }) {
     <div className="uncategorized">
       <div className="uncategorized-heading">{context.params.l10n.uncategorizedLabel}</div>
       <ul className="uncategorized-list">
-        {children.map((child, index) => (
-          <li key={index}>{child}</li>
-        ))}
+        {children}
       </ul>
     </div>
   );
