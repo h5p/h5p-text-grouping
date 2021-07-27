@@ -19,8 +19,38 @@ export default function Category({ context, title, children }) {
   const [accordionOpen, setAccordionOpen] = React.useState(false);
 
   //TODO: Test data
-  const options = ['To run', 'Blue', 'Admiration', 'Cheerful'];
-  const selected = [true, false, false, false];
+  const options = [
+    'To run',
+    'Blue',
+    'Admiration',
+    'Cheerful',
+    'Blue',
+    'Admiration',
+    'Cheerful',
+    'Blue',
+    'Admiration',
+    'Cheerful',
+    'Admiration',
+    'Cheerful',
+    'Blue',
+    'Admiration'
+  ];
+  const selected = [
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
   const multiSelectable = true;
 
   const titleWithChildCount = `${title} (${children.length})`;
@@ -40,8 +70,12 @@ export default function Category({ context, title, children }) {
         <Button
           iconName={accordionOpen ? 'second-state-icon' : 'start-state-icon'}
           className="expand-collapse-button"
-          ariaLabel={accordionOpen ? context.params.l10n.ariaCollapse : context.params.l10n.ariaExpand}
-          hoverText={accordionOpen ? context.params.l10n.hoverCollapse : context.params.l10n.hoverExpand}
+          ariaLabel={
+            accordionOpen ? context.params.l10n.ariaCollapse : context.params.l10n.ariaExpand
+          }
+          hoverText={
+            accordionOpen ? context.params.l10n.hoverCollapse : context.params.l10n.hoverExpand
+          }
           onClick={() => handleAccordionToggle()}
           aria-expanded={accordionOpen}
         />
@@ -50,6 +84,7 @@ export default function Category({ context, title, children }) {
           <AssignItemsButton expanded={isOpen} onClick={onOpen} />
           {isOpen ? (
             <DropdownSelect
+              label={'Assign items to this category'}
               onClose={onClose}
               options={options}
               selected={selected}
