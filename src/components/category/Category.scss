@@ -23,6 +23,9 @@
 }
 
 .content {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 0.75em;
   padding: 0.25em 0.25em styles.$text-item-height 0.25em;
   margin: 0;
   list-style-type: none;
