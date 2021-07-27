@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Dropzone from '../commons/Dropzone';
 
 import './Category.scss';
 
@@ -17,9 +18,9 @@ export default function Category({ title, children }) {
       <div className="heading">{titleWithChildCount}</div>
       <hr />
       <ul className="content">
-        {children.map((child, index) => (
+        {[...children.map((child, index) => (
           <li key={index}>{child}</li>
-        ))}
+        )), <li key='key'><Dropzone key='key'/></li>]}
       </ul>
     </div>
   );

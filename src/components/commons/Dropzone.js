@@ -6,5 +6,5 @@ import './Dropzone.scss';
  */
 export default function Dropzone() {
   // TODO: Dummy return statement
-  return (<div/>);
+  return (<div className='dropzone icon-add-text-item'/>);
 }

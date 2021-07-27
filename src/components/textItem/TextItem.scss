@@ -2,7 +2,7 @@
 @use '../../styles/h5p-text-grouping.scss' as styles;
 
 .text-item {
-  background-color: #f5f7ff;
+  background-color: styles.$text-item-background-neutral;
   border-radius: 5px;
   padding: 0.5em;
 
@@ -20,7 +20,7 @@
   padding: 0.25em;
 
   border-style: solid;
-  border-width: 0.15em;
+  border-width: 2px;
   border-radius: 5px;
   border-color: styles.$border-color-neutral;
   box-shadow: 4px 4px 4px #cccccc8f;
@@ -29,6 +29,8 @@
 .button-move-to-category {
   border: none;
   background: none;
+  padding: 0;
+  margin-left: 0.75em;
 }
 
 .icon-move-to-category {
@@ -37,6 +39,7 @@
     font-size: 2em;
     content: 'more_horiz';
     color: #4174cc;
+    vertical-align: middle;
 
     border-radius: 5px;
     border-width: 0.1em;

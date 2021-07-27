@@ -1,0 +1,22 @@
+@use '../../styles/h5p-text-grouping.scss' as styles;
+
+.dropzone {
+  border: dotted 2px #4174cc;
+  border-radius: 5px;
+  height: styles.$text-item-height;
+  padding: 0.25em;
+  background-color: styles.$dropzone-background-neutral;
+}
+
+.icon-add-text-item {
+  &:before {
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: 'add';
+    color: #4174cc;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
