@@ -16,8 +16,10 @@ import './Main.scss';
 export default function Main({ context }) {
   const categories = context.params.textGroups;
   const uncategorized = context.params.distractorGroup;
+  const taskDescription = context.params.taskDescription;
   return (
     <div>
+      <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
       <CategoryList
         categories={categories.map((category, index) => (
           <Category key={`category-${index}`} title={category.groupName}>
