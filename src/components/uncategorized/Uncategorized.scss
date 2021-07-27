@@ -24,6 +24,12 @@
     column-count: 2;
     column-gap: 0.75em;
 
+    &.single-text-item {
+      -webkit-column-count: 1;
+      -moz-column-count: 1;
+      column-count: 1;
+    }
+
     @media screen and (max-width: styles.$medium-screen-size) {
       -webkit-column-count: 1;
       -moz-column-count: 1;
