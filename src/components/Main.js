@@ -37,12 +37,12 @@ export default function Main({ context }) {
       ></CategoryList>
       <Uncategorized context={context} >
         {uncategorized.map((textItem, index) => (
-            <TextItem
-              key={`textItem-U-${index}`}
-              displayedText={textItem}
-              buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
-              buttonHoverText={context.params.l10n.hoverMoveToCategory}
-            />
+          <TextItem
+            key={`textItem-U-${index}`}
+            displayedText={textItem}
+            buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
+            buttonHoverText={context.params.l10n.hoverMoveToCategory}
+          />
         ))}
       </Uncategorized>
     </div>
