@@ -32,6 +32,24 @@
         }
       }
     ]
+  },  
+  {
+    "name": "taskDescription",
+    "type": "text",
+    "importance": "medium",
+    "widget": "html",
+    "label": "Task description",
+    "enterMode": "p",
+    "tags": [
+      "strong",
+      "em",
+      "sub",
+      "sup",
+      "h2",
+      "h3",
+      "pre",
+      "code"
+    ]
   },
   {
     "name": "textGroups",
