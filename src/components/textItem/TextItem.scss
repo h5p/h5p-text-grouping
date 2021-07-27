@@ -1,9 +1,12 @@
 @use 'sass:math';
 @use '../../styles/h5p-text-grouping.scss' as styles;
 
+.text-item-wrapper {
+  padding: 0.375em 0 0.375em 0;
+}
+
 .text-item-border {
   padding: 0.25em;
-  margin-bottom: 0.75em;
 
   border-style: solid;
   border-width: 2px;

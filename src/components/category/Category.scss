@@ -12,6 +12,7 @@
     border-top: 1px solid styles.$border-color-neutral;
     border-radius: 5px;
     border-bottom: 0px;
+    margin-bottom: 0.125em;
   }
 
   .heading {
@@ -31,5 +32,12 @@
     padding: 0.25em;
     margin: 0;
     list-style-type: none;
+  }
+
+  @media only screen and (max-width: styles.$small-screen-size) {
+    margin: -1px 0 -1px 0;
+    .content, hr {
+      display: none;
+    }
   }
 }

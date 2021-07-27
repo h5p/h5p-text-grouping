@@ -5,7 +5,12 @@
   grid-gap: 1em;
   grid-template-columns: repeat(2, 1fr);
 
-  @media only screen and (max-width: styles.$small-screen-size) {
+  @media only screen and (max-width: styles.$single-column-size) {
     grid-template-columns: 1fr;
+  }
+
+  @media only screen and (max-width: styles.$small-screen-size) {
+    grid-gap: 0;
+    padding: 1px 0 1px 0;
   }
 }
