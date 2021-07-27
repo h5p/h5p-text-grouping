@@ -7,6 +7,7 @@ import './Main.scss';
 import TextItem from './textItem/TextItem';
 
 import './Main.scss';
+import Uncategorized from './uncategorized/Uncategorized';
 /**
  * A component that defines the top-level layout and
  * functionality.
@@ -34,27 +35,21 @@ export default function Main({ context }) {
           </Category>
         ))}
       ></CategoryList>
-      <div className="uncategorized">
-        <div className="uncategorized-heading">
-          <strong>{context.params.l10n.uncategorizedLabel}</strong>
-        </div>
-        <ul className="uncategorized-list">
-          {uncategorized.map((textItem, index) => (
-            <li key={index}>
-              <TextItem
-                displayedText={textItem}
-                buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
-                buttonHoverText={context.params.l10n.hoverMoveToCategory}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Uncategorized context={context} >
+        {uncategorized.map((textItem, index) => (
+            <TextItem
+              key={`textItem-U-${index}`}
+              displayedText={textItem}
+              buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
+              buttonHoverText={context.params.l10n.hoverMoveToCategory}
+            />
+        ))}
+      </Uncategorized>
     </div>
   );
 }
 
-Category.propTypes = {
+Main.propTypes = {
   context: PropTypes.exact({
     params: PropTypes.object,
     l10n: PropTypes.object,

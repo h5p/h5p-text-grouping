@@ -14,9 +14,7 @@ export default function Category({ title, children }) {
   const titleWithChildCount = `${title} (${children.length})`;
   return (
     <div className="category">
-      <div className="heading">
-        <strong>{titleWithChildCount}</strong>
-      </div>
+      <div className="heading">{titleWithChildCount}</div>
       <hr />
       <ul className="content">
         {children.map((child, index) => (
