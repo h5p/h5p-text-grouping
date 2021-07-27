@@ -19,12 +19,14 @@
     margin-bottom: 0.5em;
     list-style-type: none;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75em;
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
 
     @media screen and (max-width: styles.$small-screen-size) {
-      grid-template-columns: 1fr;
+      -webkit-column-count: 1;
+      -moz-column-count: 1;
+      column-count: 1;
     }
   }
 }
