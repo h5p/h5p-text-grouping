@@ -16,10 +16,8 @@ import './Main.scss';
 export default function Main({ context }) {
   const categories = context.params.textGroups;
   const uncategorized = context.params.distractorGroup;
-  let taskDescription = context.params.taskDescription;
   return (
     <div>
-      <p>{taskDescription.replace(/<p>|<\/p>/g, '')}</p>
       <CategoryList
         categories={categories.map((category, index) => (
           <Category key={`category-${index}`} title={category.groupName}>
