@@ -35,9 +35,7 @@ export default function Main({ context }) {
         ))}
       ></CategoryList>
       <div className="uncategorized">
-        <div className="uncategorized-heading">
-          <strong>{context.params.l10n.uncategorizedLabel}</strong>
-        </div>
+        <div className="uncategorized-heading">{context.params.l10n.uncategorizedLabel}</div>
         <ul className="uncategorized-list">
           {uncategorized.map((textItem, index) => (
             <li key={index}>
