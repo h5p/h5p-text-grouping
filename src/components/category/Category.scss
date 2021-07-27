@@ -23,8 +23,7 @@
 }
 
 .content {
-  padding: 0em 0.25em;
+  padding: 0.25em 0.25em styles.$text-item-height 0.25em;
+  margin: 0;
   list-style-type: none;
-
-  padding-bottom: styles.$text-item-height;
 }
