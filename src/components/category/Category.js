@@ -16,7 +16,14 @@ import './Category.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} A single category element
  */
-export default function Category({ categoryId, title, currentCategoryAssignment, children }) {
+export default function Category({
+  categoryId,
+  title,
+  assignTextItem,
+  applyCategoryAssignment,
+  temporaryCategoryAssignment,
+  children
+}) {
   const id = categoryId.substring(9);
   const { instance, l10n } = useContext(H5PContext);
 
@@ -34,9 +41,12 @@ export default function Category({ categoryId, title, currentCategoryAssignment,
   };
 
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
-  const handleDropdownSelectClose = () => setDropdownSelectOpen(false);
+  const handleDropdownSelectClose = () => {
+    applyCategoryAssignment();
+    setDropdownSelectOpen(false);
+  };
 
-  const currentlySelectedIds = currentCategoryAssignment[id].map((item) => item[0]);
+  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
 
   return (
     <div className="category">
@@ -48,8 +58,9 @@ export default function Category({ categoryId, title, currentCategoryAssignment,
           {dropdownSelectOpen ? (
             <DropdownSelect
               label={l10n.assignItemsHelpText}
+              onChange={(textItemId) => assignTextItem(textItemId, categoryId)}
               onClose={handleDropdownSelectClose}
-              options={currentCategoryAssignment.flat()}
+              options={temporaryCategoryAssignment.flat()}
               currentlySelectedIds={currentlySelectedIds}
               multiSelectable={true}
             />

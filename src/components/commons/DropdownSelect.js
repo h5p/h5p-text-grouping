@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './DropdownSelect.scss';
 
 export default function DropdownSelect({
   label,
+  onChange,
   onClose,
   options,
   currentlySelectedIds,
   multiSelectable
 }) {
-  const [selectedIds, setSelectedIds] = useState(currentlySelectedIds);
   useEffect(() => {
     window.addEventListener('click', onClose);
     return () => {
@@ -18,15 +18,7 @@ export default function DropdownSelect({
 
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
-    const newSelectedIds = [...selectedIds];
-    const indexOfOptionId = newSelectedIds.indexOf(optionId);
-    if (indexOfOptionId > -1) {
-      newSelectedIds.splice(indexOfOptionId, 1);
-      setSelectedIds(newSelectedIds);
-    }
-    else {
-      setSelectedIds([...newSelectedIds, optionId]);
-    }
+    onChange(optionId);
   };
 
   return (
@@ -41,14 +33,14 @@ export default function DropdownSelect({
               key={`option-${optionId}`}
               className={
                 multiSelectable
-                  ? selectedIds.includes(optionId)
+                  ? currentlySelectedIds.includes(optionId)
                     ? 'selected'
                     : 'unselected'
                   : undefined
               }
               onClick={(event) => handleSelectItem(event, optionId)}
               role="option"
-              aria-selected={selectedIds.includes(optionId)}
+              aria-selected={currentlySelectedIds.includes(optionId)}
               dangerouslySetInnerHTML={{ __html: optionElement }}
             />
           );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { H5PContext } from '../context/H5PContext';
 import Category from './category/Category';
@@ -21,10 +21,17 @@ export default function Main({ context }) {
     params: { textGroups }
   } = context;
 
-  const [currentCategoryAssignment, setCurrentCategoryAssignment] = React.useState([
+  const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
     ...textGroups.map(() => []),
     randomizedTextItems
   ]);
+
+  const [temporaryCategoryAssignment, setTemporaryCategoryAssignment] = useState([
+    ...textGroups.map(() => []),
+    randomizedTextItems
+  ]);
+
+  const applyCategoryAssignment = () => setAppliedCategoryAssignment(temporaryCategoryAssignment);
 
   /**
    * Adds the listed text items to the category and removes them from others
@@ -45,7 +52,7 @@ export default function Main({ context }) {
    * @param {String} categoryId
    */
   const moveTextItem = (textItemId, categoryId) => {
-    const newCategories = currentCategoryAssignment.slice();
+    const newCategories = temporaryCategoryAssignment.slice();
     let textItem;
 
     // Remove from previous category
@@ -61,19 +68,20 @@ export default function Main({ context }) {
     textItem.push(true);  // Adds a boolean after id and text if this item was moved
     // Add to new category
     newCategories[parseInt(categoryId.substring(9))].push(textItem);
-
-    setCurrentCategoryAssignment(newCategories);
+    setTemporaryCategoryAssignment(newCategories);
   };
 
   //Construct category elements
-  const categoryElements = currentCategoryAssignment.map((category, i) => {
+  const categoryElements = appliedCategoryAssignment.map((category, i) => {
     if (i < textGroups.length) {
       return (
         <Category
-          id={`category-${i}`}
+          categoryId={`category-${i}`}
           key={`category-${i}`}
           title={textGroups[i].groupName}
-          currentCategoryAssignment={currentCategoryAssignment}
+          assignTextItem={moveTextItem}
+          applyCategoryAssignment={applyCategoryAssignment}
+          temporaryCategoryAssignment={temporaryCategoryAssignment}
         >
           {category.map((textItem) => (
             <TextItem
@@ -93,7 +101,7 @@ export default function Main({ context }) {
 
   // Construct text item elements
   let textItemElements = [];
-  currentCategoryAssignment[textGroups.length].forEach((textItem) => {
+  appliedCategoryAssignment[textGroups.length].forEach((textItem) => {
     textItemElements.push(
       <TextItem
         key={textItem[0]}
