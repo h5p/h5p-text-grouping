@@ -21,7 +21,7 @@ export default function Category({ title, children }) {
   const disabled = [false, false, false, false];
   const multiSelectable = true;
 
-  const titleWithChildCount = `${title} (${children.length})`;
+  const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 
   return (
     <div className="category">
