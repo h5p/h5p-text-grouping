@@ -13,11 +13,7 @@ export default function Uncategorized({ context, children }) {
   return (
     <div className="uncategorized">
       <div className="uncategorized-heading">{context.params.l10n.uncategorizedLabel}</div>
-      <ul
-        className={
-          children.length === 1 ? 'uncategorized-list single-text-item' : 'uncategorized-list'
-        }
-      >
+      <ul className={`uncategorized-list ${children.length === 1 ? 'single-text-item' : ''}`}>
         {children}
       </ul>
     </div>
