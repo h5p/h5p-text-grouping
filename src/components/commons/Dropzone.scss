@@ -7,9 +7,7 @@
   margin-top: 0.375em;
   padding: 0.25em;
   background-color: styles.$dropzone-background-neutral;
-}
 
-.icon-add-text-item {
   &:before {
     font-family: 'Material Icons';
     font-size: 2em;
@@ -19,5 +17,9 @@
     align-items: center;
     display: flex;
     justify-content: center;
+  }
+
+  @media screen and (max-width: styles.$small-screen-size) {
+    display: none;
   }
 }
