@@ -58,6 +58,7 @@ export default function Main({ context }) {
       });
     });
 
+    textItem.push(true);  // Adds a boolean after id and text if this item was moved
     // Add to new category
     newCategories[parseInt(categoryId.substring(9))].push(textItem);
 
@@ -77,6 +78,7 @@ export default function Main({ context }) {
               displayedText={textItem[1]}
               buttonAriaLabel={l10n.ariaMoveToCategory}
               buttonHoverText={l10n.hoverMoveToCategory}
+              animate={textItem.length === 3 && textItem[2] === true ? true : false}
             />
           ))}
         </Category>

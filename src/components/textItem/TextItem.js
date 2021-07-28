@@ -12,14 +12,14 @@ import './TextItem.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} A single text item with button
  */
-export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLabel, buttonHoverText }) {
+export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLabel, buttonHoverText, animate }) {
   const moveToCategory = () => {
     // TODO: Dummy function
     moveTextItem(id, 'category-0'); // TODO: change to category id from dropdown
   };
 
   return (
-    <li className='text-item-wrapper'>
+    <li className={`text-item-wrapper${animate ? ' animate' : ''}`}>
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: displayedText }} />

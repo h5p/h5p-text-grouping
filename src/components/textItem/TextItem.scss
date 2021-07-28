@@ -3,6 +3,20 @@
 
 .text-item-wrapper {
   padding: 0.375em 0 0.375em 0;
+
+  &.animate {
+    animation: example;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+    .text-item-border {
+      animation: example2;
+      animation-delay: .6s;
+      animation-duration: .5s;
+      animation-fill-mode: forwards;
+      animation-timing-function: linear;
+    }
+  }
 }
 
 .text-item-border {
@@ -50,5 +64,26 @@
       border-style: solid;
       border-color: #4174cc;
     }
+  }
+}
+
+@keyframes example {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes example2 {
+  0% {
+    border-color: styles.$border-color-neutral;
+  }
+  50% {
+    border-color: #4174cc;
+  }
+  100% {
+    border-color: styles.$border-color-neutral;
   }
 }
