@@ -15,15 +15,18 @@ import './Main.scss';
  * @returns {JSX.Element} the main content to be displayed
  */
 export default function Main() {
-  const context = useContext(H5PContext);
-  const { taskDescription, categories, uncategorized, l10n } = context.params;
+  const {
+    l10n,
+    params: { taskDescription, textGroups, distractorGroup }
+  } = useContext(H5PContext);
+
   return (
     <div>
       <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
-      <CategoryList
-        categories={categories.map((category, index) => (
-          <Category id={`category-${index}`} key={`category-${index}`} title={category.groupName}>
-            {category.textElements.map((textItem, index) => (
+      <CategoryList>
+        {textGroups.map((textGroup, index) => (
+          <Category id={`category-${index}`} key={`category-${index}`} title={textGroup.groupName}>
+            {textGroup.textElements.map((textItem, index) => (
               <TextItem
                 key={`textItem-${index}`}
                 displayedText={textItem}
@@ -33,9 +36,9 @@ export default function Main() {
             ))}
           </Category>
         ))}
-      ></CategoryList>
-      <Uncategorized context={context}>
-        {uncategorized.map((textItem, index) => (
+      </CategoryList>
+      <Uncategorized>
+        {distractorGroup.map((textItem, index) => (
           <TextItem
             key={`textItem-U-${index}`}
             displayedText={textItem}
