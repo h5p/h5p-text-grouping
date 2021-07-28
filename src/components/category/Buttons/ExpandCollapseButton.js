@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
-import { H5PContext } from '../../context/H5PContext';
-import Button from '../commons/Button';
+import { H5PContext } from '../../../context/H5PContext';
+import Button from '../../commons/Button';
 
 import './AssignItemsButton.scss';
 
