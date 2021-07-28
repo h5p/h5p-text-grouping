@@ -32,6 +32,8 @@ export default function Main({ context }) {
    * @param {String[]} textItemIds An array of textItemIds
    */
   const addToCategory = (categoryId, textItemIds) => {
+    // TODO: ignore textitem if already in category
+
     textItemIds.array.forEach((textItemId) => {
       moveTextItem(textItemId, categoryId);
     });
@@ -43,45 +45,48 @@ export default function Main({ context }) {
    * @param {String} categoryId
    */
   const moveTextItem = (textItemId, categoryId) => {
-    // TODO: Depending on how uncategorized is given after randomization, this might have to be implemented differently
-
-    const newCategories = currentCategoryAssignment;
+    const newCategories = currentCategoryAssignment.slice();
+    let textItem;
 
     // Remove from previous category
     newCategories.forEach((category) => {
-      const textItemIndex = category.indexOf(textItemId);
-      if (textItemIndex > -1) {
-        category.splice(textItemIndex, 1);
-      }
+      category.forEach((item, i) => {
+        if (item[0] === textItemId) {
+          textItem = item;
+          category.splice(i, 1);
+        }
+      });
     });
 
     // Add to new category
-    newCategories[parseInt(categoryId.substring(9))].push(textItemId);
+    newCategories[parseInt(categoryId.substring(9))].push(textItem);
 
     setCurrentCategoryAssignment(newCategories);
   };
 
   //Construct category elements
   const categoryElements = currentCategoryAssignment.map((category, i) => {
-    if (i < textGroups.lenght) {
-      <Category id={`category-${i}`} key={`category-${i}`} title={textGroups[i].groupName}>
-        {category.forEach( textItem => (
-          <TextItem
-            key={textItem[0]}
-            id={textItem[0]}
-            moveTextItem={moveTextItem}
-            displayedText={textItem[1]}
-            buttonAriaLabel={l10n.ariaMoveToCategory}
-            buttonHoverText={l10n.hoverMoveToCategory}
-          />
-        ))}
-      </Category>;
+    if (i < textGroups.length) {
+      return (
+        <Category id={`category-${i}`} key={`category-${i}`} title={textGroups[i].groupName}>
+          {category.map((textItem) => (
+            <TextItem
+              key={textItem[0]}
+              id={textItem[0]}
+              moveTextItem={moveTextItem}
+              displayedText={textItem[1]}
+              buttonAriaLabel={l10n.ariaMoveToCategory}
+              buttonHoverText={l10n.hoverMoveToCategory}
+            />
+          ))}
+        </Category>
+      );
     }
   });
 
   // Construct text item elements
   let textItemElements = [];
-  currentCategoryAssignment[textGroups.lenght].forEach( textItem => {
+  currentCategoryAssignment[textGroups.length].forEach((textItem) => {
     textItemElements.push(
       <TextItem
         key={textItem[0]}
