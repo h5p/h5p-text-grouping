@@ -40,51 +40,14 @@
     list-style-type: none;
   }
 
-  .expand-collapse-button {
-    display: none;
-  }
-
   @media only screen and (max-width: styles.$medium-screen-size) {
-    .expand-collapse-button {
-      display: inline;
-      border: none;
-      background: none;
-    }
-
-    .start-state-icon {
-      &:before {
-        font-family: 'Material Icons';
-        font-size: 2em;
-        content: '\e5c5';
-        color: styles.$color-collapse-expand-button;
-      }
-    }
-
-    .second-state-icon {
-      transform: rotate(-90deg);
-      &:before {
-        font-family: 'Material Icons';
-        font-size: 2em;
-        content: '\e5c5';
-        color: styles.$color-collapse-expand-button;
-      }
-    }
-
-    .second-state-content {
+    .start-state-content {
       display: none;
     }
   }
 
   @media screen and (max-width: styles.$small-screen-size) {
     margin: -1px 0 -1px 0;
-
-    .start-state-icon {
-      transform: rotate(-90deg);
-    }
-
-    .second-state-icon {
-      transform: rotate(0);
-    }
 
     .start-state-content {
       display: none;
