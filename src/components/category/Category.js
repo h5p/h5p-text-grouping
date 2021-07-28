@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import { H5PContext } from '../../context/H5PContext';
+import { useDisclosure } from '../commons/useDisclosure';
 import Dropzone from '../commons/Dropzone';
-import AssignItemsButton from './AssignItemsButton';
 import Button from '../commons/Button';
+import DropdownSelect from '../commons/DropdownSelect';
+import AssignItemsButton from './AssignItemsButton';
 
 import './Category.scss';
-import DropdownSelect from '../commons/DropdownSelect';
-import { useDisclosure } from '../commons/useDisclosure';
+
 /**
  * A Category renders a list of TextElements received
  * through parameters, a dropzone, a title and buttons
@@ -14,7 +17,10 @@ import { useDisclosure } from '../commons/useDisclosure';
  * @param {object} props Props object
  * @returns {JSX.Element} A single category element
  */
-export default function Category({ context, title, children }) {
+export default function Category({ title, children }) {
+  const context = useContext(H5PContext);
+  const l10n = context.params.l10n;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [accordionOpen, setAccordionOpen] = React.useState(false);
 
@@ -70,12 +76,8 @@ export default function Category({ context, title, children }) {
         <Button
           iconName={accordionOpen ? 'second-state-icon' : 'start-state-icon'}
           className="expand-collapse-button"
-          ariaLabel={
-            accordionOpen ? context.params.l10n.ariaCollapse : context.params.l10n.ariaExpand
-          }
-          hoverText={
-            accordionOpen ? context.params.l10n.hoverCollapse : context.params.l10n.hoverExpand
-          }
+          ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
+          hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
           onClick={() => handleAccordionToggle()}
           aria-expanded={accordionOpen}
         />
@@ -107,12 +109,6 @@ export default function Category({ context, title, children }) {
 }
 
 Category.propTypes = {
-  context: PropTypes.exact({
-    params: PropTypes.object,
-    l10n: PropTypes.object,
-    instance: PropTypes.object,
-    contentId: PropTypes.number
-  }).isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.arrayOf(PropTypes.element)
 };
