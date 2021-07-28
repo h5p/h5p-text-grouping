@@ -21,6 +21,7 @@ export default function Category({
   title,
   assignTextItem,
   applyCategoryAssignment,
+  appliedCategoryAssignment,
   temporaryCategoryAssignment,
   children
 }) {
@@ -67,7 +68,7 @@ export default function Category({
               label={l10n.assignItemsHelpText}
               onChange={(textItemId) => toggleTextItem(textItemId)}
               onClose={handleDropdownSelectClose}
-              options={temporaryCategoryAssignment.flat()}
+              options={appliedCategoryAssignment.flat()}
               currentlySelectedIds={currentlySelectedIds}
               multiSelectable={true}
             />

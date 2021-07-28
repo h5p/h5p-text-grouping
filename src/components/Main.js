@@ -23,12 +23,12 @@ export default function Main({ context }) {
 
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
     ...textGroups.map(() => []),
-    randomizedTextItems
+    randomizedTextItems.slice()
   ]);
 
   const [temporaryCategoryAssignment, setTemporaryCategoryAssignment] = useState([
     ...textGroups.map(() => []),
-    randomizedTextItems
+    randomizedTextItems.slice()
   ]);
 
   const applyCategoryAssignment = () => setAppliedCategoryAssignment(temporaryCategoryAssignment);
@@ -65,7 +65,7 @@ export default function Main({ context }) {
       });
     });
 
-    textItem.push(true);  // Adds a boolean after id and text if this item was moved
+    textItem.push(true); // Adds a boolean after id and text if this item was moved
     // Add to new category
     newCategories[parseInt(categoryId.substring(9))].push(textItem);
     setTemporaryCategoryAssignment(newCategories);
@@ -81,6 +81,7 @@ export default function Main({ context }) {
           title={textGroups[i].groupName}
           assignTextItem={moveTextItem}
           applyCategoryAssignment={applyCategoryAssignment}
+          appliedCategoryAssignment={appliedCategoryAssignment}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
         >
           {category.map((textItem) => (
