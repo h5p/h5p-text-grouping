@@ -307,6 +307,20 @@
         "default": "Expand category"
       },
       {
+        "name": "assignItemsHelpText",
+        "type": "text",
+        "label": "Help text for assigning items to category dropdown menu",
+        "importance": "low",
+        "default": "Assign items to this category"
+      },
+      {
+        "name": "moveItemsHelpText",
+        "type": "text",
+        "label": "Help text for moving items to category dropdown menu",
+        "importance": "low",
+        "default": "Move to:"
+      },
+      {
         "name": "checkAnswerButtonText",
         "type": "text",
         "label": "Text for \"Check\" button",

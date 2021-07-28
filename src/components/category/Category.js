@@ -17,7 +17,7 @@ import './Category.scss';
  * @returns {JSX.Element} A single category element
  */
 export default function Category({ title, children }) {
-  const { instance } = useContext(H5PContext);
+  const { instance, l10n } = useContext(H5PContext);
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
@@ -79,7 +79,7 @@ export default function Category({ title, children }) {
           <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
           {dropdownSelectOpen ? (
             <DropdownSelect
-              label={'Assign items to this category'}
+              label={l10n.assignItemsHelpText}
               onClose={handleDropdownSelectClose}
               options={options}
               selected={selected}
