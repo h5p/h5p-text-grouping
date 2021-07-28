@@ -69,7 +69,12 @@ export default function Main({ context }) {
   const categoryElements = currentCategoryAssignment.map((category, i) => {
     if (i < textGroups.length) {
       return (
-        <Category id={`category-${i}`} key={`category-${i}`} title={textGroups[i].groupName}>
+        <Category
+          id={`category-${i}`}
+          key={`category-${i}`}
+          title={textGroups[i].groupName}
+          currentCategoryAssignment={currentCategoryAssignment}
+        >
           {category.map((textItem) => (
             <TextItem
               key={textItem[0]}

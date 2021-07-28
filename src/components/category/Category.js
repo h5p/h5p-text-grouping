@@ -16,46 +16,12 @@ import './Category.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} A single category element
  */
-export default function Category({ title, children }) {
+export default function Category({ categoryId, title, currentCategoryAssignment, children }) {
+  const id = categoryId.substring(9);
   const { instance, l10n } = useContext(H5PContext);
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
-
-  //TODO: Test data
-  const options = [
-    'To run',
-    'Blue',
-    'Admiration',
-    'Cheerful',
-    'Blue',
-    'Admiration',
-    'Cheerful',
-    'Blue',
-    'Admiration',
-    'Cheerful',
-    'Admiration',
-    'Cheerful',
-    'Blue',
-    'Admiration'
-  ];
-  const selected = [
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-  const multiSelectable = true;
 
   const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 
@@ -70,6 +36,8 @@ export default function Category({ title, children }) {
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
   const handleDropdownSelectClose = () => setDropdownSelectOpen(false);
 
+  const currentlySelectedIds = currentCategoryAssignment[id].map((item) => item[0]);
+
   return (
     <div className="category">
       <div className="category-top">
@@ -81,9 +49,9 @@ export default function Category({ title, children }) {
             <DropdownSelect
               label={l10n.assignItemsHelpText}
               onClose={handleDropdownSelectClose}
-              options={options}
-              selected={selected}
-              multiSelectable={multiSelectable}
+              options={currentCategoryAssignment.flat()}
+              currentlySelectedIds={currentlySelectedIds}
+              multiSelectable={true}
             />
           ) : null}
         </div>
@@ -103,5 +71,8 @@ export default function Category({ title, children }) {
 
 Category.propTypes = {
   title: PropTypes.string.isRequired,
+  currentCategoryAssignment: PropTypes.arrayOf(
+    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
+  ),
   children: PropTypes.arrayOf(PropTypes.element)
 };
