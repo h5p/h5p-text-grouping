@@ -17,7 +17,7 @@ import './Main.scss';
 export default function Main({ context }) {
   const {
     l10n,
-    params: { taskDescription, textGroups, distractorGroup }
+    params: { textGroups, distractorGroup }
   } = context;
 
   // TODO: Dummy list while waiting for randomization
@@ -60,14 +60,13 @@ export default function Main({ context }) {
   };
 
   //Construct category elements
-  const categoryElements = textGroups.map((textGroup, index) => (
-    <Category id={`category-${index}`} key={`category-${index}`} title={textGroup.groupName} />
+  const categoryElements = textGroups.map((textGroup, i) => (
+    <Category id={`category-${i}`} key={`category-${i}`} title={textGroup.groupName} />
   ));
 
   // Construct text item elements for categorized words
   let randomizedTextItems = [];
-  for (let i = 0; i < textGroups.length; i++) {
-    const category = textGroups[i];
+  textGroups.forEach((category, i) => {
     category.textElements.forEach((element, j) => {
       randomizedTextItems.push(
         <TextItem
@@ -80,7 +79,7 @@ export default function Main({ context }) {
         />
       );
     });
-  }
+  });
 
   // Construct text item elements for distractor words
   distractorGroup.forEach((element, i) => {
@@ -96,6 +95,7 @@ export default function Main({ context }) {
     );
   });
 
+  // Randomize order of text items
   for (let i = randomizedTextItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [randomizedTextItems[i], randomizedTextItems[j]] = [
@@ -106,7 +106,6 @@ export default function Main({ context }) {
 
   return (
     <H5PContext.Provider value={context}>
-      <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
       <CategoryList>{categoryElements}</CategoryList>
       <Uncategorized>{randomizedTextItems}</Uncategorized>
     </H5PContext.Provider>
