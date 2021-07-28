@@ -62,7 +62,7 @@ export default function Main() {
   }
 
   return (
-    <div>
+    <div> 
       <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
       <CategoryList>{categoryElements}</CategoryList>
       <Uncategorized>{randomizedTextItems}</Uncategorized>
