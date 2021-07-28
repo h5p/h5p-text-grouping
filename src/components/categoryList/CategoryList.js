@@ -6,16 +6,17 @@ import './CategoryList.scss';
 /**
  * A component that contains 1 to n categories, and
  * determines their top-level layout and logic.
- * @param params Parameters
+ * @param {object} props Props object
+ * @returns {JSX.Element} The CategoryList element
  */
-export default function CategoryList({ categories }) {
-  let classname = 'categoryList';
-  if (categories.length < 2) {
-    classname += ' singleCategory';
+export default function CategoryList({ children }) {
+  let className = 'categoryList';
+  if (children.length < 2) {
+    className += ' singleCategory';
   }
-  return <div className={classname}>{categories}</div>;
+  return <div className={className}>{children}</div>;
 }
 
 CategoryList.propTypes = {
-  categories: PropTypes.array
+  children: PropTypes.arrayOf(PropTypes.element)
 };

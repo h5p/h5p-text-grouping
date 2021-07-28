@@ -15,18 +15,20 @@ import './Main.scss';
  * @returns {JSX.Element} the main content to be displayed
  */
 export default function Main() {
-  const context = useContext(H5PContext);
-  const { taskDescription, categories, uncategorized, l10n } = context.params;
+  const {
+    l10n,
+    params: { taskDescription, textGroups, distractorGroup }
+  } = useContext(H5PContext);
 
   //Construct category elements
-  const categoryElements = categories.map((category, index) => (
-    <Category id={`category-${index}`} key={`category-${index}`} title={category.groupName}/>
+  const categoryElements = textGroups.map((textGroup, index) => (
+    <Category id={`category-${index}`} key={`category-${index}`} title={textGroup.groupName} />
   ));
 
   // Construct text item elements for categorized words
   let randomizedTextItems = [];
-  for (let i = 0; i < categories.length; i++) {
-    const category = categories[i];
+  for (let i = 0; i < textGroups.length; i++) {
+    const category = textGroups[i];
     category.textElements.forEach((element, j) => {
       randomizedTextItems.push(
         <TextItem
@@ -40,10 +42,10 @@ export default function Main() {
   }
 
   // Construct text item elements for distractor words
-  uncategorized.forEach((element, i) => {
+  distractorGroup.forEach((element, i) => {
     randomizedTextItems.push(
       <TextItem
-        key={`${categories.length}${i}`}
+        key={`${textGroups.length}${i}`}
         displayedText={element}
         buttonAriaLabel={l10n.ariaMoveToCategory}
         buttonHoverText={l10n.hoverMoveToCategory}
@@ -62,12 +64,8 @@ export default function Main() {
   return (
     <div>
       <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
-      <CategoryList
-        categories={categoryElements}
-      ></CategoryList>
-      <Uncategorized context={context}>
-        {randomizedTextItems}
-      </Uncategorized>
+      <CategoryList>{categoryElements}</CategoryList>
+      <Uncategorized>{randomizedTextItems}</Uncategorized>
     </div>
   );
 }

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import './Uncategorized.scss';
+import { H5PContext } from '../../context/H5PContext';
 
 /**
  * Uncategorized is renders a list of TextElements not
@@ -9,10 +10,12 @@ import './Uncategorized.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} An uncategorized element
  */
-export default function Uncategorized({ context, children }) {
+export default function Uncategorized({ children }) {
+  const { l10n } = useContext(H5PContext);
+
   return (
     <div className="uncategorized">
-      <div className="uncategorized-heading">{context.params.l10n.uncategorizedLabel}</div>
+      <div className="uncategorized-heading">{l10n.uncategorizedLabel}</div>
       <ul className={`uncategorized-list ${children.length === 1 ? 'single-text-item' : ''}`}>
         {children}
       </ul>
