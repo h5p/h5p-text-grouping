@@ -51,14 +51,6 @@ export default function Main({ context }) {
     // TODO: remove from previous category
   };
 
-  const [testState, setTestState] = React.useState(true); // TODO: remove test state
-
-  // TODO: remove test func
-  const testFunc = (textItemId) => {
-    console.log(textItemId);
-    setTestState(!testState);
-  };
-
   //Construct category elements
   const categoryElements = textGroups.map((textGroup, i) => (
     <Category id={`category-${i}`} key={`category-${i}`} title={textGroup.groupName} />
