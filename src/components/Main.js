@@ -65,14 +65,27 @@ export default function Main({ context }) {
   };
 
   //Construct category elements
-  const categoryElements = textGroups.map((textGroup, i) => (
-    <Category id={`category-${i}`} key={`category-${i}`} title={textGroup.groupName} />
-  ));
+  const categoryElements = currentCategories.map((category, i) => {
+    if (i < textGroups.lenght) {
+      <Category id={`category-${i}`} key={`category-${i}`} title={textGroups[i].groupName}>
+        {category.forEach( textItem => (
+          <TextItem
+            key={textItem[0]}
+            id={textItem[0]}
+            moveTextItem={moveTextItem}
+            displayedText={textItem[1]}
+            buttonAriaLabel={l10n.ariaMoveToCategory}
+            buttonHoverText={l10n.hoverMoveToCategory}
+          />
+        ))}
+      </Category>;
+    }
+  });
 
   // Construct text item elements
-  let randomizedTextItemElements = [];
-  randomizedTextItems.forEach( textItem => {
-    randomizedTextItemElements.push(
+  let textItemElements = [];
+  currentCategories[textGroups.lenght].forEach( textItem => {
+    textItemElements.push(
       <TextItem
         key={textItem[0]}
         id={textItem[0]}
@@ -80,14 +93,14 @@ export default function Main({ context }) {
         displayedText={textItem[1]}
         buttonAriaLabel={l10n.ariaMoveToCategory}
         buttonHoverText={l10n.hoverMoveToCategory}
-      />    
+      />
     );
   });
 
   return (
     <H5PContext.Provider value={context}>
       <CategoryList>{categoryElements}</CategoryList>
-      <Uncategorized>{randomizedTextItemElements}</Uncategorized>
+      <Uncategorized>{textItemElements}</Uncategorized>
     </H5PContext.Provider>
   );
 }
