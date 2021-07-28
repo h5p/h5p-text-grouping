@@ -10,11 +10,7 @@ import './CategoryList.scss';
  * @returns {JSX.Element} The CategoryList element
  */
 export default function CategoryList({ children }) {
-  let className = 'categoryList';
-  if (children.length < 2) {
-    className += ' singleCategory';
-  }
-  return <div className={className}>{children}</div>;
+  return <div className={`categoryList${children.length < 2 ? ' singleCategory' : ''}`}>{children}</div>;
 }
 
 CategoryList.propTypes = {

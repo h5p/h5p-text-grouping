@@ -53,6 +53,7 @@ export default function Main({ context }) {
     );
   });
 
+  // Randomize order of text items
   for (let i = randomizedTextItems.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [randomizedTextItems[i], randomizedTextItems[j]] = [
