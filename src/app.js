@@ -10,11 +10,34 @@ H5P.TextGrouping = (() => {
     H5P.EventDispatcher.call(this);
     H5P.Question.call(this, 'textgrouping');
 
+    let randomizedTextItems = [];
+
+    // Construct text item elements for categorized words
+    params.textGroups.forEach((category, i) => {
+      category.textElements.forEach((element, j) => {
+        randomizedTextItems.push([`${i}${j}`, element]);
+      });
+    });
+
+    // Construct text item elements for distractor words
+    params.distractorGroup.forEach((element, i) => {
+      randomizedTextItems.push([`${params.textGroups.length}${i}`, element]);
+    });
+
+    // Randomize order of text items
+    for (let i = randomizedTextItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [randomizedTextItems[i], randomizedTextItems[j]] = [
+        randomizedTextItems[j], randomizedTextItems[i]
+      ];
+    }
+
     const context = {
       params: params,
       l10n: params.l10n,
       instance: this,
-      contentId: contentId
+      contentId: contentId,
+      randomizedTextItems: randomizedTextItems
     };
 
     this.contentId = contentId;

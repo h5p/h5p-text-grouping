@@ -17,7 +17,8 @@ import './Main.scss';
 export default function Main({ context }) {
   const {
     l10n,
-    params: { textGroups, distractorGroup }
+    randomizedTextItems,
+    params: { textGroups }
   } = context;
 
   // TODO: Dummy list while waiting for randomization
@@ -56,50 +57,25 @@ export default function Main({ context }) {
     <Category id={`category-${i}`} key={`category-${i}`} title={textGroup.groupName} />
   ));
 
-  // Construct text item elements for categorized words
-  let randomizedTextItems = [];
-  textGroups.forEach((category, i) => {
-    category.textElements.forEach((element, j) => {
-      randomizedTextItems.push(
-        <TextItem
-          key={`${i}${j}`}
-          id={`${i}${j}`}
-          moveTextItem={moveTextItem}
-          displayedText={element}
-          buttonAriaLabel={l10n.ariaMoveToCategory}
-          buttonHoverText={l10n.hoverMoveToCategory}
-        />
-      );
-    });
-  });
-
-  // Construct text item elements for distractor words
-  distractorGroup.forEach((element, i) => {
-    randomizedTextItems.push(
+  // Construct text item elements
+  let randomizedTextItemElements = [];
+  randomizedTextItems.forEach( textItem => {
+    randomizedTextItemElements.push(
       <TextItem
-        key={`${textGroups.length}${i}`}
-        id={`${textGroups.length}${i}`}
+        key={textItem[0]}
+        id={textItem[0]}
         moveTextItem={moveTextItem}
-        displayedText={element}
+        displayedText={textItem[1]}
         buttonAriaLabel={l10n.ariaMoveToCategory}
         buttonHoverText={l10n.hoverMoveToCategory}
-      />
+      />    
     );
   });
-
-  // Randomize order of text items
-  for (let i = randomizedTextItems.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [randomizedTextItems[i], randomizedTextItems[j]] = [
-      randomizedTextItems[j],
-      randomizedTextItems[i]
-    ];
-  }
 
   return (
     <H5PContext.Provider value={context}>
       <CategoryList>{categoryElements}</CategoryList>
-      <Uncategorized>{randomizedTextItems}</Uncategorized>
+      <Uncategorized>{randomizedTextItemElements}</Uncategorized>
     </H5PContext.Provider>
   );
 }
