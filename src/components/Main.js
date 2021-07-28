@@ -23,7 +23,7 @@ export default function Main({ context }) {
   // TODO: Dummy list while waiting for randomization
   const [currentCategories, setCurrentCategories] = React.useState([
     ['00', '01', '12'],
-    ['13', '04', '15']
+    ['13', '03', '15']
   ]);
 
   /**
@@ -43,12 +43,24 @@ export default function Main({ context }) {
    * @param {String} categoryId
    */
   const moveTextItem = (textItemId, categoryId) => {
+    // TODO: Depending on how uncategorized is given after randomization, this might have to be implemented differently
+
     const newCategories = currentCategories;
+
+    // Remove from previous category
+    newCategories.forEach((category) => {
+      const textItemIndex = category.indexOf(textItemId);
+      if (textItemIndex > -1) {
+        category.splice(textItemIndex, 1);
+      }
+    });
+
+    // Add to new category
     newCategories[parseInt(categoryId.substring(9))].push(textItemId);
 
     setCurrentCategories(newCategories);
 
-    // TODO: remove from previous category
+    console.log('Current categories', currentCategories);
   };
 
   //Construct category elements
