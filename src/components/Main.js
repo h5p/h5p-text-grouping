@@ -21,10 +21,9 @@ export default function Main({ context }) {
     params: { textGroups }
   } = context;
 
-  // TODO: Dummy list while waiting for randomization
-  const [currentCategories, setCurrentCategories] = React.useState([
-    ['00', '01', '12'],
-    ['13', '03', '15']
+  const [currentCategoryAssignment, setCurrentCategoryAssignment] = React.useState([
+    ...textGroups.map(() => []),
+    randomizedTextItems
   ]);
 
   /**
@@ -46,7 +45,7 @@ export default function Main({ context }) {
   const moveTextItem = (textItemId, categoryId) => {
     // TODO: Depending on how uncategorized is given after randomization, this might have to be implemented differently
 
-    const newCategories = currentCategories;
+    const newCategories = currentCategoryAssignment;
 
     // Remove from previous category
     newCategories.forEach((category) => {
@@ -59,9 +58,7 @@ export default function Main({ context }) {
     // Add to new category
     newCategories[parseInt(categoryId.substring(9))].push(textItemId);
 
-    setCurrentCategories(newCategories);
-
-    console.log('Current categories', currentCategories);
+    setCurrentCategoryAssignment(newCategories);
   };
 
   //Construct category elements
@@ -71,7 +68,7 @@ export default function Main({ context }) {
 
   // Construct text item elements
   let randomizedTextItemElements = [];
-  randomizedTextItems.forEach( textItem => {
+  randomizedTextItems.forEach((textItem) => {
     randomizedTextItemElements.push(
       <TextItem
         key={textItem[0]}
@@ -80,7 +77,7 @@ export default function Main({ context }) {
         displayedText={textItem[1]}
         buttonAriaLabel={l10n.ariaMoveToCategory}
         buttonHoverText={l10n.hoverMoveToCategory}
-      />    
+      />
     );
   });
 
