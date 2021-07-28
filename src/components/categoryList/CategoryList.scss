@@ -9,7 +9,7 @@
     grid-template-columns: 1fr;
   }
 
-  @media only screen and (max-width: styles.$single-column-size) {
+  @media only screen and (max-width: styles.$medium-screen-size) {
     grid-template-columns: 1fr;
   }
 

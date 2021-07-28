@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import { H5PContext } from './context/H5PContext';
 
 // Load library
 H5P = H5P || {};
 H5P.TextGrouping = (() => {
   function TextGrouping(params, contentId, extras) {
-    extras = extras || {};
-
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
     H5P.Question.call(this, 'textgrouping');
@@ -18,8 +17,10 @@ H5P.TextGrouping = (() => {
       instance: this,
       contentId: contentId
     };
+
     this.contentId = contentId;
     this.params = params;
+    this.extras = extras || {};
 
     // Register task media
     if (context.params.media && context.params.media.type && context.params.media.type.library) {
@@ -52,11 +53,12 @@ H5P.TextGrouping = (() => {
     }
 
     const wrapper = document.createElement('div');
-    const main = (<div><Main context={context}/></div>);
-    this.setContent(ReactDOM.render(
-      main,
-      wrapper
-    ));
+    const main = (
+      <H5PContext.Provider value={context}>
+        <Main />
+      </H5PContext.Provider>
+    );
+    this.setContent(ReactDOM.render(main, wrapper));
   }
 
   TextGrouping.prototype = Object.create(H5P.Question.prototype);

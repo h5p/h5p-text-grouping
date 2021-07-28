@@ -1,27 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 
+import { H5PContext } from '../context/H5PContext';
 import Category from './category/Category';
+import Uncategorized from './uncategorized/Uncategorized';
 import CategoryList from './categoryList/CategoryList';
-import './Main.scss';
 import TextItem from './textItem/TextItem';
 
 import './Main.scss';
-import Uncategorized from './uncategorized/Uncategorized';
+
 /**
  * A component that defines the top-level layout and
  * functionality.
  * @param {object} props Props object
  * @returns {JSX.Element} the main content to be displayed
  */
-export default function Main({ context }) {
-  const categories = context.params.textGroups;
-  const uncategorized = context.params.distractorGroup;
-  const taskDescription = context.params.taskDescription;
+export default function Main() {
+  const context = useContext(H5PContext);
+  const { taskDescription, categories, uncategorized, l10n } = context.params;
 
   //Construct category elements
   const categoryElements = categories.map((category, index) => (
-    <Category key={`category-${index}`} title={category.groupName} />
+    <Category id={`category-${index}`} key={`category-${index}`} title={category.groupName}/>
   ));
 
   // Construct text item elements for categorized words
@@ -33,8 +32,8 @@ export default function Main({ context }) {
         <TextItem
           key={`${i}${j}`}
           displayedText={element}
-          buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
-          buttonHoverText={context.params.l10n.hoverMoveToCategory}
+          buttonAriaLabel={l10n.ariaMoveToCategory}
+          buttonHoverText={l10n.hoverMoveToCategory}
         />
       );
     });
@@ -46,8 +45,8 @@ export default function Main({ context }) {
       <TextItem
         key={`${categories.length}${i}`}
         displayedText={element}
-        buttonAriaLabel={context.params.l10n.ariaMoveToCategory}
-        buttonHoverText={context.params.l10n.hoverMoveToCategory}
+        buttonAriaLabel={l10n.ariaMoveToCategory}
+        buttonHoverText={l10n.hoverMoveToCategory}
       />
     );
   });
@@ -72,12 +71,3 @@ export default function Main({ context }) {
     </div>
   );
 }
-
-Main.propTypes = {
-  context: PropTypes.exact({
-    params: PropTypes.object,
-    l10n: PropTypes.object,
-    instance: PropTypes.object,
-    contentId: PropTypes.number
-  })
-};

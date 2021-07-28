@@ -1,22 +1,67 @@
+@use '../../styles/h5p-text-grouping.scss' as styles;
+
 .dropdown-select {
   position: absolute;
   margin: 0;
-  padding: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
   top: 2em; //TODO: find a way to compute this dynamically
   right: 0;
-  max-height: 10em;
-  overflow-y: auto;
-  width: 148px;
+  max-height: 20em;
+  width: 100%;
   background: #ffffff;
+  overflow-y: auto;
+
+  color: styles.$cornflower-blue-dark;
+  filter: drop-shadow(0 0 0.75em styles.$border-color-neutral);
+  font-weight: normal;
+
+  .label {
+    padding: 0em 0.5em;
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  hr {
+    color: #ffffff00;
+    border-top: 1px solid styles.$border-color-neutral;
+    border-radius: 5px;
+    border-bottom: 0px;
+    margin-bottom: 0.125em;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
 
   li {
-    display: block;
-    padding: 0 1em 0 1.5em;
+    display: flex;
+    align-items: center;
+    padding: 0.5em 0.5em;
     position: relative;
     line-height: 1.8em;
-  }
-}
 
-.hidden {
-  display: none;
+    &:hover {
+      background: styles.$text-item-background-neutral;
+    }
+  }
+
+  .selected {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'check_box';
+      padding-right: 0.5em;
+    }
+  }
+
+  .unselected {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'check_box_outline_blank';
+      padding-right: 0.5em;
+    }
+  }
 }
