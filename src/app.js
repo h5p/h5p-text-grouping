@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
-import { H5PContext } from './context/H5PContext';
 
 // Load library
 H5P = H5P || {};
@@ -54,9 +53,9 @@ H5P.TextGrouping = (() => {
 
     const wrapper = document.createElement('div');
     const main = (
-      <H5PContext.Provider value={context}>
-        <Main />
-      </H5PContext.Provider>
+      <div>
+        <Main context={context} />
+      </div>
     );
     this.setContent(ReactDOM.render(main, wrapper));
   }
