@@ -24,12 +24,13 @@ export default function Category({
   temporaryCategoryAssignment,
   children
 }) {
-  const id = categoryId.substring(9);
   const { instance, l10n } = useContext(H5PContext);
-
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
 
+  const id = categoryId.substring(9);
+  const uncategorizedId = `category-${temporaryCategoryAssignment.length - 1}`;
+  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
   const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 
   /**
@@ -45,8 +46,14 @@ export default function Category({
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
   };
-
-  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
+  const toggleTextItem = (textItemId) => {
+    if (currentlySelectedIds.includes(textItemId)) {
+      assignTextItem(textItemId, uncategorizedId);
+    }
+    else {
+      assignTextItem(textItemId, categoryId);
+    }
+  };
 
   return (
     <div className="category">
@@ -58,7 +65,7 @@ export default function Category({
           {dropdownSelectOpen ? (
             <DropdownSelect
               label={l10n.assignItemsHelpText}
-              onChange={(textItemId) => assignTextItem(textItemId, categoryId)}
+              onChange={(textItemId) => toggleTextItem(textItemId)}
               onClose={handleDropdownSelectClose}
               options={temporaryCategoryAssignment.flat()}
               currentlySelectedIds={currentlySelectedIds}
