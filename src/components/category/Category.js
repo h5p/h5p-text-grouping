@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
-import { useDisclosure } from '../commons/useDisclosure';
 import Dropzone from '../commons/Dropzone';
 import DropdownSelect from '../commons/DropdownSelect';
 import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
@@ -20,8 +19,8 @@ import './Category.scss';
 export default function Category({ title, children }) {
   const { instance } = useContext(H5PContext);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [accordionOpen, setAccordionOpen] = React.useState(false);
+  const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
 
   //TODO: Test data
   const options = [
@@ -62,12 +61,14 @@ export default function Category({ title, children }) {
 
   /**
    * Toggle whether the accordion is open or not
-   * @param  {string} id
    */
   const handleAccordionToggle = () => {
     setAccordionOpen(!accordionOpen);
     instance.trigger('resize');
   };
+
+  const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
+  const handleDropdownSelectClose = () => setDropdownSelectOpen(false);
 
   return (
     <div className="category">
@@ -75,11 +76,11 @@ export default function Category({ title, children }) {
         <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
         <div className="heading">
           <div>{titleWithChildCount}</div>
-          <AssignItemsButton expanded={isOpen} onClick={onOpen} />
-          {isOpen ? (
+          <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
+          {dropdownSelectOpen ? (
             <DropdownSelect
               label={'Assign items to this category'}
-              onClose={onClose}
+              onClose={handleDropdownSelectClose}
               options={options}
               selected={selected}
               multiSelectable={multiSelectable}
