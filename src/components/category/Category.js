@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { H5PContext } from '../../context/H5PContext';
 import { useDisclosure } from '../commons/useDisclosure';
 import Dropzone from '../commons/Dropzone';
-import Button from '../commons/Button';
 import DropdownSelect from '../commons/DropdownSelect';
-import AssignItemsButton from './AssignItemsButton';
+import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
+import AssignItemsButton from './Buttons/AssignItemsButton';
 
 import './Category.scss';
 
@@ -18,8 +18,7 @@ import './Category.scss';
  * @returns {JSX.Element} A single category element
  */
 export default function Category({ title, children }) {
-  const context = useContext(H5PContext);
-  const l10n = context.params.l10n;
+  const { instance } = useContext(H5PContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [accordionOpen, setAccordionOpen] = React.useState(false);
@@ -67,20 +66,13 @@ export default function Category({ title, children }) {
    */
   const handleAccordionToggle = () => {
     setAccordionOpen(!accordionOpen);
-    context.instance.trigger('resize');
+    instance.trigger('resize');
   };
 
   return (
     <div className="category">
       <div className="category-top">
-        <Button
-          iconName={accordionOpen ? 'second-state-icon' : 'start-state-icon'}
-          className="expand-collapse-button"
-          ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
-          hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
-          onClick={() => handleAccordionToggle()}
-          aria-expanded={accordionOpen}
-        />
+        <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
         <div className="heading">
           <div>{titleWithChildCount}</div>
           <AssignItemsButton expanded={isOpen} onClick={onOpen} />
