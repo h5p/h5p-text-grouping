@@ -12,10 +12,10 @@ import './TextItem.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} A single text item with button
  */
-export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverText }) {
+export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLabel, buttonHoverText }) {
   const moveToCategory = () => {
     // TODO: Dummy function
-    console.log('Move to category button pressed');
+    moveTextItem(id, 'category-0'); // TODO: change to category id from dropdown
   };
 
   return (
@@ -37,6 +37,8 @@ export default function TextItem({ displayedText, buttonAriaLabel, buttonHoverTe
 }
 
 TextItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  moveTextItem: PropTypes.func.isRequired,
   displayedText: PropTypes.string.isRequired,
   buttonAriaLabel: PropTypes.string,
   buttonHoverText: PropTypes.string
