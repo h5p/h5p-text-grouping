@@ -21,14 +21,13 @@ export default function Main({ context }) {
   } = context;
 
   //Construct category elements
-  const categoryElements = textGroups.map((textGroup, index) => (
-    <Category id={`category-${index}`} key={`category-${index}`} title={textGroup.groupName} />
+  const categoryElements = textGroups.map((textGroup, i) => (
+    <Category id={`category-${i}`} key={`category-${i}`} title={textGroup.groupName} />
   ));
 
   // Construct text item elements for categorized words
   let randomizedTextItems = [];
-  for (let i = 0; i < textGroups.length; i++) {
-    const category = textGroups[i];
+  textGroups.forEach((category, i) => {
     category.textElements.forEach((element, j) => {
       randomizedTextItems.push(
         <TextItem
@@ -39,7 +38,7 @@ export default function Main({ context }) {
         />
       );
     });
-  }
+  });
 
   // Construct text item elements for distractor words
   distractorGroup.forEach((element, i) => {
