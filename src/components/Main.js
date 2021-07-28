@@ -17,7 +17,7 @@ import './Main.scss';
 export default function Main({ context }) {
   const {
     l10n,
-    params: { taskDescription, textGroups, distractorGroup }
+    params: { textGroups, distractorGroup }
   } = context;
 
   //Construct category elements
@@ -63,8 +63,7 @@ export default function Main({ context }) {
   }
 
   return (
-    <H5PContext.Provider value={context}> 
-      <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
+    <H5PContext.Provider value={context}>
       <CategoryList>{categoryElements}</CategoryList>
       <Uncategorized>{randomizedTextItems}</Uncategorized>
     </H5PContext.Provider>
