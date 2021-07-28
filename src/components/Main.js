@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { H5PContext } from '../context/H5PContext';
 import Category from './category/Category';
@@ -14,14 +14,14 @@ import './Main.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} the main content to be displayed
  */
-export default function Main() {
+export default function Main({ context }) {
   const {
     l10n,
     params: { taskDescription, textGroups, distractorGroup }
-  } = useContext(H5PContext);
+  } = context;
 
   return (
-    <div>
+    <H5PContext.Provider value={context}>
       <div dangerouslySetInnerHTML={{ __html: taskDescription }} />
       <CategoryList>
         {textGroups.map((textGroup, index) => (
@@ -47,6 +47,6 @@ export default function Main() {
           />
         ))}
       </Uncategorized>
-    </div>
+    </H5PContext.Provider>
   );
 }
