@@ -11,6 +11,7 @@
   width: 100%;
   background: #ffffff;
   overflow-y: auto;
+  z-index: 1;
 
   color: styles.$cornflower-blue-dark;
   filter: drop-shadow(0 0 0.75em styles.$border-color-neutral);
