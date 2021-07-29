@@ -22,7 +22,7 @@
     position: relative;
     width: 100%;
 
-    padding-right: 0.5em;
+    padding: 0em 0.5em;
     overflow-wrap: anywhere;
     color: styles.$cornflower-blue-dark;
     font-weight: bold;
@@ -44,6 +44,10 @@
     .second-state-content {
       display: none;
     }
+
+    .header {
+      padding-left: 0em;
+    }
   }
 
   @media screen and (max-width: styles.$small-screen-size) {
@@ -55,6 +59,10 @@
 
     .second-state-content {
       display: inline;
+    }
+
+    .header {
+      padding-left: 0em;
     }
   }
 }
