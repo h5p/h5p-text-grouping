@@ -28,11 +28,32 @@ export default function DropdownSelect({
     onChange(optionId);
   };
 
+  const handleKeyboardPressed = (event, optionId) => {
+    // TODO: Implement radio button-like functionality for optionId === null
+    if (optionId != null) {
+      switch (event.key) {
+        case ' ': // The space key
+          event.preventDefault();
+          handleSelectItem(event, optionId);
+          break;
+
+        case 'Enter': 
+          onClose();
+          break;
+      }
+    }
+  };
+
   return (
     <div className="dropdown-select">
       <div className="label">{label}</div>
       <hr />
-      <ul role="listbox" aria-multiselectable={multiSelectable || undefined}>
+      <ul
+        role="listbox"
+        tabIndex={multiSelectable === true ? -1 : 0}
+        onKeyDown={event => handleKeyboardPressed(event, null)}
+        aria-multiselectable={multiSelectable || undefined}
+      >
         {options.map((option) => {
           const [optionId, optionElement] = option;
           return (
@@ -45,7 +66,9 @@ export default function DropdownSelect({
                     : 'unselected'
                   : undefined
               }
-              onClick={(event) => handleSelectItem(event, optionId)}
+              onClick={event => handleSelectItem(event, optionId)}
+              onKeyDown={event => handleKeyboardPressed(event, optionId)}
+              tabIndex={multiSelectable === true ? 0 : -1}
               role="option"
               aria-selected={multiSelectable ? currentlySelectedIds.includes(optionId) : false}
               dangerouslySetInnerHTML={{ __html: optionElement }}
