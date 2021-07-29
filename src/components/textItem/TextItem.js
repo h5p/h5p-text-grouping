@@ -35,6 +35,7 @@ export default function TextItem({
     );
 
     setDropdownSelectOpen(true);
+    instance.trigger('resize');
   };
 
   const handleDropdownSelectClose = () => {

@@ -63,7 +63,9 @@ export default function Category({
         <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
         <div className="title">{titleWithChildCount}</div>
         <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
-        {dropdownSelectOpen ? (
+      </div>
+      {dropdownSelectOpen ? (
+        <div className="dropdown-wrapper">
           <DropdownSelect
             label={l10n.assignItemsHelpText}
             onChange={(textItemId) => toggleTextItem(textItemId)}
@@ -72,8 +74,8 @@ export default function Category({
             currentlySelectedIds={currentlySelectedIds}
             multiSelectable={true}
           />
-        ) : null}
-      </div>
+        </div>
+      ) : null}
       <div className={accordionOpen ? 'second-state-content' : 'start-state-content'}>
         <hr />
         <ul className="content">
