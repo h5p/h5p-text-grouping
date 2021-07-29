@@ -4,6 +4,10 @@
 .text-item-wrapper {
   padding: 0.375em 0 0.375em 0;
 
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+
   &.animate {
     animation: example;
     animation-duration: 1s;
@@ -27,10 +31,6 @@
   border-radius: 5px;
   border-color: styles.$border-color-neutral;
   box-shadow: 4px 4px 4px #cccccc8f;
-
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  break-inside: avoid;
 
   .text-item {
     background-color: styles.$text-item-background-neutral;

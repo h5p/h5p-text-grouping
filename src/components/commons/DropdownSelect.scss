@@ -5,7 +5,7 @@
   margin: 0;
   padding: 0.5em;
   box-sizing: border-box;
-  top: 2.375em; //TODO: find a way to compute this dynamically
+  top: 100%;
   right: 0;
   max-height: 20em;
   width: 100%;
@@ -16,6 +16,10 @@
   color: styles.$cornflower-blue-dark;
   filter: drop-shadow(0 0 0.75em styles.$border-color-neutral);
   font-weight: normal;
+
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
 
   .label {
     padding: 0em 0.5em;

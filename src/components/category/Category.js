@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -29,7 +29,10 @@ export default function Category({
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
-  const [accordionOpen, setAccordionOpen] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
+  useEffect(() => {
+    setAccordionOpen(!narrowScreen);
+  }, [narrowScreen]);
 
   const id = categoryId;
   const uncategorizedId = temporaryCategoryAssignment.length - 1;
@@ -67,7 +70,9 @@ export default function Category({
         <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
         <div className="title">{titleWithChildCount}</div>
         <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
-        {dropdownSelectOpen ? (
+      </div>
+      {dropdownSelectOpen ? (
+        <div className="dropdown-wrapper">
           <DropdownSelect
             label={l10n.assignItemsHelpText}
             onChange={(textItemId) => toggleTextItem(textItemId)}
@@ -76,9 +81,9 @@ export default function Category({
             currentlySelectedIds={currentlySelectedIds}
             multiSelectable={true}
           />
-        ) : null}
-      </div>
-      <div className={accordionOpen ? 'second-state-content' : 'start-state-content'}>
+        </div>
+      ) : null}
+      <div className={accordionOpen ? undefined : 'collapsed'}>
         <hr />
         <ul className="content">
           {children}

@@ -12,7 +12,7 @@ export default function ExpandCollapseButton({ expanded, onClick }) {
 
   return (
     <Button
-      iconName={expanded ? 'second-state-icon' : 'start-state-icon'}
+      iconName={expanded ? 'expanded-state' : 'collapsed-state'}
       className="expand-collapse-button"
       ariaLabel={expanded ? l10n.ariaCollapse : l10n.ariaExpand}
       hoverText={expanded ? l10n.hoverCollapse : l10n.hoverExpand}

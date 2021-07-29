@@ -19,7 +19,6 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    position: relative;
     width: 100%;
 
     padding: 0em 0.5em;
@@ -32,6 +31,11 @@
     }
   }
 
+  .dropdown-wrapper {
+    top: 0.7em;
+    position: relative;
+  }
+
   .content {
     display: grid;
     grid-template-columns: 1fr;
@@ -41,7 +45,7 @@
   }
 
   @media only screen and (max-width: styles.$medium-screen-size) {
-    .second-state-content {
+    .collapsed {
       display: none;
     }
 
@@ -52,14 +56,6 @@
 
   @media screen and (max-width: styles.$small-screen-size) {
     margin: -1px 0 -1px 0;
-
-    .start-state-content {
-      display: none;
-    }
-
-    .second-state-content {
-      display: inline;
-    }
 
     .header {
       padding-left: 0em;
