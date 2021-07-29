@@ -62,7 +62,7 @@ export default function TextItem({
           />
           {dropdownSelectOpen ? (
             <DropdownSelect
-              label={l10n.assignItemsHelpText}
+              label={l10n.moveItemsHelpText}
               onChange={(categoryId) => selectCategory(categoryId)}
               onClose={handleDropdownSelectClose}
               options={selectableCategories}

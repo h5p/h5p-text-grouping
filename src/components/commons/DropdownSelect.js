@@ -61,8 +61,9 @@ DropdownSelect.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
-    .isRequired,
-  currentlySelectedIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  options: PropTypes.arrayOf(
+    arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]))
+  ).isRequired,
+  currentlySelectedIds: PropTypes.arrayOf(PropTypes.string),
   multiSelectable: PropTypes.bool
 };
