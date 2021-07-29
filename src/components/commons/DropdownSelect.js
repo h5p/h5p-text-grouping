@@ -40,7 +40,7 @@ export default function DropdownSelect({
               }
               onClick={(event) => handleSelectItem(event, optionId)}
               role="option"
-              aria-selected={currentlySelectedIds.includes(optionId)}
+              aria-selected={multiSelectable ? currentlySelectedIds.includes(optionId) : false}
               dangerouslySetInnerHTML={{ __html: optionElement }}
             />
           );
