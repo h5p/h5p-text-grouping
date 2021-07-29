@@ -76,7 +76,7 @@ export default function Main({ context }) {
             <TextItem
               key={textItem[0]}
               id={textItem[0]}
-              currentCategory={`category-${i}`}
+              currentCategory={i}
               categories={[...textGroups, {groupName: 'Uncategorized'}]}
               moveTextItem={moveTextItem}
               applyAssignment={applyCategoryAssignment}
@@ -96,7 +96,7 @@ export default function Main({ context }) {
       <TextItem
         key={textItem[0]}
         id={textItem[0]}
-        currentCategory={`category-${textGroups.length}`}
+        currentCategory={textGroups.length}
         categories={textGroups}
         moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}

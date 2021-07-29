@@ -77,7 +77,7 @@ export default function TextItem({
 
 TextItem.propTypes = {
   id: PropTypes.string.isRequired,
-  currentCategory: PropTypes.string.isRequired,
+  currentCategory: PropTypes.number.isRequired,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
