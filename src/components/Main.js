@@ -35,11 +35,11 @@ export default function Main({ context }) {
     // Remove text items that are to be moved from old categories
     appliedCategoryAssignment.forEach((category, i) => {
       for (let j = category.length - 1; j >= 0; j--) {
-        if (!temporaryCategoryAssignment[i].map(e => e[0]).includes(category[j][0])) {
+        if (!temporaryCategoryAssignment[i].map((e) => e[0]).includes(category[j][0])) {
           category.splice(j, 1);
-        } 
+        }
         else {
-          category[j][2] = false;  // Set boolean for moved to false for all text items
+          category[j][2] = false; // Set boolean for moved to false for all text items
         }
       }
     });
@@ -47,13 +47,13 @@ export default function Main({ context }) {
     // Add back text items that are to be moved to new categories
     temporaryCategoryAssignment.forEach((category, i) => {
       category.forEach((textItem) => {
-        if (!appliedCategoryAssignment[i].map(e => e[0]).includes(textItem[0])) {
+        if (!appliedCategoryAssignment[i].map((e) => e[0]).includes(textItem[0])) {
           appliedCategoryAssignment[i].push(textItem);
-          textItem[2] = true;  // Set boolean for moved to true
+          textItem[2] = true; // Set boolean for moved to true
         }
       });
     });
-    
+
     setAppliedCategoryAssignment(deepCopy(appliedCategoryAssignment));
   };
 
@@ -81,6 +81,16 @@ export default function Main({ context }) {
     setTemporaryCategoryAssignment(newCategories);
   };
 
+  const removeAnimation = (textItemId) => {
+    temporaryCategoryAssignment.forEach((category) => {
+      const textItem = category.find((textItem) => textItem[0] === textItemId);
+      if (textItem) {
+        textItem[2] = false;
+        return;
+      }
+    });
+  };
+
   //Construct category elements
   const categoryElements = appliedCategoryAssignment.map((category, i) => {
     if (i < textGroups.length) {
@@ -99,11 +109,12 @@ export default function Main({ context }) {
               key={textItem[0]}
               id={textItem[0]}
               currentCategory={i}
-              categories={[...textGroups, {groupName: 'Uncategorized'}]}
+              categories={[...textGroups, { groupName: 'Uncategorized' }]}
               moveTextItem={moveTextItem}
               applyAssignment={applyCategoryAssignment}
               displayedText={textItem[1]}
               animate={textItem[2]}
+              removeAnimation={() => removeAnimation(textItem[0])}
             />
           ))}
         </Category>
@@ -124,6 +135,7 @@ export default function Main({ context }) {
         applyAssignment={applyCategoryAssignment}
         displayedText={textItem[1]}
         animate={textItem[2]}
+        removeAnimation={() => removeAnimation(textItem[0])}
       />
     );
   });

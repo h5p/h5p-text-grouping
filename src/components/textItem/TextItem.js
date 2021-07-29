@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -21,11 +21,17 @@ export default function TextItem({
   moveTextItem,
   applyAssignment,
   displayedText,
-  animate
+  animate,
+  removeAnimation
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [selectableCategories, setSelectableCategories] = useState();
+  useEffect(() => {
+    return () => {
+      removeAnimation();
+    };
+  }, [animate]);
 
   const handleDropdownSelectOpen = () => {
     setSelectableCategories(
