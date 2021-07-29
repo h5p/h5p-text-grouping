@@ -11,7 +11,7 @@
     background: none;
   }
 
-  .start-state-icon {
+  .expanded-state {
     &:before {
       font-family: 'Material Icons';
       font-size: 2em;
@@ -20,7 +20,7 @@
     }
   }
 
-  .second-state-icon {
+  .collapsed-state {
     transform: rotate(-90deg);
     &:before {
       font-family: 'Material Icons';
@@ -28,15 +28,5 @@
       content: '\e5c5';
       color: styles.$color-collapse-expand-button;
     }
-  }
-}
-
-@media screen and (max-width: styles.$small-screen-size) {
-  .start-state-icon {
-    transform: rotate(-90deg);
-  }
-
-  .second-state-icon {
-    transform: rotate(0);
   }
 }
