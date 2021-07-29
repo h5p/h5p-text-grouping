@@ -7,6 +7,7 @@ import CategoryList from './categoryList/CategoryList';
 import TextItem from './textItem/TextItem';
 
 import './Main.scss';
+import deepCopy from '../helpers/deepCopy';
 
 /**
  * A component that defines the top-level layout and
@@ -31,7 +32,8 @@ export default function Main({ context }) {
     randomizedTextItems.slice()
   ]);
 
-  const applyCategoryAssignment = () => setAppliedCategoryAssignment(temporaryCategoryAssignment);
+  const applyCategoryAssignment = () =>
+    setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
 
   /**
    * Adds the listed text items to the category and removes them from others
