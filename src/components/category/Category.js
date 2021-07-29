@@ -29,8 +29,8 @@ export default function Category({
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
 
-  const id = categoryId.substring(9);
-  const uncategorizedId = `category-${temporaryCategoryAssignment.length - 1}`;
+  const id = categoryId;
+  const uncategorizedId = temporaryCategoryAssignment.length - 1;
   const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
   const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 
@@ -59,22 +59,20 @@ export default function Category({
 
   return (
     <div className="category">
-      <div className="category-top">
+      <div className="header">
         <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
-        <div className="heading">
-          <div>{titleWithChildCount}</div>
-          <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
-          {dropdownSelectOpen ? (
-            <DropdownSelect
-              label={l10n.assignItemsHelpText}
-              onChange={(textItemId) => toggleTextItem(textItemId)}
-              onClose={handleDropdownSelectClose}
-              options={appliedCategoryAssignment.flat()}
-              currentlySelectedIds={currentlySelectedIds}
-              multiSelectable={true}
-            />
-          ) : null}
-        </div>
+        <div className="title">{titleWithChildCount}</div>
+        <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
+        {dropdownSelectOpen ? (
+          <DropdownSelect
+            label={l10n.assignItemsHelpText}
+            onChange={(textItemId) => toggleTextItem(textItemId)}
+            onClose={handleDropdownSelectClose}
+            options={appliedCategoryAssignment.flat()}
+            currentlySelectedIds={currentlySelectedIds}
+            multiSelectable={true}
+          />
+        ) : null}
       </div>
       <div className={accordionOpen ? 'second-state-content' : 'start-state-content'}>
         <hr />

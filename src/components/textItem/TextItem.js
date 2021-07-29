@@ -30,8 +30,8 @@ export default function TextItem({
   const handleDropdownSelectOpen = () => {
     setSelectableCategories(
       categories
-        .map((category, i) => [`category-${i}`, category.groupName])
-        .filter((category, i) => `category-${i}` !== currentCategory)
+        .map((category, i) => [i, category.groupName])
+        .filter((category, i) => i !== currentCategory)
     );
 
     setDropdownSelectOpen(true);
