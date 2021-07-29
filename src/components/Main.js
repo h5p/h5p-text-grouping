@@ -123,6 +123,7 @@ export default function Main({ context }) {
         moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}
         displayedText={textItem[1]}
+        animate={textItem[2]}
       />
     );
   });
