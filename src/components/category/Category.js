@@ -46,6 +46,7 @@ export default function Category({
   const handleDropdownSelectClose = () => {
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
+    instance.trigger('resize');
   };
   const toggleTextItem = (textItemId) => {
     if (currentlySelectedIds.includes(textItemId)) {
