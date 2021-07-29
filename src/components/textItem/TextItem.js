@@ -15,7 +15,7 @@ import './TextItem.scss';
 export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLabel, buttonHoverText, animate }) {
   const moveToCategory = () => {
     // TODO: Dummy function
-    moveTextItem(id, 'category-0'); // TODO: change to category id from dropdown
+    moveTextItem(id, 0); // TODO: change to category id from dropdown
   };
 
   return (

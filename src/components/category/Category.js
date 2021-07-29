@@ -29,8 +29,8 @@ export default function Category({
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
 
-  const id = categoryId.substring(9);
-  const uncategorizedId = `category-${temporaryCategoryAssignment.length - 1}`;
+  const id = categoryId;
+  const uncategorizedId = temporaryCategoryAssignment.length - 1;
   const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
   const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 

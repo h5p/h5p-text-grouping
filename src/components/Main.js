@@ -69,7 +69,7 @@ export default function Main({ context }) {
 
     textItem.push(true); // Adds a boolean after id and text if this item was moved
     // Add to new category
-    newCategories[parseInt(categoryId.substring(9))].push(textItem);
+    newCategories[categoryId].push(textItem);
     setTemporaryCategoryAssignment(newCategories);
   };
 
@@ -78,7 +78,7 @@ export default function Main({ context }) {
     if (i < textGroups.length) {
       return (
         <Category
-          categoryId={`category-${i}`}
+          categoryId={i}
           key={`category-${i}`}
           title={textGroups[i].groupName}
           assignTextItem={moveTextItem}
