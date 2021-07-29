@@ -8,6 +8,7 @@ import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 import AssignItemsButton from './Buttons/AssignItemsButton';
 
 import './Category.scss';
+import useNarrowScreen from '../../helpers/useNarrowScreen';
 
 /**
  * A Category renders a list of TextElements received
@@ -26,6 +27,7 @@ export default function Category({
   children
 }) {
   const { instance, l10n } = useContext(H5PContext);
+  const narrowScreen = useNarrowScreen();
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(false);
 
@@ -43,11 +45,13 @@ export default function Category({
   };
 
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
+
   const handleDropdownSelectClose = () => {
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
     instance.trigger('resize');
   };
+
   const toggleTextItem = (textItemId) => {
     if (currentlySelectedIds.includes(textItemId)) {
       assignTextItem(textItemId, uncategorizedId);
