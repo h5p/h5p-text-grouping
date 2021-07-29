@@ -15,13 +15,13 @@ H5P.TextGrouping = (() => {
     // Construct text item elements for categorized words
     params.textGroups.forEach((category, i) => {
       category.textElements.forEach((element, j) => {
-        randomizedTextItems.push([`${i}${j}`, element]);
+        randomizedTextItems.push([`${i}${j}`, element, false]);
       });
     });
 
     // Construct text item elements for distractor words
     params.distractorGroup.forEach((element, i) => {
-      randomizedTextItems.push([`${params.textGroups.length}${i}`, element]);
+      randomizedTextItems.push([`${params.textGroups.length}${i}`, element, false]);
     });
 
     // Randomize order of text items

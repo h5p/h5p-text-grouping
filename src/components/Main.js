@@ -32,8 +32,31 @@ export default function Main({ context }) {
     randomizedTextItems.slice()
   ]);
 
-  const applyCategoryAssignment = () =>
-    setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
+  const applyCategoryAssignment = () => {
+    // Remove text items that are to be moved from old categories
+    appliedCategoryAssignment.forEach((category, i) => {
+      for (let j = category.length - 1; j >= 0; j--) {
+        if (!temporaryCategoryAssignment[i].map(e => e[0]).includes(category[j][0])) {
+          category.splice(j, 1);
+        } 
+        else {
+          category[j][2] = false;  // Set boolean for moved to false for all text items
+        }
+      }
+    });
+
+    // Add back text items that are to be moved to new categories
+    temporaryCategoryAssignment.forEach((category, i) => {
+      category.forEach((textItem) => {
+        if (!appliedCategoryAssignment[i].map(e => e[0]).includes(textItem[0])) {
+          appliedCategoryAssignment[i].push(textItem);
+          textItem[2] = true;  // Set boolean for moved to true
+        }
+      });
+    });
+    
+    setAppliedCategoryAssignment(deepCopy(appliedCategoryAssignment));
+  };
 
   /**
    * Adds the listed text items to the category and removes them from others
@@ -67,7 +90,6 @@ export default function Main({ context }) {
       });
     });
 
-    textItem.push(true); // Adds a boolean after id and text if this item was moved
     // Add to new category
     newCategories[categoryId].push(textItem);
     setTemporaryCategoryAssignment(newCategories);
@@ -94,7 +116,7 @@ export default function Main({ context }) {
               displayedText={textItem[1]}
               buttonAriaLabel={l10n.ariaMoveToCategory}
               buttonHoverText={l10n.hoverMoveToCategory}
-              animate={textItem.length === 3 && textItem[2] === true ? true : false}
+              animate={textItem[2]}
             />
           ))}
         </Category>
