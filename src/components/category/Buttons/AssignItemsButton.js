@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { H5PContext } from '../../../context/H5PContext';
 import Button from '../../commons/Button';
 
 import './AssignItemsButton.scss';
 
 export default function AssignItemsButton({ expanded, onClick }) {
+  const { l10n } = useContext(H5PContext);
+
   return (
     <Button
       iconName="icon-assign-items"
       className="button-assign-items"
-      ariaLabel="Assign items to category"
+      ariaLabel={l10n.assignItemsHelpText}
       ariaHasPopup="listbox"
       ariaExpanded={expanded}
-      hoverText="Assign items to category"
+      hoverText={l10n.assignItemsHelpText}
       onClick={onClick}
     />
   );

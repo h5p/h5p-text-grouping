@@ -17,7 +17,6 @@ import deepCopy from '../helpers/deepCopy';
  */
 export default function Main({ context }) {
   const {
-    l10n,
     randomizedTextItems,
     params: { textGroups }
   } = context;
@@ -56,19 +55,6 @@ export default function Main({ context }) {
     });
     
     setAppliedCategoryAssignment(deepCopy(appliedCategoryAssignment));
-  };
-
-  /**
-   * Adds the listed text items to the category and removes them from others
-   * @param {String} categoryId
-   * @param {String[]} textItemIds An array of textItemIds
-   */
-  const addToCategory = (categoryId, textItemIds) => {
-    // TODO: ignore textitem if already in category
-
-    textItemIds.array.forEach((textItemId) => {
-      moveTextItem(textItemId, categoryId);
-    });
   };
 
   /**
@@ -112,10 +98,11 @@ export default function Main({ context }) {
             <TextItem
               key={textItem[0]}
               id={textItem[0]}
+              currentCategory={i}
+              categories={[...textGroups, {groupName: 'Uncategorized'}]}
               moveTextItem={moveTextItem}
+              applyAssignment={applyCategoryAssignment}
               displayedText={textItem[1]}
-              buttonAriaLabel={l10n.ariaMoveToCategory}
-              buttonHoverText={l10n.hoverMoveToCategory}
               animate={textItem[2]}
             />
           ))}
@@ -131,10 +118,11 @@ export default function Main({ context }) {
       <TextItem
         key={textItem[0]}
         id={textItem[0]}
+        currentCategory={textGroups.length}
+        categories={textGroups}
         moveTextItem={moveTextItem}
+        applyAssignment={applyCategoryAssignment}
         displayedText={textItem[1]}
-        buttonAriaLabel={l10n.ariaMoveToCategory}
-        buttonHoverText={l10n.hoverMoveToCategory}
       />
     );
   });

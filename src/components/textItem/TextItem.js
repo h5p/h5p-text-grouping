@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import { H5PContext } from '../../context/H5PContext';
 import Button from '../commons/Button';
+import DropdownSelect from '../commons/DropdownSelect';
 import './TextItem.scss';
 
 /**
@@ -12,10 +14,38 @@ import './TextItem.scss';
  * @param {object} props Props object
  * @returns {JSX.Element} A single text item with button
  */
-export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLabel, buttonHoverText, animate }) {
-  const moveToCategory = () => {
-    // TODO: Dummy function
-    moveTextItem(id, 0); // TODO: change to category id from dropdown
+export default function TextItem({
+  id,
+  currentCategory,
+  categories,
+  moveTextItem,
+  applyAssignment,
+  displayedText,
+  animate
+}) {
+  const { instance, l10n } = useContext(H5PContext);
+  const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
+  const [selectableCategories, setSelectableCategories] = useState();
+
+  const handleDropdownSelectOpen = () => {
+    setSelectableCategories(
+      categories
+        .map((category, i) => [i, category.groupName])
+        .filter((category, i) => i !== currentCategory)
+    );
+
+    setDropdownSelectOpen(true);
+  };
+
+  const handleDropdownSelectClose = () => {
+    applyAssignment();
+    setDropdownSelectOpen(false);
+    instance.trigger('resize');
+  };
+
+  const selectCategory = (categoryId) => {
+    moveTextItem(id, categoryId);
+    handleDropdownSelectClose();
   };
 
   return (
@@ -26,10 +56,19 @@ export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLa
           <Button
             iconName="icon-move-to-category"
             className="button-move-to-category"
-            ariaLabel={buttonAriaLabel}
-            hoverText={buttonHoverText}
-            onClick={moveToCategory}
+            ariaLabel={l10n.ariaMoveToCategory}
+            hoverText={l10n.hoverMoveToCategory}
+            onClick={handleDropdownSelectOpen}
           />
+          {dropdownSelectOpen ? (
+            <DropdownSelect
+              label={l10n.moveItemsHelpText}
+              onChange={(categoryId) => selectCategory(categoryId)}
+              onClose={handleDropdownSelectClose}
+              options={selectableCategories}
+              multiSelectable={false}
+            />
+          ) : null}
         </div>
       </div>
     </li>
@@ -38,8 +77,13 @@ export default function TextItem({ id, moveTextItem, displayedText, buttonAriaLa
 
 TextItem.propTypes = {
   id: PropTypes.string.isRequired,
+  currentCategory: PropTypes.number.isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      groupName: PropTypes.string.isRequired
+    })
+  ),
   moveTextItem: PropTypes.func.isRequired,
-  displayedText: PropTypes.string.isRequired,
-  buttonAriaLabel: PropTypes.string,
-  buttonHoverText: PropTypes.string
+  applyAssignment: PropTypes.func.isRequired,
+  displayedText: PropTypes.string.isRequired
 };
