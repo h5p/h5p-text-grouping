@@ -59,22 +59,20 @@ export default function Category({
 
   return (
     <div className="category">
-      <div className="category-top">
+      <div className="header">
         <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
-        <div className="heading">
-          <div>{titleWithChildCount}</div>
-          <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
-          {dropdownSelectOpen ? (
-            <DropdownSelect
-              label={l10n.assignItemsHelpText}
-              onChange={(textItemId) => toggleTextItem(textItemId)}
-              onClose={handleDropdownSelectClose}
-              options={appliedCategoryAssignment.flat()}
-              currentlySelectedIds={currentlySelectedIds}
-              multiSelectable={true}
-            />
-          ) : null}
-        </div>
+        <div className="title">{titleWithChildCount}</div>
+        <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
+        {dropdownSelectOpen ? (
+          <DropdownSelect
+            label={l10n.assignItemsHelpText}
+            onChange={(textItemId) => toggleTextItem(textItemId)}
+            onClose={handleDropdownSelectClose}
+            options={appliedCategoryAssignment.flat()}
+            currentlySelectedIds={currentlySelectedIds}
+            multiSelectable={true}
+          />
+        ) : null}
       </div>
       <div className={accordionOpen ? 'second-state-content' : 'start-state-content'}>
         <hr />
