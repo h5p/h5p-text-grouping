@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Button from '../commons/Button';
-import DropdownSelect from '../commons/DropdownSelect';
+import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import './TextItem.scss';
 
 /**
@@ -66,12 +66,11 @@ export default function TextItem({
             onClick={handleDropdownSelectOpen}
           />
           {dropdownSelectOpen ? (
-            <DropdownSelect
+            <SingleDropdownSelect
               label={l10n.moveItemsHelpText}
               onChange={(categoryId) => selectCategory(categoryId)}
               onClose={handleDropdownSelectClose}
               options={selectableCategories}
-              multiSelectable={false}
             />
           ) : null}
         </div>

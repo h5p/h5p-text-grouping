@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Dropzone from '../commons/Dropzone';
-import DropdownSelect from '../commons/DropdownSelect';
+import MultiDropdownSelect from '../commons/MultiDropdownSelect';
 import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 import AssignItemsButton from './Buttons/AssignItemsButton';
 
@@ -73,13 +73,12 @@ export default function Category({
       </div>
       {dropdownSelectOpen ? (
         <div className="dropdown-wrapper">
-          <DropdownSelect
+          <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
             onChange={(textItemId) => toggleTextItem(textItemId)}
             onClose={handleDropdownSelectClose}
             options={appliedCategoryAssignment.flat()}
             currentlySelectedIds={currentlySelectedIds}
-            multiSelectable={true}
           />
         </div>
       ) : null}
