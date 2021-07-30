@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes, { arrayOf } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import './DropdownSelect.scss';
 
@@ -78,18 +78,17 @@ export default function SingleDropdownSelect({
         tabIndex={0}
         onKeyDown={(event) => handleKeyboardPressed(event, null)}
       >
-        {options.map((option, index) => {
-          const [optionId, optionElement] = option;
+        {options.map(({ groupName }, id) => {
           return (
             <li
-              key={`option-${optionId}`}
-              className={classNames[index]}
-              onClick={(event) => handleSelectItem(event, optionId)}
+              key={`option-${id}`}
+              className={classNames[id]}
+              onClick={(event) => handleSelectItem(event, id)}
               tabIndex={-1}
               role="option"
               aria-selected={false}
-              disabled={optionId === currentlySelectedId}
-              dangerouslySetInnerHTML={{ __html: optionElement }}
+              disabled={id === currentlySelectedId}
+              dangerouslySetInnerHTML={{ __html: groupName }}
             />
           );
         })}
@@ -103,7 +102,9 @@ SingleDropdownSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
-    arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]))
+    PropTypes.shape({
+      groupName: PropTypes.string
+    })
   ).isRequired,
-  currentlySelectedId: PropTypes.arrayOf(PropTypes.string)
+  currentlySelectedId: PropTypes.number
 };

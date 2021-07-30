@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import PropTypes, { arrayOf } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import './DropdownSelect.scss';
 
@@ -47,17 +47,17 @@ export default function MultiDropdownSelect({
       <hr />
       <ul role="listbox" tabIndex={-1} aria-multiselectable={true}>
         {options.map((option) => {
-          const [optionId, optionElement] = option;
+          const { id, content } = option;
           return (
             <li
-              key={`option-${optionId}`}
-              className={currentlySelectedIds.includes(optionId) ? 'selected' : 'unselected'}
-              onClick={(event) => handleSelectItem(event, optionId)}
-              onKeyDown={(event) => handleKeyboardPressed(event, optionId)}
+              key={`option-${id}`}
+              className={currentlySelectedIds.includes(id) ? 'selected' : 'unselected'}
+              onClick={(event) => handleSelectItem(event, id)}
+              onKeyDown={(event) => handleKeyboardPressed(event, id)}
               tabIndex={0}
               role="option"
-              aria-selected={currentlySelectedIds.includes(optionId)}
-              dangerouslySetInnerHTML={{ __html: optionElement }}
+              aria-selected={currentlySelectedIds.includes(id)}
+              dangerouslySetInnerHTML={{ __html: content }}
             />
           );
         })}
@@ -71,7 +71,11 @@ MultiDropdownSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
-    arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]))
+    PropTypes.exact({
+      id: PropTypes.string,
+      content: PropTypes.string,
+      shouldAnimate: PropTypes.bool
+    })
   ).isRequired,
   currentlySelectedIds: PropTypes.arrayOf(PropTypes.string)
 };

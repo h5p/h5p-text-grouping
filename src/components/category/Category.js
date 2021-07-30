@@ -34,9 +34,10 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const id = categoryId;
   const uncategorizedId = temporaryCategoryAssignment.length - 1;
-  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
+  const currentlySelectedIds = temporaryCategoryAssignment[categoryId].map(
+    (textItem) => textItem.id
+  );
   const titleWithChildCount = `${title} (${children ? children.length : 0})`;
 
   /**

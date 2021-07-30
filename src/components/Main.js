@@ -39,13 +39,13 @@ export default function Main({ context }) {
       for (let otherCategoryId = category.length - 1; otherCategoryId >= 0; otherCategoryId--) {
         if (
           !temporaryCategoryAssignment[categoryId]
-            .map((temporaryTextItem) => temporaryTextItem[0])
-            .includes(category[otherCategoryId][0])
+            .map((temporaryTextItem) => temporaryTextItem.id)
+            .includes(category[otherCategoryId].id)
         ) {
           category.splice(otherCategoryId, 1);
         }
         else {
-          category[otherCategoryId][2] = false; // Set boolean for moved to false for all text items
+          category[otherCategoryId].shouldAnimate = false; // Set boolean for moved to false for all text items
         }
       }
     });
@@ -55,11 +55,11 @@ export default function Main({ context }) {
       category.forEach((textItem) => {
         if (
           !appliedCategoryAssignment[categoryId]
-            .map((appliedTextItem) => appliedTextItem[0])
-            .includes(textItem[0])
+            .map((appliedTextItem) => appliedTextItem.id)
+            .includes(textItem.id)
         ) {
           appliedCategoryAssignment[categoryId].push(textItem);
-          textItem[2] = true; // Set boolean for moved to true
+          textItem.shouldAnimate = true; // Set boolean for moved to true
         }
       });
     });
@@ -79,7 +79,7 @@ export default function Main({ context }) {
     // Remove from previous category
     newCategories.forEach((category) => {
       category.forEach((item, index) => {
-        if (item[0] === textItemId) {
+        if (item.id === textItemId) {
           textItem = item;
           category.splice(index, 1);
         }
@@ -94,7 +94,7 @@ export default function Main({ context }) {
   const removeAnimations = () => {
     const temporaryCategoryAssignmentCopy = deepCopy(temporaryCategoryAssignment);
     temporaryCategoryAssignmentCopy.flat().forEach((textItem) => {
-      textItem[2] = false;
+      textItem.shouldAnimate = false;
     });
     setTemporaryCategoryAssignment(temporaryCategoryAssignmentCopy);
     applyCategoryAssignment();
@@ -113,44 +113,40 @@ export default function Main({ context }) {
           appliedCategoryAssignment={appliedCategoryAssignment}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
         >
-          {category.map((textItem) => {
-            const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
-            return (
-              <TextItem
-                key={textItemId}
-                textItemId={textItemId}
-                currentCategory={categoryId}
-                categories={[...textGroups, { groupName: 'Uncategorized' }]}
-                moveTextItem={moveTextItem}
-                applyAssignment={applyCategoryAssignment}
-                textElement={textItemElement}
-                shouldAnimate={textItemShouldAnimate}
-                removeAnimations={removeAnimations}
-              />
-            );
-          })}
+          {category.map(({ id, content, shouldAnimate }) => (
+            <TextItem
+              key={id}
+              textItemId={id}
+              currentCategoryId={categoryId}
+              categories={[...textGroups, { groupName: 'Uncategorized' }]}
+              moveTextItem={moveTextItem}
+              applyAssignment={applyCategoryAssignment}
+              textElement={content}
+              shouldAnimate={shouldAnimate}
+              removeAnimations={removeAnimations}
+            />
+          ))}
         </Category>
       );
     }
   });
 
   // Construct text item elements
-  const textItemElements = appliedCategoryAssignment[uncategorizedId].map((textItem) => {
-    const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
-    return (
+  const textItemElements = appliedCategoryAssignment[uncategorizedId].map(
+    ({ id, content, shouldAnimate }) => (
       <TextItem
-        key={textItemId}
-        textItemId={textItemId}
-        currentCategory={uncategorizedId}
+        key={id}
+        textItemId={id}
+        currentCategoryId={uncategorizedId}
         categories={textGroups}
         moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}
-        textElement={textItemElement}
-        shouldAnimate={textItemShouldAnimate}
+        textElement={content}
+        shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
       />
-    );
-  });
+    )
+  );
 
   return (
     <H5PContext.Provider value={context}>
