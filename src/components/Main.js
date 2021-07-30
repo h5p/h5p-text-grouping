@@ -118,7 +118,7 @@ export default function Main({ context }) {
             return (
               <TextItem
                 key={textItemId}
-                id={textItemId}
+                textItemId={textItemId}
                 currentCategory={categoryId}
                 categories={[...textGroups, { groupName: 'Uncategorized' }]}
                 moveTextItem={moveTextItem}
@@ -140,7 +140,7 @@ export default function Main({ context }) {
     return (
       <TextItem
         key={textItemId}
-        id={textItemId}
+        textItemId={textItemId}
         currentCategory={uncategorizedId}
         categories={textGroups}
         moveTextItem={moveTextItem}
