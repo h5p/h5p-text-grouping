@@ -81,14 +81,13 @@ export default function Main({ context }) {
     setTemporaryCategoryAssignment(newCategories);
   };
 
-  const removeAnimation = (textItemId) => {
-    temporaryCategoryAssignment.forEach((category) => {
-      const textItem = category.find((textItem) => textItem[0] === textItemId);
-      if (textItem) {
-        textItem[2] = false;
-        return;
-      }
+  const removeAnimations = () => {
+    const temporaryCategoryAssignmentCopy = deepCopy(temporaryCategoryAssignment);
+    temporaryCategoryAssignmentCopy.flat().forEach((textItem) => {
+      textItem[2] = false;
     });
+    setTemporaryCategoryAssignment(temporaryCategoryAssignmentCopy);
+    setAppliedCategoryAssignment(temporaryCategoryAssignmentCopy);
   };
 
   //Construct category elements
@@ -114,7 +113,7 @@ export default function Main({ context }) {
               applyAssignment={applyCategoryAssignment}
               displayedText={textItem[1]}
               animate={textItem[2]}
-              removeAnimation={() => removeAnimation(textItem[0])}
+              removeAnimations={removeAnimations}
             />
           ))}
         </Category>
@@ -135,7 +134,7 @@ export default function Main({ context }) {
         applyAssignment={applyCategoryAssignment}
         displayedText={textItem[1]}
         animate={textItem[2]}
-        removeAnimation={() => removeAnimation(textItem[0])}
+        removeAnimations={removeAnimations}
       />
     );
   });
