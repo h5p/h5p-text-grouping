@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import './Uncategorized.scss';
+import Dropzone from '../commons/DropZone.js';
+import TextItem from '../textItem/TextItem';
 import { H5PContext } from '../../context/H5PContext';
 
 /**
@@ -10,14 +12,44 @@ import { H5PContext } from '../../context/H5PContext';
  * @param {object} props Props object
  * @returns {JSX.Element} An uncategorized element
  */
-export default function Uncategorized({ children }) {
+export default function Uncategorized({
+  textItems: {
+    category,
+    currentCategory,
+    categories,
+    moveTextItem,
+    applyAssignment,
+    removeAnimations
+  }
+}) {
   const { l10n } = useContext(H5PContext);
+  const [dropzoneVisible, setDropzoneVisible] = useState(false);
+
+  const textItems = category.map((textItem) => {
+    const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
+    return (
+      <TextItem
+        key={textItemId}
+        textItemId={textItemId}
+        currentCategory={currentCategory}
+        categories={categories}
+        moveTextItem={moveTextItem}
+        applyAssignment={applyAssignment}
+        textElement={textItemElement}
+        shouldAnimate={textItemShouldAnimate}
+        removeAnimations={removeAnimations}
+      />
+    );
+  });
 
   return (
     <div className="uncategorized">
       <div className="uncategorized-heading">{l10n.uncategorizedLabel}</div>
-      <ul className={`uncategorized-list ${children.length === 1 ? 'single-text-item' : ''}`}>
-        {children}
+      <ul className={`uncategorized-list ${categories.length === 1 ? 'single-text-item' : ''}`}>
+        {textItems}
+        <li>
+          <Dropzone key={`dropzone-uncategorized`} visible={dropzoneVisible} />
+        </li>
       </ul>
     </div>
   );

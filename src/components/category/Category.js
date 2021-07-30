@@ -6,6 +6,7 @@ import Dropzone from '../commons/Dropzone';
 import DropdownSelect from '../commons/DropdownSelect';
 import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 import AssignItemsButton from './Buttons/AssignItemsButton';
+import TextItem from '../textItem/TextItem';
 
 import './Category.scss';
 import useNarrowScreen from '../../helpers/useNarrowScreen';
@@ -24,12 +25,18 @@ export default function Category({
   applyCategoryAssignment,
   appliedCategoryAssignment,
   temporaryCategoryAssignment,
-  children
+  textItems: {
+    category, 
+    currentCategory, 
+    categories,
+    removeAnimations
+  }
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
+  const [dropzoneVisible, setDropzoneVisible] = useState(false);
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
@@ -37,7 +44,7 @@ export default function Category({
   const id = categoryId;
   const uncategorizedId = temporaryCategoryAssignment.length - 1;
   const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
-  const titleWithChildCount = `${title} (${children ? children.length : 0})`;
+  const titleWithChildCount = `${title} (${category ? category.length : 0})`;
 
   /**
    * Toggle whether the accordion is open or not
@@ -64,6 +71,25 @@ export default function Category({
     }
   };
 
+  const textItems = (
+    category.map((textItem) => {
+      const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
+      return (
+        <TextItem
+          key={textItemId}
+          textItemId={textItemId}
+          currentCategory={currentCategory}
+          categories={[...categories, { groupName: 'Uncategorized' }]}
+          moveTextItem={assignTextItem}
+          applyAssignment={applyCategoryAssignment}
+          textElement={textItemElement}
+          shouldAnimate={textItemShouldAnimate}
+          removeAnimations={removeAnimations}
+        />
+      );
+    })
+  );
+  
   return (
     <div className="category">
       <div className="header">
@@ -86,9 +112,9 @@ export default function Category({
       <div className={accordionOpen ? undefined : 'collapsed'}>
         <hr />
         <ul className="content">
-          {children}
-          <li key="key">
-            <Dropzone key="key" />
+          {textItems}
+          <li>
+            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible}/>
           </li>
         </ul>
       </div>

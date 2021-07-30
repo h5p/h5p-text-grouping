@@ -19,6 +19,10 @@
     justify-content: center;
   }
 
+  &.hidden {
+    visibility: hidden;
+  }
+
   @media screen and (max-width: styles.$small-screen-size) {
     display: none;
   }

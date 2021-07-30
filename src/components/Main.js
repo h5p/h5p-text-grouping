@@ -4,7 +4,6 @@ import { H5PContext } from '../context/H5PContext';
 import Category from './category/Category';
 import Uncategorized from './uncategorized/Uncategorized';
 import CategoryList from './categoryList/CategoryList';
-import TextItem from './textItem/TextItem';
 
 import './Main.scss';
 import deepCopy from '../helpers/deepCopy';
@@ -102,50 +101,30 @@ export default function Main({ context }) {
           applyCategoryAssignment={applyCategoryAssignment}
           appliedCategoryAssignment={appliedCategoryAssignment}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
-        >
-          {category.map((textItem) => {
-            const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
-            return (
-              <TextItem
-                key={textItemId}
-                id={textItemId}
-                currentCategory={i}
-                categories={[...textGroups, { groupName: 'Uncategorized' }]}
-                moveTextItem={moveTextItem}
-                applyAssignment={applyCategoryAssignment}
-                textElement={textItemElement}
-                shouldAnimate={textItemShouldAnimate}
-                removeAnimations={removeAnimations}
-              />
-            );
-          })}
-        </Category>
+          textItems={{
+            category: category,
+            currentCategory: i,
+            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            removeAnimations: removeAnimations
+          }}
+        ></Category>
       );
     }
-  });
-
-  // Construct text item elements
-  const textItemElements = appliedCategoryAssignment[textGroups.length].map((textItem) => {
-    const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
-    return (
-      <TextItem
-        key={textItemId}
-        id={textItemId}
-        currentCategory={textGroups.length}
-        categories={textGroups}
-        moveTextItem={moveTextItem}
-        applyAssignment={applyCategoryAssignment}
-        textElement={textItemElement}
-        shouldAnimate={textItemShouldAnimate}
-        removeAnimations={removeAnimations}
-      />
-    );
   });
 
   return (
     <H5PContext.Provider value={context}>
       <CategoryList>{categoryElements}</CategoryList>
-      <Uncategorized>{textItemElements}</Uncategorized>
+      <Uncategorized
+        textItems={{
+          category: appliedCategoryAssignment[textGroups.length],
+          currentCategory: textGroups.length,
+          categories: [...textGroups, { groupName: 'Uncategorized' }],
+          moveTextItem: moveTextItem,
+          applyAssignment: applyCategoryAssignment,
+          removeAnimations: removeAnimations
+        }}
+      />
     </H5PContext.Provider>
   );
 }
