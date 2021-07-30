@@ -87,7 +87,7 @@ export default function Main({ context }) {
       textItem[2] = false;
     });
     setTemporaryCategoryAssignment(temporaryCategoryAssignmentCopy);
-    setAppliedCategoryAssignment(temporaryCategoryAssignmentCopy);
+    applyCategoryAssignment();
   };
 
   //Construct category elements
