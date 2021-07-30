@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -22,22 +22,17 @@ export default function TextItem({
   applyAssignment,
   displayedText,
   animate,
-  removeAnimation
+  removeAnimations
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [selectableCategories, setSelectableCategories] = useState();
-  useEffect(() => {
-    return () => {
-      removeAnimation();
-    };
-  }, [animate]);
 
   const handleDropdownSelectOpen = () => {
     setSelectableCategories(
       categories
         .map((category, i) => [i, category.groupName])
-        .filter((category, i) => i !== currentCategory)
+        .filter((_category, i) => i !== currentCategory)
     );
 
     setDropdownSelectOpen(true);
@@ -56,7 +51,10 @@ export default function TextItem({
   };
 
   return (
-    <li className={`text-item-wrapper${animate ? ' animate' : ''}`}>
+    <li
+      className={`text-item-wrapper${animate ? ' animate' : ''}`}
+      onAnimationEnd={removeAnimations}
+    >
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: displayedText }} />
