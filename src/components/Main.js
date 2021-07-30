@@ -103,37 +103,40 @@ export default function Main({ context }) {
           appliedCategoryAssignment={appliedCategoryAssignment}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
         >
-          {category.map((textItem) => (
-            <TextItem
-              key={textItem[0]}
-              id={textItem[0]}
-              currentCategory={i}
-              categories={[...textGroups, { groupName: 'Uncategorized' }]}
-              moveTextItem={moveTextItem}
-              applyAssignment={applyCategoryAssignment}
-              displayedText={textItem[1]}
-              animate={textItem[2]}
-              removeAnimations={removeAnimations}
-            />
-          ))}
+          {category.map((textItem) => {
+            const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
+            return (
+              <TextItem
+                key={textItemId}
+                id={textItemId}
+                currentCategory={i}
+                categories={[...textGroups, { groupName: 'Uncategorized' }]}
+                moveTextItem={moveTextItem}
+                applyAssignment={applyCategoryAssignment}
+                textElement={textItemElement}
+                shouldAnimate={textItemShouldAnimate}
+                removeAnimations={removeAnimations}
+              />
+            );
+          })}
         </Category>
       );
     }
   });
 
   // Construct text item elements
-  let textItemElements = [];
-  appliedCategoryAssignment[textGroups.length].forEach((textItem) => {
-    textItemElements.push(
+  const textItemElements = appliedCategoryAssignment[textGroups.length].map((textItem) => {
+    const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
+    return (
       <TextItem
-        key={textItem[0]}
-        id={textItem[0]}
+        key={textItemId}
+        id={textItemId}
         currentCategory={textGroups.length}
         categories={textGroups}
         moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}
-        displayedText={textItem[1]}
-        animate={textItem[2]}
+        textElement={textItemElement}
+        shouldAnimate={textItemShouldAnimate}
         removeAnimations={removeAnimations}
       />
     );

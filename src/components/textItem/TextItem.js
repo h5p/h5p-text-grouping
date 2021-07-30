@@ -15,13 +15,13 @@ import './TextItem.scss';
  * @returns {JSX.Element} A single text item with button
  */
 export default function TextItem({
-  id,
+  textItemId,
   currentCategory,
   categories,
   moveTextItem,
   applyAssignment,
-  displayedText,
-  animate,
+  textElement,
+  shouldAnimate,
   removeAnimations
 }) {
   const { instance, l10n } = useContext(H5PContext);
@@ -46,18 +46,18 @@ export default function TextItem({
   };
 
   const selectCategory = (categoryId) => {
-    moveTextItem(id, categoryId);
+    moveTextItem(textItemId, categoryId);
     handleDropdownSelectClose();
   };
 
   return (
     <li
-      className={`text-item-wrapper${animate ? ' animate' : ''}`}
+      className={`text-item-wrapper${shouldAnimate ? ' animate' : ''}`}
       onAnimationEnd={removeAnimations}
     >
       <div className="text-item-border">
         <div className="text-item">
-          <div dangerouslySetInnerHTML={{ __html: displayedText }} />
+          <div dangerouslySetInnerHTML={{ __html: textElement }} />
           <Button
             iconName="icon-move-to-category"
             className="button-move-to-category"
@@ -81,7 +81,7 @@ export default function TextItem({
 }
 
 TextItem.propTypes = {
-  id: PropTypes.string.isRequired,
+  textItemId: PropTypes.string.isRequired,
   currentCategory: PropTypes.number.isRequired,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
@@ -90,5 +90,7 @@ TextItem.propTypes = {
   ),
   moveTextItem: PropTypes.func.isRequired,
   applyAssignment: PropTypes.func.isRequired,
-  displayedText: PropTypes.string.isRequired
+  textElement: PropTypes.string.isRequired,
+  shouldAnimate: PropTypes.bool.isRequired,
+  removeAnimations: PropTypes.func.isRequired
 };
