@@ -21,9 +21,9 @@ export default function Category({
   categoryId,
   title,
   assignTextItem,
-  applyCategoryAssignment,
-  appliedCategoryAssignment,
+  allTextItems,
   temporaryCategoryAssignment,
+  applyCategoryAssignment,
   children
 }) {
   const { instance, l10n } = useContext(H5PContext);
@@ -78,7 +78,7 @@ export default function Category({
             label={l10n.assignItemsHelpText}
             onChange={(textItemId) => toggleTextItem(textItemId)}
             onClose={handleDropdownSelectClose}
-            options={appliedCategoryAssignment.flat()}
+            options={allTextItems}
             currentlySelectedIds={currentlySelectedIds}
           />
         </div>

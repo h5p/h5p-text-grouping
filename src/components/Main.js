@@ -109,9 +109,9 @@ export default function Main({ context }) {
           key={`category-${categoryId}`}
           title={textGroups[categoryId].groupName}
           assignTextItem={moveTextItem}
-          applyCategoryAssignment={applyCategoryAssignment}
-          appliedCategoryAssignment={appliedCategoryAssignment}
+          allTextItems={randomizedTextItems.slice()}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
+          applyCategoryAssignment={applyCategoryAssignment}
         >
           {category.map(({ id, content, shouldAnimate }) => (
             <TextItem
