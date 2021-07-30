@@ -30,25 +30,35 @@ export default function Main({ context }) {
     randomizedTextItems.slice()
   ]);
 
+  const uncategorizedId = textGroups.length;
+
   const applyCategoryAssignment = () => {
     // Remove text items that are to be moved from old categories
-    appliedCategoryAssignment.forEach((category, i) => {
-      for (let j = category.length - 1; j >= 0; j--) {
-        if (!temporaryCategoryAssignment[i].map((e) => e[0]).includes(category[j][0])) {
-          category.splice(j, 1);
+    appliedCategoryAssignment.forEach((category, categoryId) => {
+      for (let otherCategoryId = category.length - 1; otherCategoryId >= 0; otherCategoryId--) {
+        if (
+          !temporaryCategoryAssignment[categoryId]
+            .map((temporaryTextItem) => temporaryTextItem.id)
+            .includes(category[otherCategoryId].id)
+        ) {
+          category.splice(otherCategoryId, 1);
         }
         else {
-          category[j][2] = false; // Set boolean for moved to false for all text items
+          category[otherCategoryId].shouldAnimate = false; // Set boolean for moved to false for all text items
         }
       }
     });
 
     // Add back text items that are to be moved to new categories
-    temporaryCategoryAssignment.forEach((category, i) => {
+    temporaryCategoryAssignment.forEach((category, categoryId) => {
       category.forEach((textItem) => {
-        if (!appliedCategoryAssignment[i].map((e) => e[0]).includes(textItem[0])) {
-          appliedCategoryAssignment[i].push(textItem);
-          textItem[2] = true; // Set boolean for moved to true
+        if (
+          !appliedCategoryAssignment[categoryId]
+            .map((appliedTextItem) => appliedTextItem.id)
+            .includes(textItem.id)
+        ) {
+          appliedCategoryAssignment[categoryId].push(textItem);
+          textItem.shouldAnimate = true; // Set boolean for moved to true
         }
       });
     });
@@ -67,10 +77,10 @@ export default function Main({ context }) {
 
     // Remove from previous category
     newCategories.forEach((category) => {
-      category.forEach((item, i) => {
-        if (item[0] === textItemId) {
+      category.forEach((item, index) => {
+        if (item.id === textItemId) {
           textItem = item;
-          category.splice(i, 1);
+          category.splice(index, 1);
         }
       });
     });
@@ -83,28 +93,29 @@ export default function Main({ context }) {
   const removeAnimations = () => {
     const temporaryCategoryAssignmentCopy = deepCopy(temporaryCategoryAssignment);
     temporaryCategoryAssignmentCopy.flat().forEach((textItem) => {
-      textItem[2] = false;
+      textItem.shouldAnimate = false;
     });
     setTemporaryCategoryAssignment(temporaryCategoryAssignmentCopy);
     applyCategoryAssignment();
   };
 
   //Construct category elements
-  const categoryElements = appliedCategoryAssignment.map((category, i) => {
-    if (i < textGroups.length) {
+  const categoryElements = appliedCategoryAssignment.map((category, categoryId) => {
+    if (categoryId < uncategorizedId) {
       return (
         <Category
-          categoryId={i}
-          key={`category-${i}`}
-          title={textGroups[i].groupName}
+          categoryId={categoryId}
+          key={`category-${categoryId}`}
+          title={textGroups[categoryId].groupName}
           assignTextItem={moveTextItem}
-          applyCategoryAssignment={applyCategoryAssignment}
-          appliedCategoryAssignment={appliedCategoryAssignment}
+          allTextItems={randomizedTextItems.slice()}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
+          applyCategoryAssignment={applyCategoryAssignment}
           textItems={{
             category: category,
-            currentCategory: i,
+            currentCategoryId: categoryId,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
+            applyAssignment: applyCategoryAssignment,
             removeAnimations: removeAnimations
           }}
         ></Category>
@@ -117,8 +128,8 @@ export default function Main({ context }) {
       <CategoryList>{categoryElements}</CategoryList>
       <Uncategorized
         textItems={{
-          category: appliedCategoryAssignment[textGroups.length],
-          currentCategory: textGroups.length,
+          category: appliedCategoryAssignment[uncategorizedId],
+          currentCategoryId: uncategorizedId,
           categories: [...textGroups, { groupName: 'Uncategorized' }],
           moveTextItem: moveTextItem,
           applyAssignment: applyCategoryAssignment,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Dropzone from '../commons/Dropzone';
-import DropdownSelect from '../commons/DropdownSelect';
+import MultiDropdownSelect from '../commons/MultiDropdownSelect';
 import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 import AssignItemsButton from './Buttons/AssignItemsButton';
 import TextItem from '../textItem/TextItem';
@@ -22,15 +22,10 @@ export default function Category({
   categoryId,
   title,
   assignTextItem,
-  applyCategoryAssignment,
-  appliedCategoryAssignment,
+  allTextItems,
   temporaryCategoryAssignment,
-  textItems: {
-    category, 
-    currentCategory, 
-    categories,
-    removeAnimations
-  }
+  applyCategoryAssignment,
+  textItems: { category, currentCategoryId, categories, removeAnimations }
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
@@ -41,9 +36,10 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const id = categoryId;
   const uncategorizedId = temporaryCategoryAssignment.length - 1;
-  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
+  const currentlySelectedIds = temporaryCategoryAssignment[categoryId].map(
+    (textItem) => textItem.id
+  );
   const titleWithChildCount = `${title} (${category ? category.length : 0})`;
 
   /**
@@ -71,24 +67,21 @@ export default function Category({
     }
   };
 
-  const textItems = (
-    category.map((textItem) => {
-      const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
-      return (
-        <TextItem
-          key={textItemId}
-          textItemId={textItemId}
-          currentCategory={currentCategory}
-          categories={[...categories, { groupName: 'Uncategorized' }]}
-          moveTextItem={assignTextItem}
-          applyAssignment={applyCategoryAssignment}
-          textElement={textItemElement}
-          shouldAnimate={textItemShouldAnimate}
-          removeAnimations={removeAnimations}
-        />
-      );
-    })
-  );
+  const textItems = category.map(({ id, content, shouldAnimate }) => {
+    return (
+      <TextItem
+        key={id}
+        textItemId={id}
+        currentCategoryId={currentCategoryId}
+        categories={categories.slice(0, categoryId).concat(categories.slice(categoryId+1))}
+        moveTextItem={assignTextItem}
+        applyAssignment={applyCategoryAssignment}
+        textElement={content}
+        shouldAnimate={shouldAnimate}
+        removeAnimations={removeAnimations}
+      />
+    );
+  });
   
   return (
     <div className="category">
@@ -99,13 +92,12 @@ export default function Category({
       </div>
       {dropdownSelectOpen ? (
         <div className="dropdown-wrapper">
-          <DropdownSelect
+          <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
             onChange={(textItemId) => toggleTextItem(textItemId)}
             onClose={handleDropdownSelectClose}
-            options={appliedCategoryAssignment.flat()}
+            options={allTextItems}
             currentlySelectedIds={currentlySelectedIds}
-            multiSelectable={true}
           />
         </div>
       ) : null}

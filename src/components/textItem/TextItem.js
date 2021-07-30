@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Button from '../commons/Button';
-import DropdownSelect from '../commons/DropdownSelect';
+import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import './TextItem.scss';
 
 /**
@@ -16,7 +16,7 @@ import './TextItem.scss';
  */
 export default function TextItem({
   textItemId,
-  currentCategory,
+  currentCategoryId,
   categories,
   moveTextItem,
   applyAssignment,
@@ -26,15 +26,8 @@ export default function TextItem({
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
-  const [selectableCategories, setSelectableCategories] = useState();
 
   const handleDropdownSelectOpen = () => {
-    setSelectableCategories(
-      categories
-        .map((category, i) => [i, category.groupName])
-        .filter((_category, i) => i !== currentCategory)
-    );
-
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
@@ -66,12 +59,12 @@ export default function TextItem({
             onClick={handleDropdownSelectOpen}
           />
           {dropdownSelectOpen ? (
-            <DropdownSelect
+            <SingleDropdownSelect
               label={l10n.moveItemsHelpText}
               onChange={(categoryId) => selectCategory(categoryId)}
               onClose={handleDropdownSelectClose}
-              options={selectableCategories}
-              multiSelectable={false}
+              options={categories}
+              currentlySelectedId={currentCategoryId}
             />
           ) : null}
         </div>
@@ -82,7 +75,7 @@ export default function TextItem({
 
 TextItem.propTypes = {
   textItemId: PropTypes.string.isRequired,
-  currentCategory: PropTypes.number.isRequired,
+  currentCategoryId: PropTypes.number.isRequired,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired

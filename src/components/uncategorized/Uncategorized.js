@@ -15,7 +15,7 @@ import { H5PContext } from '../../context/H5PContext';
 export default function Uncategorized({
   textItems: {
     category,
-    currentCategory,
+    currentCategoryId,
     categories,
     moveTextItem,
     applyAssignment,
@@ -25,18 +25,17 @@ export default function Uncategorized({
   const { l10n } = useContext(H5PContext);
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
 
-  const textItems = category.map((textItem) => {
-    const [textItemId, textItemElement, textItemShouldAnimate] = textItem;
+  const textItems = category.map(({ id, content, shouldAnimate }) => {
     return (
       <TextItem
-        key={textItemId}
-        textItemId={textItemId}
-        currentCategory={currentCategory}
-        categories={categories}
+        key={id}
+        textItemId={id}
+        currentCategoryId={currentCategoryId}
+        categories={categories.slice(0, -1)}
         moveTextItem={moveTextItem}
         applyAssignment={applyAssignment}
-        textElement={textItemElement}
-        shouldAnimate={textItemShouldAnimate}
+        textElement={content}
+        shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
       />
     );
