@@ -69,4 +69,22 @@
       padding-right: 0.5em;
     }
   }
+
+  .radioChecked {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'radio_button_checked';
+      padding-right: 0.5em;
+    }
+  }
+
+  .radioUnchecked {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'radio_button_unchecked';
+      padding-right: 0.5em;
+    }
+  }
 }

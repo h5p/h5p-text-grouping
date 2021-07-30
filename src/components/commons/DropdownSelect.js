@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes, { arrayOf } from 'prop-types';
 
 import './DropdownSelect.scss';
@@ -23,25 +23,63 @@ export default function DropdownSelect({
     };
   }, []);
 
+  const [classNames, setClassNames] = useState(options.map(() => 'radioUnchecked'));
+
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
     onChange(optionId);
   };
 
   const handleKeyboardPressed = (event, optionId) => {
-    // TODO: Implement radio button-like functionality for optionId === null
-    if (optionId != null) {
+    if (multiSelectable) {
       switch (event.key) {
         case ' ': // The space key
           event.preventDefault();
           handleSelectItem(event, optionId);
           break;
 
-        case 'Enter': 
+        case 'Enter':
           onClose();
           break;
       }
     }
+    else {
+      switch (event.key) {
+        case 'ArrowDown': 
+          event.preventDefault();
+          if (classNames[classNames.length - 1] != 'radioUnchecked') return;
+          setClassNames(prevClassNames => {
+            const index = prevClassNames.indexOf('radioChecked');
+            const classes = options.map(() => 'radioUnchecked');
+            classes[index + 1] = 'radioChecked';
+            return classes;
+          });
+          break;
+        
+        case 'ArrowUp': 
+          event.preventDefault();
+          if (classNames[0] != 'radioUnchecked') return;
+          setClassNames(prevClassNames => {
+            const index = prevClassNames.indexOf('radioChecked');
+            const classes = options.map(() => 'radioUnchecked');
+            classes[index - 1] = 'radioChecked';
+            return classes;
+          });
+          break;
+          
+        case 'Enter':
+        case ' ': // The space key
+          event.preventDefault();
+          handleSelectItem(event, classNames.indexOf('radioChecked'));
+          break;
+      }
+    }
+  };
+
+  const handleListboxSelected = () => {
+    const newClassNames = options.map(() => 'radioUnchecked');
+    newClassNames[0] = 'radioChecked';
+    setClassNames(newClassNames);
   };
 
   return (
@@ -50,24 +88,23 @@ export default function DropdownSelect({
       <hr />
       <ul
         role="listbox"
+        onFocus={event => handleListboxSelected(event)}
         tabIndex={multiSelectable === true ? -1 : 0}
         onKeyDown={event => handleKeyboardPressed(event, null)}
         aria-multiselectable={multiSelectable || undefined}
       >
-        {options.map((option) => {
+        {options.map((option, index) => {
           const [optionId, optionElement] = option;
           return (
             <li
               key={`option-${optionId}`}
-              className={
-                multiSelectable
-                  ? currentlySelectedIds.includes(optionId)
-                    ? 'selected'
-                    : 'unselected'
-                  : undefined
-              }
-              onClick={event => handleSelectItem(event, optionId)}
-              onKeyDown={event => handleKeyboardPressed(event, optionId)}
+              className={multiSelectable
+                ? currentlySelectedIds.includes(optionId)
+                  ? 'selected'
+                  : 'unselected'
+                : classNames[index]}
+              onClick={(event) => handleSelectItem(event, optionId)}
+              onKeyDown={(event) => handleKeyboardPressed(event, optionId)}
               tabIndex={multiSelectable === true ? 0 : -1}
               role="option"
               aria-selected={multiSelectable ? currentlySelectedIds.includes(optionId) : false}
