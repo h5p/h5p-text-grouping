@@ -39,6 +39,7 @@ export default function DropdownSelect({
           break;
 
         case 'Enter':
+        case 'Escape': 
           onClose();
           break;
       }
@@ -68,6 +69,7 @@ export default function DropdownSelect({
           break;
           
         case 'Enter':
+        case 'Escape':
         case ' ': // The space key
           event.preventDefault();
           handleSelectItem(event, options[classNames.indexOf('radioChecked')][0]);
