@@ -70,7 +70,7 @@ export default function DropdownSelect({
         case 'Enter':
         case ' ': // The space key
           event.preventDefault();
-          handleSelectItem(event, classNames.indexOf('radioChecked'));
+          handleSelectItem(event, options[classNames.indexOf('radioChecked')][0]);
           break;
       }
     }
