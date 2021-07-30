@@ -73,7 +73,7 @@ export default function Category({
         key={id}
         textItemId={id}
         currentCategoryId={currentCategoryId}
-        categories={categories.slice(0, categoryId).concat(categories.slice(categoryId+1))}
+        categories={categories}
         moveTextItem={assignTextItem}
         applyAssignment={applyCategoryAssignment}
         textElement={content}

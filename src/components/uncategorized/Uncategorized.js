@@ -31,7 +31,7 @@ export default function Uncategorized({
         key={id}
         textItemId={id}
         currentCategoryId={currentCategoryId}
-        categories={categories.slice(0, -1)}
+        categories={categories}
         moveTextItem={moveTextItem}
         applyAssignment={applyAssignment}
         textElement={content}

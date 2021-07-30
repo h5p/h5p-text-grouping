@@ -87,7 +87,7 @@ export default function SingleDropdownSelect({
               tabIndex={-1}
               role="option"
               aria-selected={false}
-              disabled={id === currentlySelectedId}
+              disabled={id === currentlySelectedId} // TODO: Implement functionality for this attribute
               dangerouslySetInnerHTML={{ __html: groupName }}
             />
           );
