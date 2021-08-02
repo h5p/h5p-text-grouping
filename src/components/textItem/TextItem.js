@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Button from '../commons/Button';
-import DropdownSelect from '../commons/DropdownSelect';
+import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import './TextItem.scss';
 
 /**
@@ -15,33 +15,22 @@ import './TextItem.scss';
  * @returns {JSX.Element} A single text item with button
  */
 export default function TextItem({
-  id,
-  currentCategory,
+  textItemId,
+  currentCategoryId,
   categories,
   moveTextItem,
   applyAssignment,
-  displayedText,
-  animate,
-  removeAnimation,
+  textElement,
+  shouldAnimate,
+  removeAnimations,
   setContainerHeight,
   resetContainerHeight
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
-  const [selectableCategories, setSelectableCategories] = useState();
   const textItemRef = useRef(null);
-  useEffect(() => {
-    return () => {
-      removeAnimation();
-    };
-  }, [animate]);
 
   const handleDropdownSelectOpen = () => {
-    setSelectableCategories(
-      categories
-        .map((category, i) => [i, category.groupName])
-        .filter((category, i) => i !== currentCategory)
-    );
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
@@ -54,7 +43,7 @@ export default function TextItem({
   };
 
   const selectCategory = (categoryId) => {
-    moveTextItem(id, categoryId);
+    moveTextItem(textItemId, categoryId);
     handleDropdownSelectClose();
   };
 
@@ -70,10 +59,14 @@ export default function TextItem({
   };
 
   return (
-    <li className={`text-item-wrapper${animate ? ' animate' : ''}`} ref={textItemRef}>
+    <li
+      className={`text-item-wrapper${shouldAnimate ? ' animate' : ''}`}
+      ref={textItemRef}
+      onAnimationEnd={removeAnimations}
+    >
       <div className="text-item-border">
         <div className="text-item">
-          <div dangerouslySetInnerHTML={{ __html: displayedText }} />
+          <div dangerouslySetInnerHTML={{ __html: textElement }} />
           <Button
             iconName="icon-move-to-category"
             className="button-move-to-category"
@@ -81,28 +74,28 @@ export default function TextItem({
             hoverText={l10n.hoverMoveToCategory}
             onClick={handleDropdownSelectOpen}
           />
+          {dropdownSelectOpen ? (
+            <div className="dropdown-wrapper">
+              <SingleDropdownSelect
+                label={l10n.moveItemsHelpText}
+                setContainerHeight={setHeight}
+                resetContainerHeight={resetContainerHeight}
+                onChange={(categoryId) => selectCategory(categoryId)}
+                onClose={handleDropdownSelectClose}
+                options={categories}
+                currentlySelectedId={currentCategoryId}
+              />
+            </div>
+          ) : null}
         </div>
-        {dropdownSelectOpen ? (
-          <div className="dropdown-wrapper">
-            <DropdownSelect
-              label={l10n.moveItemsHelpText}
-              setContainerHeight={setHeight}
-              resetContainerHeight={resetContainerHeight}
-              onChange={(categoryId) => selectCategory(categoryId)}
-              onClose={handleDropdownSelectClose}
-              options={selectableCategories}
-              multiSelectable={false}
-            />
-          </div>
-        ) : null}
       </div>
     </li>
   );
 }
 
 TextItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  currentCategory: PropTypes.number.isRequired,
+  textItemId: PropTypes.string.isRequired,
+  currentCategoryId: PropTypes.number.isRequired,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
@@ -110,7 +103,9 @@ TextItem.propTypes = {
   ),
   moveTextItem: PropTypes.func.isRequired,
   applyAssignment: PropTypes.func.isRequired,
-  displayedText: PropTypes.string.isRequired,
+  textElement: PropTypes.string.isRequired,
+  shouldAnimate: PropTypes.bool.isRequired,
+  removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired
 };

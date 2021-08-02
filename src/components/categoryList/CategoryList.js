@@ -14,11 +14,11 @@ import './CategoryList.scss';
 export default function CategoryList({
   categories,
   textGroups,
-  removeAnimation,
   moveTextItem,
+  allTextItems,
   applyCategoryAssignment,
-  appliedCategoryAssignment,
-  temporaryCategoryAssignment
+  temporaryCategoryAssignment,
+  removeAnimations
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
@@ -30,23 +30,27 @@ export default function CategoryList({
     }
   };
 
-  const categoryElements = categories.map((category, i) => {
-    if (i < textGroups.length) {
+  const categoryElements = categories.map((category, categoryId) => {
+    if (categoryId < textGroups.length) {
       return (
         <Category
-          categoryId={i}
-          key={`category-${i}`}
-          title={textGroups[i].groupName}
-          textGroups={textGroups}
-          removeAnimation={removeAnimation}
-          textItems={category}
+          categoryId={categoryId}
+          key={`category-${categoryId}`}
+          title={textGroups[categoryId].groupName}
           assignTextItem={moveTextItem}
-          applyCategoryAssignment={applyCategoryAssignment}
-          appliedCategoryAssignment={appliedCategoryAssignment}
+          allTextItems={allTextItems}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
+          applyCategoryAssignment={applyCategoryAssignment}
+          textItems={{
+            category: category,
+            currentCategoryId: categoryId,
+            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            applyAssignment: applyCategoryAssignment,
+            removeAnimations: removeAnimations
+          }}
           setContainerHeight={setMargin}
           resetContainerHeight={() => setMarginBottom(0)}
-        />
+        ></Category>
       );
     }
   });
@@ -64,20 +68,29 @@ export default function CategoryList({
 
 CategoryList.propTypes = {
   categories: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
   ).isRequired,
   textGroups: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
     })
   ).isRequired,
-  removeAnimation: PropTypes.func.isRequired,
   moveTextItem: PropTypes.func.isRequired,
   applyCategoryAssignment: PropTypes.func.isRequired,
-  appliedCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
-  ).isRequired,
   temporaryCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
-  ).isRequired
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
+  ).isRequired,
+  removeAnimations: PropTypes.func.isRequired
 };

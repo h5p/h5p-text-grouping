@@ -11,14 +11,14 @@
   break-inside: avoid;
 
   &.animate {
-    animation: example;
+    animation: fadeIn;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 
     .text-item-border {
-      animation: example2;
-      animation-delay: 0.6s;
-      animation-duration: 0.5s;
+      animation: flashBorder;
+      animation-delay: .5s;
+      animation-duration: .5s;
       animation-fill-mode: forwards;
       animation-timing-function: linear;
     }
@@ -75,7 +75,7 @@
   }
 }
 
-@keyframes example {
+@keyframes fadeIn {
   0% {
     opacity: 0%;
   }
@@ -84,7 +84,7 @@
   }
 }
 
-@keyframes example2 {
+@keyframes flashBorder {
   0% {
     border-color: styles.$border-color-neutral;
   }

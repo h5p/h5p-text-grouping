@@ -49,8 +49,15 @@
     line-height: 1.8em;
 
     &:hover {
-      background: styles.$text-item-background-neutral;
+      &:not(.disabled) {
+        cursor: pointer;
+        background: styles.$text-item-background-neutral;
+      }
     }
+  }
+
+  .disabled {
+    color: styles.$disabled-text-color;
   }
 
   .selected {
@@ -69,5 +76,9 @@
       content: 'check_box_outline_blank';
       padding-right: 0.5em;
     }
+  }
+
+  .radioSelected {
+    background: styles.$text-item-background-neutral;
   }
 }

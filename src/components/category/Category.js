@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import Dropzone from '../commons/Dropzone';
-import DropdownSelect from '../commons/DropdownSelect';
+import MultiDropdownSelect from '../commons/MultiDropdownSelect';
 import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 import AssignItemsButton from './Buttons/AssignItemsButton';
 import TextItem from '../textItem/TextItem';
@@ -21,15 +21,13 @@ import useNarrowScreen from '../../helpers/useNarrowScreen';
 export default function Category({
   categoryId,
   title,
-  textItems,
-  textGroups,
-  removeAnimation,
   assignTextItem,
-  applyCategoryAssignment,
-  appliedCategoryAssignment,
+  allTextItems,
   temporaryCategoryAssignment,
   setContainerHeight,
-  resetContainerHeight
+  resetContainerHeight,
+  applyCategoryAssignment,
+  textItems: { category, currentCategoryId, categories, removeAnimations }
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
@@ -37,31 +35,17 @@ export default function Category({
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
   const categoryHeaderRef = useRef(null);
 
+  const [dropzoneVisible, setDropzoneVisible] = useState(false);
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const id = categoryId;
   const uncategorizedId = temporaryCategoryAssignment.length - 1;
-  const currentlySelectedIds = temporaryCategoryAssignment[id].map((item) => item[0]);
 
-  const textItemElements = textItems.map((textItem) => (
-    <TextItem
-      key={textItem[0]}
-      id={textItem[0]}
-      currentCategory={categoryId}
-      categories={[...textGroups, { groupName: 'Uncategorized' }]}
-      moveTextItem={assignTextItem}
-      applyAssignment={applyCategoryAssignment}
-      displayedText={textItem[1]}
-      animate={textItem[2]}
-      removeAnimation={() => removeAnimation(textItem[0])}
-      setContainerHeight={setContainerHeight}
-      resetContainerHeight={resetContainerHeight}
-    />
-  ));
-
-  const titleWithChildCount = `${title} (${textItemElements ? textItemElements.length : 0})`;
+  const currentlySelectedIds = temporaryCategoryAssignment[categoryId].map(
+    (textItem) => textItem.id
+  );
+  const titleWithChildCount = `${title} (${category ? category.length : 0})`;
 
   /**
    * Toggle whether the accordion is open or not
@@ -94,6 +78,24 @@ export default function Category({
     );
   };
 
+  const textItems = category.map(({ id, content, shouldAnimate }) => {
+    return (
+      <TextItem
+        key={id}
+        textItemId={id}
+        currentCategoryId={currentCategoryId}
+        categories={categories}
+        moveTextItem={assignTextItem}
+        applyAssignment={applyCategoryAssignment}
+        textElement={content}
+        shouldAnimate={shouldAnimate}
+        removeAnimations={removeAnimations}
+        setContainerHeight={setContainerHeight}
+        resetContainerHeight={resetContainerHeight}
+      />
+    );
+  });
+
   return (
     <div className="category">
       <div className="header" ref={categoryHeaderRef}>
@@ -103,24 +105,23 @@ export default function Category({
       </div>
       {dropdownSelectOpen ? (
         <div className="dropdown-wrapper">
-          <DropdownSelect
+          <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
             setContainerHeight={setHeight}
             resetContainerHeight={resetContainerHeight}
             onChange={(textItemId) => toggleTextItem(textItemId)}
             onClose={handleDropdownSelectClose}
-            options={appliedCategoryAssignment.flat()}
+            options={allTextItems}
             currentlySelectedIds={currentlySelectedIds}
-            multiSelectable={true}
           />
         </div>
       ) : null}
       <div className={accordionOpen ? undefined : 'collapsed'}>
         <hr />
         <ul className="content">
-          {textItemElements}
-          <li key="key">
-            <Dropzone key="key" />
+          {textItems}
+          <li>
+            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
           </li>
         </ul>
       </div>
@@ -131,23 +132,17 @@ export default function Category({
 Category.propTypes = {
   categoryId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  textItems: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool]))
-  ).isRequired,
-  textGroups: PropTypes.arrayOf(
-    PropTypes.shape({
-      groupName: PropTypes.string.isRequired
-    })
-  ).isRequired,
-  removeAnimation: PropTypes.func.isRequired,
   assignTextItem: PropTypes.func.isRequired,
-  applyCategoryAssignment: PropTypes.func.isRequired,
-  appliedCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
-  ).isRequired,
   temporaryCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])))
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
   ).isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired
+  resetContainerHeight: PropTypes.func.isRequired,
+  applyCategoryAssignment: PropTypes.func.isRequired
 };
