@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { H5PContext } from '../context/H5PContext';
 import Category from './category/Category';
@@ -107,18 +108,16 @@ export default function Main({ context }) {
           categoryId={categoryId}
           key={`category-${categoryId}`}
           title={textGroups[categoryId].groupName}
-          assignTextItem={moveTextItem}
+          moveTextItem={moveTextItem}
           allTextItems={randomizedTextItems.slice()}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
           applyCategoryAssignment={applyCategoryAssignment}
           textItems={{
             category: category,
-            currentCategoryId: categoryId,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
-            applyAssignment: applyCategoryAssignment,
             removeAnimations: removeAnimations
           }}
-        ></Category>
+        />
       );
     }
   });
@@ -127,15 +126,31 @@ export default function Main({ context }) {
     <H5PContext.Provider value={context}>
       <CategoryList>{categoryElements}</CategoryList>
       <Uncategorized
+        categoryId={uncategorizedId}
+        applyCategoryAssignment={applyCategoryAssignment}
+        moveTextItem={moveTextItem}
         textItems={{
           category: appliedCategoryAssignment[uncategorizedId],
-          currentCategoryId: uncategorizedId,
           categories: [...textGroups, { groupName: 'Uncategorized' }],
-          moveTextItem: moveTextItem,
-          applyAssignment: applyCategoryAssignment,
           removeAnimations: removeAnimations
         }}
       />
     </H5PContext.Provider>
   );
 }
+
+Category.Main = {
+  context: PropTypes.exact({
+    params: PropTypes.object,
+    l10n: PropTypes.object,
+    instance: PropTypes.object,
+    contentId: PropTypes.number,
+    randomizedTextItems: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
+  }).isRequired
+};

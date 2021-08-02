@@ -21,12 +21,13 @@ import useNarrowScreen from '../../helpers/useNarrowScreen';
 export default function Category({
   categoryId,
   title,
-  assignTextItem,
+  moveTextItem,
   allTextItems,
   temporaryCategoryAssignment,
   applyCategoryAssignment,
-  textItems: { category, currentCategoryId, categories, removeAnimations }
+  textItems: { category, categories, removeAnimations }
 }) {
+  console.log(allTextItems);
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -60,10 +61,10 @@ export default function Category({
 
   const toggleTextItem = (textItemId) => {
     if (currentlySelectedIds.includes(textItemId)) {
-      assignTextItem(textItemId, uncategorizedId);
+      moveTextItem(textItemId, uncategorizedId);
     }
     else {
-      assignTextItem(textItemId, categoryId);
+      moveTextItem(textItemId, categoryId);
     }
   };
 
@@ -72,9 +73,9 @@ export default function Category({
       <TextItem
         key={id}
         textItemId={id}
-        currentCategoryId={currentCategoryId}
+        currentCategoryId={categoryId}
         categories={categories}
-        moveTextItem={assignTextItem}
+        moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}
         textElement={content}
         shouldAnimate={shouldAnimate}
@@ -82,7 +83,7 @@ export default function Category({
       />
     );
   });
-  
+
   return (
     <div className="category">
       <div className="header">
@@ -106,7 +107,7 @@ export default function Category({
         <ul className="content">
           {textItems}
           <li>
-            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible}/>
+            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
           </li>
         </ul>
       </div>
@@ -115,9 +116,39 @@ export default function Category({
 }
 
 Category.propTypes = {
+  categoryId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  currentCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
+  moveTextItem: PropTypes.func.isRequired,
+  allTextItems: PropTypes.arrayOf(
+    PropTypes.exact({
+      id: PropTypes.string,
+      content: PropTypes.string,
+      shouldAnimate: PropTypes.bool
+    })
   ),
-  children: PropTypes.arrayOf(PropTypes.element)
+  temporaryCategoryAssignment: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
+  ),
+  applyCategoryAssignment: PropTypes.func.isRequired,
+  textItems: PropTypes.exact({
+    category: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    ),
+    categories: PropTypes.arrayOf(
+      PropTypes.shape({
+        groupName: PropTypes.string
+      })
+    ),
+    removeAnimations: PropTypes.func
+  }).isRequired
 };
