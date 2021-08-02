@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import './Uncategorized.scss';
-import Dropzone from '../commons/DropZone.js';
+import Dropzone from '../commons/Dropzone.js';
 import TextItem from '../textItem/TextItem';
 import { H5PContext } from '../../context/H5PContext';
 
