@@ -29,8 +29,6 @@ export default function TextItem({
   setContainerHeight,
   resetContainerHeight
 }) {
-  console.log(textElement, textItemId);
-  console.log(currentCategoryId);
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
