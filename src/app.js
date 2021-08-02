@@ -89,6 +89,34 @@ H5P.TextGrouping = (() => {
     this.setContent(ReactDOM.render(main, wrapper));
   }
 
+  // /**
+  //  * Check answer.
+  //  */
+  // this.checkAnswer = () => {
+  //   this.content.disableSelectables();
+
+  //   const score = this.getScore();
+  //   const maxScore = this.getMaxScore();
+  //   const textScore = H5P.Question.determineOverallFeedback(
+  //     this.params.overallFeedback,
+  //     score / maxScore
+  //   );
+
+  //   this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
+
+  //   if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
+  //     this.showButton('show-solution');
+  //   }
+
+  //   if (this.params.behaviour.enableRetry && score !== maxScore) {
+  //     this.showButton('try-again');
+  //   }
+
+  //   this.hideButton('check-answer');
+
+  //   this.content.showSelectedSolutions();
+  // };
+
   TextGrouping.prototype = Object.create(H5P.Question.prototype);
   TextGrouping.prototype.constructor = TextGrouping;
 

@@ -48,7 +48,7 @@ export default function CategoryList({
           }}
           setContainerHeight={setMargin}
           resetContainerHeight={() => setMarginBottom(0)}
-        ></Category>
+        />
       );
     }
   });

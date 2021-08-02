@@ -29,7 +29,6 @@ export default function Category({
   applyCategoryAssignment,
   textItems: { category, categories, removeAnimations }
 }) {
-  console.log(allTextItems);
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
