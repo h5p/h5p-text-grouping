@@ -22,7 +22,10 @@ export default function SingleDropdownSelect({
     };
   }, []);
 
-  const [classNames, setClassNames] = useState(options.map(() => 'radioUnchecked'));
+  const selectableOptions = options
+    .map((_option, optionId) => optionId)
+    .filter((optionId) => optionId !== currentlySelectedId);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
@@ -33,39 +36,27 @@ export default function SingleDropdownSelect({
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        if (classNames[classNames.length - 1] != 'radioUnchecked') return;
-        setClassNames((prevClassNames) => {
-          const index = prevClassNames.indexOf('radioChecked');
-          const classes = options.map(() => 'radioUnchecked');
-          classes[index + 1] = 'radioChecked';
-          return classes;
-        });
+        if (selectedOption === selectableOptions.length - 1) return;
+        setSelectedOption(selectedOption + 1);
         break;
 
       case 'ArrowUp':
         event.preventDefault();
-        if (classNames[0] != 'radioUnchecked') return;
-        setClassNames((prevClassNames) => {
-          const index = prevClassNames.indexOf('radioChecked');
-          const classes = options.map(() => 'radioUnchecked');
-          classes[index - 1] = 'radioChecked';
-          return classes;
-        });
+        if (selectedOption === 0) return;
+        setSelectedOption(selectedOption - 1);
         break;
 
       case 'Enter':
       case 'Escape':
       case ' ': // The space key
         event.preventDefault();
-        handleSelectItem(event, options[classNames.indexOf('radioChecked')][0]);
+        handleSelectItem(event, selectableOptions[selectedOption]);
         break;
     }
   };
 
   const handleListboxSelected = () => {
-    const newClassNames = options.map(() => 'radioUnchecked');
-    newClassNames[0] = 'radioChecked';
-    setClassNames(newClassNames);
+    setSelectedOption(0);
   };
 
   return (
@@ -74,20 +65,23 @@ export default function SingleDropdownSelect({
       <hr />
       <ul
         role="listbox"
-        onFocus={(event) => handleListboxSelected(event)}
         tabIndex={0}
-        onKeyDown={(event) => handleKeyboardPressed(event, null)}
+        onFocus={(event) => handleListboxSelected(event)}
+        onKeyDown={(event) => handleKeyboardPressed(event)}
       >
         {options.map(({ groupName }, id) => {
+          const disabled = id === currentlySelectedId;
+          let className = id === selectableOptions[selectedOption] ? 'radioSelected' : '';
+          className = disabled ? 'disabled' : className;
           return (
             <li
               key={`option-${id}`}
-              className={classNames[id]}
+              className={className}
               onClick={(event) => handleSelectItem(event, id)}
               tabIndex={-1}
               role="option"
               aria-selected={false}
-              disabled={id === currentlySelectedId} // TODO: Implement functionality for this attribute
+              aria-disabled={disabled}
               dangerouslySetInnerHTML={{ __html: groupName }}
             />
           );
