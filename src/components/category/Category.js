@@ -27,7 +27,8 @@ export default function Category({
   setContainerHeight,
   resetContainerHeight,
   applyCategoryAssignment,
-  textItems: { category, categories, removeAnimations }
+  textItems: { category, categories, removeAnimations },
+  checkSolution
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
@@ -88,6 +89,7 @@ export default function Category({
         moveTextItem={moveTextItem}
         applyAssignment={applyCategoryAssignment}
         textElement={content}
+        checkSolution={checkSolution}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={setContainerHeight}

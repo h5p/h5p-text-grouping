@@ -5,6 +5,8 @@ import { H5PContext } from '../../context/H5PContext';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import './TextItem.scss';
+import getClassNames from '../../helpers/getClassNames';
+import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
 
 /**
  * A TextItem represents what the user is trying to
@@ -21,11 +23,14 @@ export default function TextItem({
   moveTextItem,
   applyAssignment,
   textElement,
+  checkSolution,
   shouldAnimate,
   removeAnimations,
   setContainerHeight,
   resetContainerHeight
 }) {
+  console.log(textElement, textItemId);
+  console.log(currentCategoryId);
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
@@ -60,7 +65,12 @@ export default function TextItem({
 
   return (
     <li
-      className={`text-item-wrapper${shouldAnimate ? ' animate' : ''}`}
+      className={getClassNames({
+        'text-item-wrapper': true,
+        animate: shouldAnimate,
+        correct: checkSolution && isCorrectlyPlaced(textItemId, currentCategoryId),
+        wrong: checkSolution && !isCorrectlyPlaced(textItemId, currentCategoryId)
+      })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
     >

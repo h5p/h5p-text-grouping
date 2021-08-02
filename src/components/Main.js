@@ -99,6 +99,8 @@ export default function Main({ context }) {
     applyCategoryAssignment();
   };
 
+  const checkSolution = true;
+
   return (
     <H5PContext.Provider value={context}>
       <CategoryList
@@ -110,6 +112,7 @@ export default function Main({ context }) {
         appliedCategoryAssignment={appliedCategoryAssignment}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
+        checkSolution={checkSolution}
       />
       <Uncategorized
         categoryId={uncategorizedId}

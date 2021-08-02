@@ -17,10 +17,32 @@
 
     .text-item-border {
       animation: flashBorder;
-      animation-delay: .5s;
-      animation-duration: .5s;
+      animation-delay: 0.5s;
+      animation-duration: 0.5s;
       animation-fill-mode: forwards;
       animation-timing-function: linear;
+    }
+  }
+
+  &.correct {
+    .text-item-border {
+      border-color: styles.$color-correct-dark;
+
+      .text-item {
+        color: styles.$color-correct-text;
+        background-color: styles.$color-correct-light;
+      }
+    }
+  }
+
+  &.wrong {
+    .text-item-border {
+      border-color: styles.$color-wrong-dark;
+
+      .text-item {
+        color: styles.$color-wrong-dark;
+        background-color: styles.$color-wrong-light;
+      }
     }
   }
 
@@ -59,6 +81,7 @@
       background: none;
       margin-left: 0.75em;
     }
+
     .icon-move-to-category {
       &:before {
         font-family: 'Material Icons';

@@ -18,7 +18,8 @@ export default function CategoryList({
   allTextItems,
   applyCategoryAssignment,
   temporaryCategoryAssignment,
-  removeAnimations
+  removeAnimations,
+  checkSolution
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
@@ -46,6 +47,7 @@ export default function CategoryList({
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
           }}
+          checkSolution={checkSolution}
           setContainerHeight={setMargin}
           resetContainerHeight={() => setMarginBottom(0)}
         />
