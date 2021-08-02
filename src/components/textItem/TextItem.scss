@@ -3,6 +3,8 @@
 
 .text-item-wrapper {
   padding: 0.375em 0 0.375em 0;
+  position: relative;
+  backface-visibility: hidden;
 
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
@@ -15,55 +17,60 @@
 
     .text-item-border {
       animation: example2;
-      animation-delay: .6s;
-      animation-duration: .5s;
+      animation-delay: 0.6s;
+      animation-duration: 0.5s;
       animation-fill-mode: forwards;
       animation-timing-function: linear;
     }
   }
-}
 
-.text-item-border {
-  padding: 0.25em;
+  .text-item-border {
+    padding: 0.25em;
 
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 5px;
-  border-color: styles.$border-color-neutral;
-  box-shadow: 4px 4px 4px #cccccc8f;
-
-  .text-item {
-    background-color: styles.$text-item-background-neutral;
+    border-style: solid;
+    border-width: 2px;
     border-radius: 5px;
-    padding: 0.5em;
-    position: relative;
+    border-color: styles.$border-color-neutral;
+    box-shadow: 4px 4px 4px #cccccc8f;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    color: styles.$cornflower-blue-dark;
-    font-family: Arial;
-    font-size: 1em;
-    line-height: 2em;
-  }
-
-  .button-move-to-category {
-    border: none;
-    background: none;
-    margin-left: 0.75em;
-  }
-  .icon-move-to-category {
-    &:before {
-      font-family: 'Material Icons';
-      font-size: 2em;
-      content: 'more_horiz';
-      color: #4174cc;
-
+    .text-item {
+      background-color: styles.$text-item-background-neutral;
       border-radius: 5px;
-      border-width: 0.1em;
-      border-style: solid;
-      border-color: #4174cc;
+      padding: 0.5em;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      color: styles.$cornflower-blue-dark;
+      font-family: Arial;
+      font-size: 1em;
+      line-height: 2em;
+    }
+
+    .dropdown-wrapper {
+      top: calc(50% + 1.2em);
+      position: absolute;
+      width: calc(100% - 0.75em);
+    }
+
+    .button-move-to-category {
+      border: none;
+      background: none;
+      margin-left: 0.75em;
+    }
+    .icon-move-to-category {
+      &:before {
+        font-family: 'Material Icons';
+        font-size: 2em;
+        content: 'more_horiz';
+        color: #4174cc;
+
+        border-radius: 5px;
+        border-width: 0.1em;
+        border-style: solid;
+        border-color: #4174cc;
+      }
     }
   }
 }

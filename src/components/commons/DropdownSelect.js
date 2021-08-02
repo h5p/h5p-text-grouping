@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes, { arrayOf } from 'prop-types';
 
 import './DropdownSelect.scss';
@@ -10,22 +10,38 @@ import './DropdownSelect.scss';
  */
 export default function DropdownSelect({
   label,
+  setContainerHeight,
+  resetContainerHeight,
   onChange,
   onClose,
   options,
   currentlySelectedIds,
   multiSelectable = false
 }) {
+  const dropdownRef = useRef(null);
+
   useEffect(() => {
-    window.addEventListener('click', onClose);
+    const dropdownHeight = dropdownRef.current.offsetHeight;
+    if (dropdownHeight > 0) {
+      setContainerHeight(dropdownHeight);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('click', handleClose);
     return () => {
-      window.removeEventListener('click', onClose);
+      window.removeEventListener('click', handleClose);
     };
   }, []);
 
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
     onChange(optionId);
+  };
+
+  const handleClose = () => {
+    resetContainerHeight();
+    onClose();
   };
 
   const handleKeyboardPressed = (event, optionId) => {
@@ -37,21 +53,21 @@ export default function DropdownSelect({
           handleSelectItem(event, optionId);
           break;
 
-        case 'Enter': 
-          onClose();
+        case 'Enter':
+          handleClose();
           break;
       }
     }
   };
 
   return (
-    <div className="dropdown-select">
+    <div className="dropdown-select" ref={dropdownRef}>
       <div className="label">{label}</div>
       <hr />
       <ul
         role="listbox"
         tabIndex={multiSelectable === true ? -1 : 0}
-        onKeyDown={event => handleKeyboardPressed(event, null)}
+        onKeyDown={(event) => handleKeyboardPressed(event, null)}
         aria-multiselectable={multiSelectable || undefined}
       >
         {options.map((option) => {
@@ -66,8 +82,8 @@ export default function DropdownSelect({
                     : 'unselected'
                   : undefined
               }
-              onClick={event => handleSelectItem(event, optionId)}
-              onKeyDown={event => handleKeyboardPressed(event, optionId)}
+              onClick={(event) => handleSelectItem(event, optionId)}
+              onKeyDown={(event) => handleKeyboardPressed(event, optionId)}
               tabIndex={multiSelectable === true ? 0 : -1}
               role="option"
               aria-selected={multiSelectable ? currentlySelectedIds.includes(optionId) : false}
@@ -82,6 +98,8 @@ export default function DropdownSelect({
 
 DropdownSelect.propTypes = {
   label: PropTypes.string.isRequired,
+  setContainerHeight: PropTypes.func.isRequired,
+  resetContainerHeight: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(

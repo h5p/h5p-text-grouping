@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -22,11 +22,14 @@ export default function TextItem({
   applyAssignment,
   displayedText,
   animate,
-  removeAnimation
+  removeAnimation,
+  setContainerHeight,
+  resetContainerHeight
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [selectableCategories, setSelectableCategories] = useState();
+  const textItemRef = useRef(null);
   useEffect(() => {
     return () => {
       removeAnimation();
@@ -39,7 +42,6 @@ export default function TextItem({
         .map((category, i) => [i, category.groupName])
         .filter((category, i) => i !== currentCategory)
     );
-
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
@@ -47,6 +49,7 @@ export default function TextItem({
   const handleDropdownSelectClose = () => {
     applyAssignment();
     setDropdownSelectOpen(false);
+    resetContainerHeight();
     instance.trigger('resize');
   };
 
@@ -55,8 +58,19 @@ export default function TextItem({
     handleDropdownSelectClose();
   };
 
+  const setHeight = (height) => {
+    // If the dropdown can't fit in the textitem
+    if (height > textItemRef.current.offsetHeight / 2) {
+      const offset =
+        textItemRef.current.offsetTop +
+        textItemRef.current.offsetHeight +
+        (height - textItemRef.current.offsetHeight / 2);
+      setContainerHeight(offset);
+    }
+  };
+
   return (
-    <li className={`text-item-wrapper${animate ? ' animate' : ''}`}>
+    <li className={`text-item-wrapper${animate ? ' animate' : ''}`} ref={textItemRef}>
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: displayedText }} />
@@ -67,16 +81,20 @@ export default function TextItem({
             hoverText={l10n.hoverMoveToCategory}
             onClick={handleDropdownSelectOpen}
           />
-          {dropdownSelectOpen ? (
+        </div>
+        {dropdownSelectOpen ? (
+          <div className="dropdown-wrapper">
             <DropdownSelect
               label={l10n.moveItemsHelpText}
+              setContainerHeight={setHeight}
+              resetContainerHeight={resetContainerHeight}
               onChange={(categoryId) => selectCategory(categoryId)}
               onClose={handleDropdownSelectClose}
               options={selectableCategories}
               multiSelectable={false}
             />
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
     </li>
   );
@@ -92,5 +110,7 @@ TextItem.propTypes = {
   ),
   moveTextItem: PropTypes.func.isRequired,
   applyAssignment: PropTypes.func.isRequired,
-  displayedText: PropTypes.string.isRequired
+  displayedText: PropTypes.string.isRequired,
+  setContainerHeight: PropTypes.func.isRequired,
+  resetContainerHeight: PropTypes.func.isRequired
 };
