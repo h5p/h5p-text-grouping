@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { H5PContext } from '../context/H5PContext';
 import Uncategorized from './uncategorized/Uncategorized';
@@ -111,15 +112,31 @@ export default function Main({ context }) {
         removeAnimations={removeAnimations}
       />
       <Uncategorized
+        categoryId={uncategorizedId}
+        applyCategoryAssignment={applyCategoryAssignment}
+        moveTextItem={moveTextItem}
         textItems={{
           category: appliedCategoryAssignment[uncategorizedId],
-          currentCategoryId: uncategorizedId,
           categories: [...textGroups, { groupName: 'Uncategorized' }],
-          moveTextItem: moveTextItem,
-          applyAssignment: applyCategoryAssignment,
           removeAnimations: removeAnimations
         }}
       />
     </H5PContext.Provider>
   );
 }
+
+Main.propTypes = {
+  context: PropTypes.exact({
+    params: PropTypes.object,
+    l10n: PropTypes.object,
+    instance: PropTypes.object,
+    contentId: PropTypes.number,
+    randomizedTextItems: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string,
+        content: PropTypes.string,
+        shouldAnimate: PropTypes.bool
+      })
+    )
+  }).isRequired
+};

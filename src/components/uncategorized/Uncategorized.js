@@ -13,14 +13,10 @@ import { H5PContext } from '../../context/H5PContext';
  * @returns {JSX.Element} An uncategorized element
  */
 export default function Uncategorized({
-  textItems: {
-    category,
-    currentCategoryId,
-    categories,
-    moveTextItem,
-    applyAssignment,
-    removeAnimations
-  }
+  categoryId,
+  applyCategoryAssignment,
+  moveTextItem: moveTextItem,
+  textItems: { category, categories, removeAnimations }
 }) {
   const [minHeight, setMinHeight] = useState(null);
   const { l10n } = useContext(H5PContext);
@@ -31,10 +27,10 @@ export default function Uncategorized({
       <TextItem
         key={id}
         textItemId={id}
-        currentCategoryId={currentCategoryId}
+        currentCategoryId={categoryId}
         categories={categories}
         moveTextItem={moveTextItem}
-        applyAssignment={applyAssignment}
+        applyAssignment={applyCategoryAssignment}
         textElement={content}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
@@ -61,23 +57,22 @@ export default function Uncategorized({
 }
 
 Uncategorized.propTypes = {
-  textItems: PropTypes.shape({
+  categoryId: PropTypes.number.isRequired,
+  applyCategoryAssignment: PropTypes.func.isRequired,
+  moveTextItem: PropTypes.func.isRequired,
+  textItems: PropTypes.exact({
     category: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        content: PropTypes.string.isRequired,
+      PropTypes.exact({
+        id: PropTypes.string,
+        content: PropTypes.string,
         shouldAnimate: PropTypes.bool
       })
-    ).isRequired,
-    currentCategoryId: PropTypes.number.isRequired,
+    ),
     categories: PropTypes.arrayOf(
       PropTypes.shape({
-        groupName: PropTypes.string.isRequired,
-        textElements: PropTypes.arrayOf(PropTypes.string)
+        groupName: PropTypes.string
       })
     ),
-    moveTextItem: PropTypes.func.isRequired,
-    applyAssignment: PropTypes.func.isRequired,
-    removeAnimations: PropTypes.func.isRequired
-  })
+    removeAnimations: PropTypes.func
+  }).isRequired
 };

@@ -37,15 +37,13 @@ export default function CategoryList({
           categoryId={categoryId}
           key={`category-${categoryId}`}
           title={textGroups[categoryId].groupName}
-          assignTextItem={moveTextItem}
+          moveTextItem={moveTextItem}
           allTextItems={allTextItems}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
           applyCategoryAssignment={applyCategoryAssignment}
           textItems={{
             category: category,
-            currentCategoryId: categoryId,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
-            applyAssignment: applyCategoryAssignment,
             removeAnimations: removeAnimations
           }}
           setContainerHeight={setMargin}
