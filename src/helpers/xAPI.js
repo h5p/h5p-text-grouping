@@ -64,7 +64,7 @@ export function getAnsweredXAPIEvent(
 function addQuestionToXAPI(xAPIEvent, textGroups, question) {
   const definition = xAPIEvent.getVerifiedStatementValue(['object', 'definition']);
   definition.description = {
-    'en-US': question
+    'en-US': htmlDecode(question)
   };
   definition.type = 'http://adlnet.gov/expapi/activities/cmi.interaction';
   definition.interactionType = 'matching';
@@ -77,7 +77,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
     target.push({
       id: categoryId,
       description: {
-        'en-US': category.groupName
+        'en-US': htmlDecode(category.groupName)
       }
     });
 
@@ -86,7 +86,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
       source.push({
         id: textItemStringId,
         description: {
-          'en-US': textItem
+          'en-US': htmlDecode(textItem)
         }
       });
 
@@ -99,7 +99,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
 
   definition.source = source;
   definition.target = target;
-  definition.correctResponsePattern = correctResponsePattern;
+  definition.correctResponsePattern = [correctResponsePattern];
 }
 
 /**
@@ -121,5 +121,16 @@ function getResponse(currentCategoryAssignement) {
 
   return response;
 }
+
+/**
+ * Get plain text
+ *
+ * @param {String} html
+ */
+const htmlDecode = (html) => {
+  const el = document.createElement('div');
+  el.innerHTML = html;
+  return el.textContent.trim();
+};
 
 export default { getXAPIData, getCurrentState, getAnsweredXAPIEvent };
