@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { H5PContext } from '../../../context/H5PContext';
 import Button from '../../commons/Button';
 
-import './AssignItemsButton.scss';
 import './ExpandCollapseButton.scss';
 
 export default function ExpandCollapseButton({ expanded, onClick }) {

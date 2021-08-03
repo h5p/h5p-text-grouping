@@ -62,3 +62,17 @@
     }
   }
 }
+
+.button-assign-items {
+  border: none;
+  background: none;
+}
+
+.icon-assign-items {
+  &:before {
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: 'queue';
+    color: #4174cc;
+  }
+}

@@ -52,6 +52,7 @@ export default function MultiDropdownSelect({
 
       case 'Enter':
       case 'Escape':
+        event.preventDefault();
         handleClose();
         break;
     }
