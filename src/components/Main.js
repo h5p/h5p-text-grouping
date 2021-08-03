@@ -22,6 +22,8 @@ export default function Main({ context }) {
     triggerInteracted
   } = context;
 
+  const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
+
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
     ...textGroups.map(() => []),
     getRandomizedTextItems().slice()
@@ -33,15 +35,27 @@ export default function Main({ context }) {
   ]);
 
   useEffect(() => {
+    instance.on('xAPI', function (event) {
+      if (event.getVerb() === 'answered') {
+        setShowSelectedSolutions(true);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     instance.on('reset-task', () => {
+      setShowSelectedSolutions(false);
       setAppliedCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
-      setTemporaryCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
+      setTemporaryCategoryAssignment([
+        ...textGroups.map(() => []),
+        getRandomizedTextItems().slice()
+      ]);
     });
   }, []);
 
   const uncategorizedId = textGroups.length;
 
-  const [draggedTextItem, setDraggedTextItem] = useState({textItemId: -1, categoryId: -1});
+  const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: -1, categoryId: -1 });
 
   const applyCategoryAssignment = () => {
     // Animate moved items
@@ -97,18 +111,22 @@ export default function Main({ context }) {
   const textItemDragStart = (event, textItemId, currentCategoryId) => {
     if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
     event.preventDefault();
-    setDraggedTextItem({textItemId: textItemId, categoryId: currentCategoryId});
+    setDraggedTextItem({ textItemId: textItemId, categoryId: currentCategoryId });
   };
 
   const textItemDragEnd = (event, categoryId = null) => {
-    if (categoryId !== null && draggedTextItem.textItemId !== -1 && categoryId !== draggedTextItem.categoryId) {
+    if (
+      categoryId !== null &&
+      draggedTextItem.textItemId !== -1 &&
+      categoryId !== draggedTextItem.categoryId
+    ) {
       moveTextItem(draggedTextItem.textItemId, categoryId);
       applyCategoryAssignment();
     }
-    setDraggedTextItem({textItemId: -1, categoryId: -1});
+    setDraggedTextItem({ textItemId: -1, categoryId: -1 });
   };
 
-  document.onmouseup = event => {
+  document.onmouseup = (event) => {
     let node = event.target;
     while (node.parentNode) {
       if (node.className.includes('category ')) {
@@ -125,7 +143,7 @@ export default function Main({ context }) {
   };
 
   return (
-    <H5PContext.Provider value={context}>
+    <H5PContext.Provider value={{ ...context, showSelectedSolutions }}>
       <CategoryList
         categories={appliedCategoryAssignment}
         textGroups={textGroups}
