@@ -104,7 +104,7 @@ export default function Main({ context }) {
   };
 
   const textItemDragEnd = (event, categoryId = null) => {
-    if (categoryId !== null && draggedTextItem !== 0 && categoryId !== draggedTextItem.categoryId) {
+    if (categoryId !== null && draggedTextItem.textItemId !== -1 && categoryId !== draggedTextItem.categoryId) {
       moveTextItem(draggedTextItem.textItemId, categoryId);
       applyCategoryAssignment();
     }
