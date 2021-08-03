@@ -2,14 +2,14 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
+import useNarrowScreen from '../../helpers/useNarrowScreen';
+
+import Button from '../commons/Button';
 import Dropzone from '../commons/Dropzone';
 import MultiDropdownSelect from '../commons/MultiDropdownSelect';
-import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
-import AssignItemsButton from './Buttons/AssignItemsButton';
 import TextItem from '../textItem/TextItem';
 
 import './Category.scss';
-import useNarrowScreen from '../../helpers/useNarrowScreen';
 
 /**
  * A Category renders a list of TextElements received
@@ -31,11 +31,14 @@ export default function Category({
 }) {
   const { instance, l10n } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
+
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
-  const categoryHeaderRef = useRef(null);
-
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
+
+  const categoryHeaderRef = useRef(null);
+  const assignItemsButtonRef = useRef(null);
+
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
@@ -58,6 +61,7 @@ export default function Category({
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
 
   const handleDropdownSelectClose = () => {
+    assignItemsButtonRef.current.focus();
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
     instance.trigger('resize');
@@ -99,9 +103,25 @@ export default function Category({
   return (
     <div className="category">
       <div className="header" ref={categoryHeaderRef}>
-        <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
+        <Button
+          iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
+          className="expand-collapse-button"
+          ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
+          hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
+          onClick={handleAccordionToggle}
+          aria-expanded={accordionOpen}
+        />
         <div className="title">{titleWithChildCount}</div>
-        <AssignItemsButton expanded={dropdownSelectOpen} onClick={handleDropdownSelectOpen} />
+        <Button
+          ref={assignItemsButtonRef}
+          iconName="icon-assign-items"
+          className="button-assign-items"
+          ariaLabel={l10n.assignItemsHelpText}
+          ariaHasPopup="listbox"
+          ariaExpanded={dropdownSelectOpen}
+          hoverText={l10n.assignItemsHelpText}
+          onClick={handleDropdownSelectOpen}
+        />
       </div>
       {dropdownSelectOpen ? (
         <div className="dropdown-wrapper">
