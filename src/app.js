@@ -151,7 +151,7 @@ H5P.TextGrouping = (() => {
       const penalties = true; // TODO: add to editor, or remove functionality
 
       categoryState.forEach((category, categoryIndex) => {
-        if (categoryIndex !== (categoryState.length - 1)) {
+        if (categoryIndex !== categoryState.length - 1) {
           category.forEach((textItem) => {
             if (textItem.id.substring(0, 1) == categoryIndex) {
               score++;
@@ -169,7 +169,7 @@ H5P.TextGrouping = (() => {
      * Get maximum possible score
      *
      * Distractor words do not contribute to scoring.
-     * @return {number} Score necessary for mastering
+     * @return {number} Max score achievable for this task
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
      */
     this.getMaxScore = () => {
@@ -185,8 +185,7 @@ H5P.TextGrouping = (() => {
      * @return {boolean} True if passed, false if not
      */
     this.isPassed = () => {
-      // TODO: Dummy metod
-      return true;
+      return (this.getScore() / this.getMaxScore()) * 100 >= this.params.behaviour.passPercentage;
     };
 
     /**
@@ -210,7 +209,7 @@ H5P.TextGrouping = (() => {
         this.getScore(),
         this.getMaxScore(),
         this.isSuccess(),
-        categoryState,
+        categoryState
       );
     };
 
