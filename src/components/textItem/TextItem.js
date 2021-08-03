@@ -49,7 +49,7 @@ export default function TextItem({
   };
 
   const selectCategory = (categoryId) => {
-    moveTextItem(textItemId, categoryId);
+    moveTextItem(textItemId, categoryId, currentCategoryId);
     handleDropdownSelectClose();
   };
 

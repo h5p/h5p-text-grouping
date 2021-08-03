@@ -67,23 +67,25 @@ export default function Main({ context }) {
    * @param {String} textItemId
    * @param {String} categoryId
    */
-  const moveTextItem = (textItemId, categoryId) => {
+  const moveTextItem = (textItemId, newCategoryId, prevCategoryId = null) => {
     const newCategories = temporaryCategoryAssignment.slice();
     let textItem;
 
     // Remove from previous category
-    newCategories.forEach((category) => {
-      category.forEach((item, index) => {
+    let i = (prevCategoryId === null ? 0 : prevCategoryId); 
+    const limit = (prevCategoryId === null ? textGroups.length : prevCategoryId);
+    for (i; i <= limit; i++) {
+      newCategories[i].forEach((item, index) => {
         if (item.id === textItemId) {
           textItem = item;
           textItem.shouldAnimate = true;
-          category.splice(index, 1);
+          newCategories[i].splice(index, 1);
         }
       });
-    });
+    }
 
     // Add to new category
-    newCategories[categoryId].push(textItem);
+    newCategories[newCategoryId].push(textItem);
     setTemporaryCategoryAssignment(newCategories);
   };
 
@@ -108,7 +110,7 @@ export default function Main({ context }) {
       draggedTextItem.textItemId !== -1 &&
       categoryId !== draggedTextItem.categoryId
     ) {
-      moveTextItem(draggedTextItem.textItemId, categoryId);
+      moveTextItem(draggedTextItem.textItemId, categoryId, draggedTextItem.categoryId);
       applyCategoryAssignment();
     }
     setDraggedTextItem({ textItemId: -1, categoryId: -1 });

@@ -64,7 +64,7 @@ export default function Category({
 
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     addedIds.forEach(id => moveTextItem(id, categoryId));
-    removedIds.forEach(id => moveTextItem(id, uncategorizedId));
+    removedIds.forEach(id => moveTextItem(id, uncategorizedId, categoryId));
     assignItemsButtonRef.current.focus();
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
