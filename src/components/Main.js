@@ -57,6 +57,9 @@ export default function Main({ context }) {
 
   const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: -1, categoryId: -1 });
 
+  /**
+   * Update layout with current location of all text items
+   */
   const applyCategoryAssignment = () => {
     setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
     triggerInteracted(appliedCategoryAssignment);
@@ -64,16 +67,20 @@ export default function Main({ context }) {
 
   /**
    * Moves a text item from its current category to a new one
-   * @param {String} textItemId
-   * @param {String} categoryId
+   * Does not apply the updated locations in the layout
+   * @param {String} textItemId Id of text item that should be moved
+   * @param {number} newCategoryId Id of category the text item should be moved to
+   * @param {number} prevCategoryId Id of category the text item currently belongs to, if available
    */
   const moveTextItem = (textItemId, newCategoryId, prevCategoryId = null) => {
     const newCategories = temporaryCategoryAssignment.slice();
     let textItem;
 
     // Remove from previous category
+    // Reduce looping if the previous category is known
     let i = (prevCategoryId === null ? 0 : prevCategoryId); 
     const limit = (prevCategoryId === null ? textGroups.length : prevCategoryId);
+
     for (i; i <= limit; i++) {
       newCategories[i].forEach((item, index) => {
         if (item.id === textItemId) {
@@ -89,22 +96,36 @@ export default function Main({ context }) {
     setTemporaryCategoryAssignment(newCategories);
   };
 
+  /**
+   * Remove animations for all text items
+   */
   const removeAnimations = () => {
-    const temporaryCategoryAssignmentCopy = deepCopy(temporaryCategoryAssignment);
-    temporaryCategoryAssignmentCopy.flat().forEach((textItem) => {
-      textItem.shouldAnimate = false;
+    setTemporaryCategoryAssignment(prevTemporaryCategoryAssignment => {
+      prevTemporaryCategoryAssignment.flat().forEach(textItem => textItem.shouldAnimate = false);
+      return prevTemporaryCategoryAssignment;
     });
-    setTemporaryCategoryAssignment(temporaryCategoryAssignmentCopy);
     applyCategoryAssignment();
   };
 
+  /**
+   * Start dragging text item
+   * @param {*} event MouseDown event
+   * @param {*} textItemId Id of text item being dragged
+   * @param {*} currentCategoryId ID of current category of text item
+   */
   const textItemDragStart = (event, textItemId, currentCategoryId) => {
     if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
     event.preventDefault();
     setDraggedTextItem({ textItemId: textItemId, categoryId: currentCategoryId });
   };
 
-  const textItemDragEnd = (event, categoryId = null) => {
+  /**
+   * Finish dragging text item
+   * Moves the text item to a new category if relevant
+   * @param {*} _event MouseUp event
+   * @param {*} categoryId Id of category text item has been dragged to, if relevant
+   */
+  const textItemDragEnd = (_event, categoryId = null) => {
     if (
       categoryId !== null &&
       draggedTextItem.textItemId !== -1 &&
