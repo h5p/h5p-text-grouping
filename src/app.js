@@ -75,14 +75,16 @@ H5P.TextGrouping = (() => {
      * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
      */
     const triggerAnswered = () => {
+      const score = this.getScore();
+      const maxScore = this.getMaxScore();
       this.trigger(
         getAnsweredXAPIEvent(
           this,
           this.params.question,
           this.params.textGroups,
-          this.getScore(),
-          this.getMaxScore(),
-          this.isPassed(),
+          score,
+          maxScore,
+          this.isPassed(score, maxScore),
           categoryState
         )
       );
@@ -137,11 +139,35 @@ H5P.TextGrouping = (() => {
     this.setContent(ReactDOM.render(main, wrapper));
 
     /**
+     * Get whether the user has achieved a passing score or not
+     * @return {boolean} True if passed, false if not
+     */
+    this.isPassed = (score, maxScore) => {
+      return (score / maxScore) * 100 >= this.params.behaviour.passPercentage;
+    };
+
+    /**
+     * Calculates the maximum possible score,
+     * but does not take into account the singlePoint setting
+     * @returns
+     */
+    this.calculateMaxScore = () => {
+      let maxScore = 0;
+      this.params.textGroups.forEach((category) => {
+        maxScore += category.textElements.length;
+      });
+      return maxScore;
+    };
+
+    /**
      * Get latest score
      *
      * Text items in the correct category are worth 1 point.
-     * Text items the incorrect category are worth -1 point.
+     * Text items in the incorrect category are worth -1 point.
      * Text items Uncategorized are not counted.
+     *
+     * If singlePoint is enabled, the score is either 1 or 0,
+     * depending on isPassed()
      *
      * @return {number} latest score
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
@@ -162,6 +188,11 @@ H5P.TextGrouping = (() => {
           });
         }
       });
+
+      if (this.params.behaviour.singlePoint) {
+        return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
+      }
+
       return score >= 0 ? score : 0;
     };
 
@@ -169,23 +200,13 @@ H5P.TextGrouping = (() => {
      * Get maximum possible score
      *
      * Distractor words do not contribute to scoring.
+     * If singlePoint is enabled, the max score is 1.
+     *
      * @return {number} Max score achievable for this task
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
      */
     this.getMaxScore = () => {
-      let maxScore = 0;
-      this.params.textGroups.forEach((category) => {
-        maxScore += category.textElements.length;
-      });
-      return maxScore;
-    };
-
-    /**
-     * Get whether the user has achieved a passing score or not
-     * @return {boolean} True if passed, false if not
-     */
-    this.isPassed = () => {
-      return (this.getScore() / this.getMaxScore()) * 100 >= this.params.behaviour.passPercentage;
+      return this.params.behaviour.singlePoint ? 1 : this.calculateMaxScore();
     };
 
     /**
@@ -202,13 +223,16 @@ H5P.TextGrouping = (() => {
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
      */
     this.getXAPIData = () => {
+      const score = this.getScore();
+      const maxScore = this.getMaxScore();
+
       return getXAPIData(
         this,
         this.params.question,
         this.params.textGroups,
-        this.getScore(),
-        this.getMaxScore(),
-        this.isSuccess(),
+        score,
+        maxScore,
+        this.isPassed(score, maxScore),
         categoryState
       );
     };

@@ -205,7 +205,7 @@
         "type": "boolean",
         "label": "Give one point for the whole task",
         "importance": "low",
-        "description": "Enable to give a total of one point for multiple correct answers. This will not be an option in \"Single answer\" mode.",
+        "description": "Enable to give a total of one point for multiple correct answers.",
         "default": false
       },
       {
