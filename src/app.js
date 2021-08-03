@@ -167,12 +167,17 @@ H5P.TextGrouping = (() => {
 
     /**
      * Get maximum possible score
+     *
+     * Distractor words do not contribute to scoring.
      * @return {number} Score necessary for mastering
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
      */
     this.getMaxScore = () => {
-      // TODO: Dummy metod
-      return 10;
+      let maxScore = 0;
+      this.params.textGroups.forEach((category) => {
+        maxScore += category.textElements.length;
+      });
+      return maxScore;
     };
 
     /**
