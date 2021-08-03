@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../context/H5PContext';
@@ -16,20 +16,28 @@ import deepCopy from '../helpers/deepCopy';
  */
 export default function Main({ context }) {
   const {
-    randomizedTextItems,
     params: { textGroups },
+    instance,
+    getRandomizedTextItems,
     triggerInteracted
   } = context;
 
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
     ...textGroups.map(() => []),
-    randomizedTextItems.slice()
+    getRandomizedTextItems().slice()
   ]);
 
   const [temporaryCategoryAssignment, setTemporaryCategoryAssignment] = useState([
     ...textGroups.map(() => []),
-    randomizedTextItems.slice()
+    getRandomizedTextItems().slice()
   ]);
+
+  useEffect(() => {
+    instance.on('reset-task', () => {
+      setAppliedCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
+      setTemporaryCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
+    });
+  }, []);
 
   const uncategorizedId = textGroups.length;
 
@@ -90,7 +98,7 @@ export default function Main({ context }) {
         categories={appliedCategoryAssignment}
         textGroups={textGroups}
         moveTextItem={moveTextItem}
-        allTextItems={randomizedTextItems.slice()}
+        allTextItems={getRandomizedTextItems().slice()}
         applyCategoryAssignment={applyCategoryAssignment}
         appliedCategoryAssignment={appliedCategoryAssignment}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
@@ -116,13 +124,7 @@ Main.propTypes = {
     l10n: PropTypes.object,
     instance: PropTypes.object,
     contentId: PropTypes.number,
-    randomizedTextItems: PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string,
-        content: PropTypes.string,
-        shouldAnimate: PropTypes.bool
-      })
-    ),
+    getRandomizedTextItems: PropTypes.func.isRequired,
     triggerInteracted: PropTypes.func.isRequired,
     showSelectedSolutions: PropTypes.bool
   }).isRequired

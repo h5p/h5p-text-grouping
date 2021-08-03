@@ -35,14 +35,27 @@ H5P.TextGrouping = (() => {
       randomizedTextItems.push(createTextItem(`${params.textGroups.length}${i}`, element, false));
     });
 
-    // Randomize order of text items
-    for (let i = randomizedTextItems.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [randomizedTextItems[i], randomizedTextItems[j]] = [
-        randomizedTextItems[j],
-        randomizedTextItems[i]
-      ];
-    }
+    let reset = true;
+
+    /**
+     * Randomizes the order of text items, if reset has been set
+     * since last time they were randomized.
+     *
+     * @return {object[]} An array of text item objects
+     */
+    const getRandomizedTextItems = () => {
+      if (reset) {
+        for (let i = randomizedTextItems.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [randomizedTextItems[i], randomizedTextItems[j]] = [
+            randomizedTextItems[j],
+            randomizedTextItems[i]
+          ];
+        }
+        reset = false;
+      }
+      return randomizedTextItems;
+    };
 
     let categoryState = null;
 
@@ -80,7 +93,7 @@ H5P.TextGrouping = (() => {
       l10n: params.l10n,
       instance: this,
       contentId: contentId,
-      randomizedTextItems: randomizedTextItems,
+      getRandomizedTextItems: getRandomizedTextItems,
       triggerInteracted: triggerInteracted,
       showSelectedSolutions: this.showSelectedSolutions
     };
@@ -177,6 +190,7 @@ H5P.TextGrouping = (() => {
       );
     };
 
+    // Add H5P buttons
     this.addButton(
       'check-answer',
       this.params.l10n.checkAnswerButtonText,
@@ -251,6 +265,9 @@ H5P.TextGrouping = (() => {
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
      */
     this.resetTask = () => {
+      reset = true;
+      this.trigger('reset-task');
+
       //resetSelections();
       this.showButton('check-answer');
       this.hideButton('try-again');
