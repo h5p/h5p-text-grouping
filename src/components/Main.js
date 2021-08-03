@@ -58,19 +58,6 @@ export default function Main({ context }) {
   const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: -1, categoryId: -1 });
 
   const applyCategoryAssignment = () => {
-    // Animate moved items
-    temporaryCategoryAssignment.forEach((category, categoryId) => {
-      category.forEach((textItem) => {
-        if (
-          !appliedCategoryAssignment[categoryId]
-            .map((appliedTextItem) => appliedTextItem.id)
-            .includes(textItem.id)
-        ) {
-          textItem.shouldAnimate = true;
-        }
-      });
-    });
-
     setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
     triggerInteracted(appliedCategoryAssignment);
   };
@@ -89,6 +76,7 @@ export default function Main({ context }) {
       category.forEach((item, index) => {
         if (item.id === textItemId) {
           textItem = item;
+          textItem.shouldAnimate = true;
           category.splice(index, 1);
         }
       });
@@ -131,7 +119,7 @@ export default function Main({ context }) {
     while (node.parentNode) {
       if (node.className.includes('category ')) {
         let className = node.className;
-        textItemDragEnd(event, className.replace('category ', ''));
+        textItemDragEnd(event, parseInt(className.replace('category ', '')));
         return;
       }
       else if (node.className === 'uncategorized') {
