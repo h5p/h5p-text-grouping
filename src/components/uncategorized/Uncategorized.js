@@ -15,7 +15,8 @@ import { H5PContext } from '../../context/H5PContext';
 export default function Uncategorized({
   categoryId,
   applyCategoryAssignment,
-  moveTextItem: moveTextItem,
+  moveTextItem,
+  textItemDragStart,
   textItems: { category, categories, removeAnimations }
 }) {
   const [minHeight, setMinHeight] = useState(null);
@@ -36,6 +37,7 @@ export default function Uncategorized({
         removeAnimations={removeAnimations}
         setContainerHeight={setMinHeight}
         resetContainerHeight={() => setMinHeight(0)}
+        dragStart={textItemDragStart}
       />
     );
   });

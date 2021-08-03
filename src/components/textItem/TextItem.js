@@ -26,7 +26,8 @@ export default function TextItem({
   shouldAnimate,
   removeAnimations,
   setContainerHeight,
-  resetContainerHeight
+  resetContainerHeight,
+  dragStart
 }) {
   const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -70,6 +71,11 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
+      onMouseDown={(event) => {
+        if (!dropdownSelectOpen) {
+          dragStart(event, textItemId);
+        }
+      }}
     >
       <div className="text-item-border">
         <div className="text-item">

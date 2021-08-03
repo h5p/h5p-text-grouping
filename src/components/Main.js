@@ -30,7 +30,11 @@ export default function Main({ context }) {
     randomizedTextItems.slice()
   ]);
 
+  const [dropzonesVisible, setDropzonesVisible] = useState(false);
+
   const uncategorizedId = textGroups.length;
+
+  const [draggedTextItemId, setDraggedTextItemId] = useState(0);
 
   const applyCategoryAssignment = () => {
     // Animate moved items
@@ -82,6 +86,38 @@ export default function Main({ context }) {
     applyCategoryAssignment();
   };
 
+  const textItemDragStart = (event, textItemId) => {
+    if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
+    event.preventDefault();
+    setDraggedTextItemId(textItemId);
+    setDropzonesVisible(true);
+  };
+
+  const textItemDragEnd = (event, categoryId = null) => {
+    if (categoryId !== null && draggedTextItemId !== 0) {
+      moveTextItem(draggedTextItemId, categoryId);
+      applyCategoryAssignment();
+    }
+    setDraggedTextItemId(0);
+    setDropzonesVisible(false);
+  };
+
+  document.onmouseup = event => {
+    let node = event.target;
+    while (node.parentNode) {
+      if (node.className.includes('category ')) {
+        let className = node.className;
+        textItemDragEnd(event, className.replace('category ', ''));
+        return;
+      } 
+      else if (node.className === 'uncategorized') {
+        textItemDragEnd(event, uncategorizedId);
+      }
+      node = node.parentNode;
+    }
+    textItemDragEnd(event);
+  };
+
   return (
     <H5PContext.Provider value={context}>
       <CategoryList
@@ -90,7 +126,8 @@ export default function Main({ context }) {
         moveTextItem={moveTextItem}
         allTextItems={randomizedTextItems.slice()}
         applyCategoryAssignment={applyCategoryAssignment}
-        appliedCategoryAssignment={appliedCategoryAssignment}
+        textItemDragStart={textItemDragStart}
+        dropzoneVisible={dropzonesVisible}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
       />
@@ -98,6 +135,8 @@ export default function Main({ context }) {
         categoryId={uncategorizedId}
         applyCategoryAssignment={applyCategoryAssignment}
         moveTextItem={moveTextItem}
+        textItemDragStart={textItemDragStart}
+        dropzoneVisible={dropzonesVisible}
         textItems={{
           category: appliedCategoryAssignment[uncategorizedId],
           categories: [...textGroups, { groupName: 'Uncategorized' }],
