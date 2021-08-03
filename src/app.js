@@ -16,6 +16,11 @@ H5P.TextGrouping = (() => {
     this.extras = extras || {};
     this.showSelectedSolutions = false;
 
+    let categoryState = null;
+    const initiateCategoryState = () => {
+      categoryState = [...this.params.textGroups.map(() => []), randomizedTextItems.slice()];
+    };
+
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
       content,
@@ -52,12 +57,13 @@ H5P.TextGrouping = (() => {
             randomizedTextItems[i]
           ];
         }
+        initiateCategoryState();
         reset = false;
       }
       return randomizedTextItems;
     };
 
-    let categoryState = null;
+    initiateCategoryState();
 
     /**
      * Updates the state and triggers xAPI interacted event
