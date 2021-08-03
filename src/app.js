@@ -61,8 +61,7 @@ H5P.TextGrouping = (() => {
      *
      * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
      */
-    const triggerAnswered = (currentCategoryState) => {
-      categoryState = currentCategoryState;
+    const triggerAnswered = () => {
       this.trigger(
         getAnsweredXAPIEvent(
           this,
@@ -243,6 +242,8 @@ H5P.TextGrouping = (() => {
 
       this.showSelectedSolutions = true;
       this.trigger('resize');
+
+      triggerAnswered();
     };
 
     /**
