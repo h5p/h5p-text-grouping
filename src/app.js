@@ -195,6 +195,22 @@ H5P.TextGrouping = (() => {
         }
       }
     );
+    this.addButton(
+      'try-again',
+      this.params.l10n.retryText,
+      () => {
+        this.resetTask();
+      },
+      false,
+      { 'aria-label': this.params.l10n.retry },
+      {
+        confirmationDialog: {
+          enable: this.params.behaviour.confirmRetryDialog,
+          l10n: this.params.l10n.confirmRetry,
+          instance: this
+        }
+      }
+    );
 
     /**
      * Check answer.
@@ -221,8 +237,26 @@ H5P.TextGrouping = (() => {
 
       this.hideButton('check-answer');
 
+      if (this.params.behaviour.enableRetry && this.getScore() !== this.getMaxScore()) {
+        this.showButton('try-again');
+      }
+
       this.showSelectedSolutions = true;
       this.trigger('resize');
+    };
+
+    /**
+     * Resets buttons, solutions and positions of the text items
+     *
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
+     */
+    this.resetTask = () => {
+      //resetSelections();
+      this.showButton('check-answer');
+      this.hideButton('try-again');
+      this.hideButton('show-solution');
+      //hideSolutions();
+      this.removeFeedback();
     };
   }
 
