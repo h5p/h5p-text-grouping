@@ -14,6 +14,7 @@ H5P.TextGrouping = (() => {
     this.contentId = contentId;
     this.params = params;
     this.extras = extras || {};
+    this.showSelectedSolutions = false;
 
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
@@ -83,6 +84,7 @@ H5P.TextGrouping = (() => {
       randomizedTextItems: randomizedTextItems,
       triggerInteracted: triggerInteracted,
       triggerAnswered: triggerAnswered,
+      showSelectedSolutions: this.showSelectedSolutions
     };
 
     // Register task media
@@ -176,35 +178,53 @@ H5P.TextGrouping = (() => {
         categoryState,
       );
     };
+
+    this.addButton(
+      'check-answer',
+      this.params.l10n.checkAnswerButtonText,
+      () => {
+        this.checkAnswer();
+      },
+      true,
+      { 'aria-label': this.params.l10n.checkAnswer },
+      {
+        confirmationDialog: {
+          enable: this.params.behaviour.confirmCheckDialog,
+          l10n: this.params.l10n.confirmCheck,
+          instance: this
+        }
+      }
+    );
+
+    /**
+     * Check answer.
+     */
+    this.checkAnswer = () => {
+      // this.content.disableSelectables();
+
+      // const score = this.getScore();
+      // const maxScore = this.getMaxScore();
+      // const textScore = H5P.Question.determineOverallFeedback(
+      //   this.params.overallFeedback,
+      //   score / maxScore
+      // );
+
+      // this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
+
+      // if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
+      //   this.showButton('show-solution');
+      // }
+
+      // if (this.params.behaviour.enableRetry && score !== maxScore) {
+      //   this.showButton('try-again');
+      // }
+
+      this.hideButton('check-answer');
+
+      this.showSelectedSolutions = true;
+      this.trigger('resize');
+    };
   }
-
-  // /**
-  //  * Check answer.
-  //  */
-  // this.checkAnswer = () => {
-  //   this.content.disableSelectables();
-
-  //   const score = this.getScore();
-  //   const maxScore = this.getMaxScore();
-  //   const textScore = H5P.Question.determineOverallFeedback(
-  //     this.params.overallFeedback,
-  //     score / maxScore
-  //   );
-
-  //   this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
-
-  //   if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
-  //     this.showButton('show-solution');
-  //   }
-
-  //   if (this.params.behaviour.enableRetry && score !== maxScore) {
-  //     this.showButton('try-again');
-  //   }
-
-  //   this.hideButton('check-answer');
-
-  //   this.content.showSelectedSolutions();
-  // };
 
   TextGrouping.prototype = Object.create(H5P.Question.prototype);
   TextGrouping.prototype.constructor = TextGrouping;

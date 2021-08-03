@@ -35,23 +35,7 @@ export default function Main({ context }) {
   const uncategorizedId = textGroups.length;
 
   const applyCategoryAssignment = () => {
-    // Remove text items that are to be moved from old categories
-    appliedCategoryAssignment.forEach((category, categoryId) => {
-      for (let otherCategoryId = category.length - 1; otherCategoryId >= 0; otherCategoryId--) {
-        if (
-          !temporaryCategoryAssignment[categoryId]
-            .map((temporaryTextItem) => temporaryTextItem.id)
-            .includes(category[otherCategoryId].id)
-        ) {
-          category.splice(otherCategoryId, 1);
-        }
-        else {
-          category[otherCategoryId].shouldAnimate = false; // Set boolean for moved to false for all text items
-        }
-      }
-    });
-
-    // Add back text items that are to be moved to new categories
+    // Animate moved items
     temporaryCategoryAssignment.forEach((category, categoryId) => {
       category.forEach((textItem) => {
         if (
@@ -59,13 +43,12 @@ export default function Main({ context }) {
             .map((appliedTextItem) => appliedTextItem.id)
             .includes(textItem.id)
         ) {
-          appliedCategoryAssignment[categoryId].push(textItem);
-          textItem.shouldAnimate = true; // Set boolean for moved to true
+          textItem.shouldAnimate = true;
         }
       });
     });
 
-    setAppliedCategoryAssignment(deepCopy(appliedCategoryAssignment));
+    setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
     triggerInteracted(appliedCategoryAssignment);
   };
 
@@ -102,8 +85,6 @@ export default function Main({ context }) {
     applyCategoryAssignment();
   };
 
-  const checkSolution = true;
-
   return (
     <H5PContext.Provider value={context}>
       <CategoryList
@@ -115,7 +96,6 @@ export default function Main({ context }) {
         appliedCategoryAssignment={appliedCategoryAssignment}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
-        checkSolution={checkSolution}
       />
       <Uncategorized
         categoryId={uncategorizedId}
@@ -145,6 +125,7 @@ Main.propTypes = {
       })
     ),
     triggerInteracted: PropTypes.func.isRequired,
-    triggerAnswered: PropTypes.func.isRequired
+    triggerAnswered: PropTypes.func.isRequired,
+    showSelectedSolutions: PropTypes.bool
   }).isRequired
 };

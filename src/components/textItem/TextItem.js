@@ -23,13 +23,12 @@ export default function TextItem({
   moveTextItem,
   applyAssignment,
   textElement,
-  checkSolution,
   shouldAnimate,
   removeAnimations,
   setContainerHeight,
   resetContainerHeight
 }) {
-  const { instance, l10n } = useContext(H5PContext);
+  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
 
@@ -66,8 +65,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: checkSolution && isCorrectlyPlaced(textItemId, currentCategoryId),
-        wrong: checkSolution && !isCorrectlyPlaced(textItemId, currentCategoryId)
+        correct: showSelectedSolutions && isCorrectlyPlaced(textItemId, currentCategoryId),
+        wrong: showSelectedSolutions && !isCorrectlyPlaced(textItemId, currentCategoryId)
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
@@ -75,7 +74,7 @@ export default function TextItem({
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
-          {checkSolution ? (
+          {showSelectedSolutions ? (
             <div className="solution-icon" />
           ) : (
             <Button
