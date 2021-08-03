@@ -35,7 +35,7 @@ export default function Main({ context }) {
 
   const uncategorizedId = textGroups.length;
 
-  const [draggedTextItemId, setDraggedTextItemId] = useState(0);
+  const [draggedTextItem, setDraggedTextItem] = useState({textItemId: -1, categoryId: -1});
 
   const applyCategoryAssignment = () => {
     // Animate moved items
@@ -88,19 +88,19 @@ export default function Main({ context }) {
     applyCategoryAssignment();
   };
 
-  const textItemDragStart = (event, textItemId) => {
+  const textItemDragStart = (event, textItemId, currentCategoryId) => {
     if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
     event.preventDefault();
-    setDraggedTextItemId(textItemId);
+    setDraggedTextItem({textItemId: textItemId, categoryId: currentCategoryId});
     setDropzonesVisible(true);
   };
 
   const textItemDragEnd = (event, categoryId = null) => {
-    if (categoryId !== null && draggedTextItemId !== 0) {
-      moveTextItem(draggedTextItemId, categoryId);
+    if (categoryId !== null && draggedTextItem !== 0 && categoryId !== draggedTextItem.categoryId) {
+      moveTextItem(draggedTextItem.textItemId, categoryId);
       applyCategoryAssignment();
     }
-    setDraggedTextItemId(0);
+    setDraggedTextItem({textItemId: -1, categoryId: -1});
     setDropzonesVisible(false);
   };
 

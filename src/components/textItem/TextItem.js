@@ -73,7 +73,7 @@ export default function TextItem({
       onAnimationEnd={removeAnimations}
       onMouseDown={(event) => {
         if (!dropdownSelectOpen) {
-          dragStart(event, textItemId);
+          dragStart(event, textItemId, currentCategoryId);
         }
       }}
     >
