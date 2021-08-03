@@ -1,5 +1,6 @@
 @use 'sass:math';
 @use '../../styles/h5p-text-grouping.scss' as styles;
+@use 'mixins' as *;
 
 .text-item-wrapper {
   padding: 0.375em 0 0.375em 0;
@@ -32,6 +33,10 @@
         color: styles.$color-correct-text;
         background-color: styles.$color-correct-light;
       }
+
+      .solution-icon:before {
+        @include solution-button('check_circle', styles.$color-correct-dark);
+      }
     }
   }
 
@@ -42,6 +47,10 @@
       .text-item {
         color: styles.$color-wrong-dark;
         background-color: styles.$color-wrong-light;
+      }
+
+      .solution-icon:before {
+        @include solution-button('cancel', styles.$color-wrong-dark);
       }
     }
   }

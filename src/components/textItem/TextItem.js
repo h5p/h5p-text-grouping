@@ -75,13 +75,17 @@ export default function TextItem({
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
-          <Button
-            iconName="icon-move-to-category"
-            className="button-move-to-category"
-            ariaLabel={l10n.ariaMoveToCategory}
-            hoverText={l10n.hoverMoveToCategory}
-            onClick={handleDropdownSelectOpen}
-          />
+          {checkSolution ? (
+            <div className="solution-icon" />
+          ) : (
+            <Button
+              iconName="icon-move-to-category"
+              className="button-move-to-category"
+              ariaLabel={l10n.ariaMoveToCategory}
+              hoverText={l10n.hoverMoveToCategory}
+              onClick={handleDropdownSelectOpen}
+            />
+          )}
           {dropdownSelectOpen ? (
             <div className="dropdown-wrapper">
               <SingleDropdownSelect
