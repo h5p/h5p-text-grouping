@@ -82,7 +82,6 @@ H5P.TextGrouping = (() => {
       contentId: contentId,
       randomizedTextItems: randomizedTextItems,
       triggerInteracted: triggerInteracted,
-      triggerAnswered: triggerAnswered,
       showSelectedSolutions: this.showSelectedSolutions
     };
 

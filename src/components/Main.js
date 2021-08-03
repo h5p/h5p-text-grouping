@@ -18,8 +18,7 @@ export default function Main({ context }) {
   const {
     randomizedTextItems,
     params: { textGroups },
-    triggerInteracted,
-    triggerAnswered
+    triggerInteracted
   } = context;
 
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
@@ -125,7 +124,6 @@ Main.propTypes = {
       })
     ),
     triggerInteracted: PropTypes.func.isRequired,
-    triggerAnswered: PropTypes.func.isRequired,
     showSelectedSolutions: PropTypes.bool
   }).isRequired
 };
