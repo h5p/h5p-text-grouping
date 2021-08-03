@@ -1,4 +1,4 @@
-@use '../../styles/h5p-text-grouping.scss' as styles;
+@use '../../styles/' as styles;
 
 .category {
   padding: 0.5em 0.5em;
@@ -59,6 +59,51 @@
 
     .header {
       padding-left: 0em;
+    }
+  }
+}
+
+.button-assign-items {
+  border: none;
+  background: none;
+}
+
+.icon-assign-items {
+  &:before {
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: 'queue';
+    color: #4174cc;
+  }
+}
+
+.expand-collapse-button {
+  display: none;
+}
+
+@media only screen and (max-width: styles.$medium-screen-size) {
+  .expand-collapse-button {
+    display: inline;
+    border: none;
+    background: none;
+  }
+
+  .expanded-state {
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: '\e5c5';
+      color: styles.$color-collapse-expand-button;
+    }
+  }
+
+  .collapsed-state {
+    transform: rotate(-90deg);
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: '\e5c5';
+      color: styles.$color-collapse-expand-button;
     }
   }
 }

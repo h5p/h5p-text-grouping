@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './Button.scss';
@@ -7,19 +7,23 @@ import './Button.scss';
  * A general Button component to be used in other components.
  * Functionality and appearance is determined by parameters.
  */
-export default function Button({
-  iconName,
-  className = '',
-  ariaLabel,
-  ariaHasPopup = false,
-  ariaExpanded = false,
-  hoverText,
-  disabled,
-  onClick,
-  children
-}) {
-  return (
+const Button = forwardRef(
+  (
+    {
+      iconName,
+      className = '',
+      ariaLabel,
+      ariaHasPopup = false,
+      ariaExpanded = false,
+      hoverText,
+      disabled,
+      onClick,
+      children
+    },
+    ref
+  ) => (
     <button
+      ref={ref}
       onClick={onClick}
       className={`h5p-text-grouping-button ${className} ${iconName ? iconName : ''}`}
       aria-label={ariaLabel}
@@ -30,8 +34,10 @@ export default function Button({
     >
       {children}
     </button>
-  );
-}
+  )
+);
+
+Button.displayName = 'Button';
 
 Button.propTypes = {
   iconName: PropTypes.string,
@@ -43,3 +49,5 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 };
+
+export default Button;

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
 H5P = H5P || {};
@@ -9,6 +10,11 @@ H5P.TextGrouping = (() => {
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
     H5P.Question.call(this, 'textgrouping');
+
+    this.contentId = contentId;
+    this.params = params;
+    this.extras = extras || {};
+    this.showSelectedSolutions = false;
 
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
@@ -38,10 +44,36 @@ H5P.TextGrouping = (() => {
       ];
     }
 
-    this.contentId = contentId;
-    this.params = params;
-    this.extras = extras || {};
-    this.showSelectedSolutions = false;
+    let categoryState = null;
+
+    /**
+     * Updates the state and triggers xAPI interacted event
+     *
+     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     */
+    const triggerInteracted = (currentCategoryState) => {
+      categoryState = currentCategoryState;
+      this.triggerXAPI('interacted');
+    };
+
+    /**
+     * Updates the state and triggers xAPI answered event
+     *
+     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     */
+    const triggerAnswered = () => {
+      this.trigger(
+        getAnsweredXAPIEvent(
+          this,
+          this.params.question,
+          this.params.textGroups,
+          this.getScore(),
+          this.getMaxScore(),
+          this.isPassed(),
+          categoryState
+        )
+      );
+    };
 
     const context = {
       params: params,
@@ -49,6 +81,7 @@ H5P.TextGrouping = (() => {
       instance: this,
       contentId: contentId,
       randomizedTextItems: randomizedTextItems,
+      triggerInteracted: triggerInteracted,
       showSelectedSolutions: this.showSelectedSolutions
     };
 
@@ -90,6 +123,60 @@ H5P.TextGrouping = (() => {
     );
     this.setContent(ReactDOM.render(main, wrapper));
 
+    /**
+     * Get latest score
+     * @return {number} latest score
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
+     */
+    this.getScore = () => {
+      // TODO: Dummy metod
+      return 5;
+    };
+
+    /**
+     * Get maximum possible score
+     * @return {number} Score necessary for mastering
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
+     */
+    this.getMaxScore = () => {
+      // TODO: Dummy metod
+      return 10;
+    };
+
+    /**
+     * Get whether the user has achieved a passing score or not
+     * @return {boolean} True if passed, false if not
+     */
+    this.isPassed = () => {
+      // TODO: Dummy metod
+      return true;
+    };
+
+    /**
+     * Packs the current state of the users interactivity into a
+     * serializable object.
+     * @public
+     */
+    this.getCurrentState = () => {
+      return getCurrentState(categoryState);
+    };
+
+    /**
+     * Retrieves the xAPI data necessary for generating result reports
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+     */
+    this.getXAPIData = () => {
+      return getXAPIData(
+        this,
+        this.params.question,
+        this.params.textGroups,
+        this.getScore(),
+        this.getMaxScore(),
+        this.isSuccess(),
+        categoryState,
+      );
+    };
+
     this.addButton(
       'check-answer',
       this.params.l10n.checkAnswerButtonText,
@@ -102,6 +189,22 @@ H5P.TextGrouping = (() => {
         confirmationDialog: {
           enable: this.params.behaviour.confirmCheckDialog,
           l10n: this.params.l10n.confirmCheck,
+          instance: this
+        }
+      }
+    );
+    this.addButton(
+      'try-again',
+      this.params.l10n.retryText,
+      () => {
+        this.resetTask();
+      },
+      false,
+      { 'aria-label': this.params.l10n.retry },
+      {
+        confirmationDialog: {
+          enable: this.params.behaviour.confirmRetryDialog,
+          l10n: this.params.l10n.confirmRetry,
           instance: this
         }
       }
@@ -132,8 +235,28 @@ H5P.TextGrouping = (() => {
 
       this.hideButton('check-answer');
 
+      if (this.params.behaviour.enableRetry && this.getScore() !== this.getMaxScore()) {
+        this.showButton('try-again');
+      }
+
       this.showSelectedSolutions = true;
       this.trigger('resize');
+
+      triggerAnswered();
+    };
+
+    /**
+     * Resets buttons, solutions and positions of the text items
+     *
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
+     */
+    this.resetTask = () => {
+      //resetSelections();
+      this.showButton('check-answer');
+      this.hideButton('try-again');
+      this.hideButton('show-solution');
+      //hideSolutions();
+      this.removeFeedback();
     };
   }
 
