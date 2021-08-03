@@ -138,22 +138,46 @@ H5P.TextGrouping = (() => {
 
     /**
      * Get latest score
+     *
+     * Text items in the correct category are worth 1 point.
+     * Text items the incorrect category are worth -1 point.
+     * Text items Uncategorized are not counted.
+     *
      * @return {number} latest score
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
      */
     this.getScore = () => {
-      // TODO: Dummy metod
-      return 5;
+      let score = 0;
+      const penalties = true; // TODO: add to editor, or remove functionality
+
+      categoryState.forEach((category, categoryIndex) => {
+        if (categoryIndex !== (categoryState.length - 1)) {
+          category.forEach((textItem) => {
+            if (textItem.id.substring(0, 1) == categoryIndex) {
+              score++;
+            }
+            else if (penalties) {
+              score--;
+            }
+          });
+        }
+      });
+      return score >= 0 ? score : 0;
     };
 
     /**
      * Get maximum possible score
+     *
+     * Distractor words do not contribute to scoring.
      * @return {number} Score necessary for mastering
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
      */
     this.getMaxScore = () => {
-      // TODO: Dummy metod
-      return 10;
+      let maxScore = 0;
+      this.params.textGroups.forEach((category) => {
+        maxScore += category.textElements.length;
+      });
+      return maxScore;
     };
 
     /**
