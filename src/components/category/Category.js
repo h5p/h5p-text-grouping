@@ -28,7 +28,7 @@ export default function Category({
   resetContainerHeight,
   applyCategoryAssignment,
   textItemDragStart,
-  dropzoneVisible,
+  draggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
   const { instance, l10n } = useContext(H5PContext);
@@ -36,6 +36,7 @@ export default function Category({
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
+  const [dropzoneVisible, setDropzoneVisible] = useState(false);
 
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
@@ -66,6 +67,22 @@ export default function Category({
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
     instance.trigger('resize');
+  };
+
+  const handleOnMouseEnter = () => {
+    if (draggedTextItem.categoryId !== categoryId && draggedTextItem.categoryId !== -1) {
+      setDropzoneVisible(true);
+    }
+  };
+
+  const handleOnMouseLeave = () => {
+    setDropzoneVisible(false);
+  };
+
+  const handleOnMouseUp = () => {
+    if (draggedTextItem.categoryId === -1) {
+      setDropzoneVisible(false);
+    }
   };
 
   const toggleTextItem = (textItemId) => {
@@ -103,7 +120,12 @@ export default function Category({
   });
 
   return (
-    <div className={`category ${categoryId}`}>
+    <div 
+      className={`category ${categoryId}`} 
+      onMouseEnter={event => handleOnMouseEnter(event)} 
+      onMouseLeave={event => handleOnMouseLeave(event)} 
+      onMouseUp={event => handleOnMouseUp(event)}
+    >
       <div className="header" ref={categoryHeaderRef}>
         <Button
           iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}

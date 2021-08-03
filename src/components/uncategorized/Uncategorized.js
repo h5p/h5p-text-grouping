@@ -17,11 +17,29 @@ export default function Uncategorized({
   applyCategoryAssignment,
   moveTextItem,
   textItemDragStart,
+  draggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
   const [minHeight, setMinHeight] = useState(null);
   const { l10n } = useContext(H5PContext);
+
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
+
+  const handleOnMouseEnter = () => {
+    if (draggedTextItem.categoryId !== categoryId && draggedTextItem.categoryId !== -1) {
+      setDropzoneVisible(true);
+    }
+  };
+
+  const handleOnMouseLeave = () => {
+    setDropzoneVisible(false);
+  };
+
+  const handleOnMouseUp = () => {
+    if (draggedTextItem.categoryId === -1) {
+      setDropzoneVisible(false);
+    }
+  };
 
   const textItems = category.map(({ id, content, shouldAnimate }) => {
     return (
@@ -43,7 +61,12 @@ export default function Uncategorized({
   });
 
   return (
-    <div className="uncategorized">
+    <div 
+      className="uncategorized" 
+      onMouseEnter={event => handleOnMouseEnter(event)} 
+      onMouseLeave={event => handleOnMouseLeave(event)} 
+      onMouseUp={event => handleOnMouseUp(event)}
+    >
       <div className="uncategorized-heading">{l10n.uncategorizedLabel}</div>
       <ul
         style={{ minHeight: minHeight }}

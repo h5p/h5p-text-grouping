@@ -39,8 +39,6 @@ export default function Main({ context }) {
     });
   }, []);
 
-  const [dropzonesVisible, setDropzonesVisible] = useState(false);
-
   const uncategorizedId = textGroups.length;
 
   const [draggedTextItem, setDraggedTextItem] = useState({textItemId: -1, categoryId: -1});
@@ -100,7 +98,6 @@ export default function Main({ context }) {
     if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
     event.preventDefault();
     setDraggedTextItem({textItemId: textItemId, categoryId: currentCategoryId});
-    setDropzonesVisible(true);
   };
 
   const textItemDragEnd = (event, categoryId = null) => {
@@ -109,7 +106,6 @@ export default function Main({ context }) {
       applyCategoryAssignment();
     }
     setDraggedTextItem({textItemId: -1, categoryId: -1});
-    setDropzonesVisible(false);
   };
 
   document.onmouseup = event => {
@@ -137,7 +133,7 @@ export default function Main({ context }) {
         allTextItems={getRandomizedTextItems().slice()}
         applyCategoryAssignment={applyCategoryAssignment}
         textItemDragStart={textItemDragStart}
-        dropzoneVisible={dropzonesVisible}
+        draggedTextItem={draggedTextItem}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
       />
@@ -146,7 +142,7 @@ export default function Main({ context }) {
         applyCategoryAssignment={applyCategoryAssignment}
         moveTextItem={moveTextItem}
         textItemDragStart={textItemDragStart}
-        dropzoneVisible={dropzonesVisible}
+        draggedTextItem={draggedTextItem}
         textItems={{
           category: appliedCategoryAssignment[uncategorizedId],
           categories: [...textGroups, { groupName: 'Uncategorized' }],

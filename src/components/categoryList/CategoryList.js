@@ -20,7 +20,7 @@ export default function CategoryList({
   temporaryCategoryAssignment,
   removeAnimations,
   textItemDragStart,
-  dropzoneVisible,
+  draggedTextItem={draggedTextItem},
   checkSolution
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
@@ -45,7 +45,7 @@ export default function CategoryList({
           temporaryCategoryAssignment={temporaryCategoryAssignment}
           applyCategoryAssignment={applyCategoryAssignment}
           textItemDragStart={textItemDragStart}
-          dropzoneVisible={dropzoneVisible}
+          draggedTextItem={draggedTextItem}
           textItems={{
             category: category,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
