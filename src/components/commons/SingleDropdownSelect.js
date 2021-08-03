@@ -39,8 +39,10 @@ export default function SingleDropdownSelect({
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleSelectItem = (event, optionId) => {
-    event.stopPropagation();
-    onChange(optionId);
+    if (optionId !== currentlySelectedId) {
+      onChange(optionId);
+      event.stopPropagation();
+    }
   };
 
   const handleClose = () => {

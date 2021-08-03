@@ -33,6 +33,9 @@ export default function TextItem({
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
 
+  const uncategorizedId = categories.length - 1;
+  const showSolution = showSelectedSolutions && uncategorizedId !== currentCategoryId;
+
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
     instance.trigger('resize');
@@ -66,8 +69,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: showSelectedSolutions && isCorrectlyPlaced(textItemId, currentCategoryId),
-        wrong: showSelectedSolutions && !isCorrectlyPlaced(textItemId, currentCategoryId)
+        correct: showSolution && isCorrectlyPlaced(textItemId, currentCategoryId),
+        wrong: showSolution && !isCorrectlyPlaced(textItemId, currentCategoryId)
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
