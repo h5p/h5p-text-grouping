@@ -8,7 +8,6 @@ import Button from '../commons/Button';
 import Dropzone from '../commons/Dropzone';
 import MultiDropdownSelect from '../commons/MultiDropdownSelect';
 import TextItem from '../textItem/TextItem';
-import ExpandCollapseButton from './Buttons/ExpandCollapseButton';
 
 import './Category.scss';
 
@@ -104,7 +103,14 @@ export default function Category({
   return (
     <div className="category">
       <div className="header" ref={categoryHeaderRef}>
-        <ExpandCollapseButton expanded={accordionOpen} onClick={handleAccordionToggle} />
+        <Button
+          iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
+          className="expand-collapse-button"
+          ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
+          hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
+          onClick={handleAccordionToggle}
+          aria-expanded={accordionOpen}
+        />
         <div className="title">{titleWithChildCount}</div>
         <Button
           ref={assignItemsButtonRef}
