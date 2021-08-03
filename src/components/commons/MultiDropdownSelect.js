@@ -27,20 +27,24 @@ export default function MultiDropdownSelect({
   }, []);
 
   useEffect(() => {
-    window.addEventListener('click', handleClose);
+    window.addEventListener('mousedown', handleClose);
     return () => {
-      window.removeEventListener('click', handleClose);
+      window.removeEventListener('mousedown', handleClose);
     };
   }, []);
 
   const handleSelectItem = (event, optionId) => {
-    event.stopPropagation();
-    onChange(optionId);
+    if (!event.button) { // Left click or keyboard
+      event.stopPropagation();
+      onChange(optionId);
+    }
   };
 
-  const handleClose = () => {
-    resetContainerHeight();
-    onClose();
+  const handleClose = event => {
+    if (!event.button) { // Left click or keyboard
+      resetContainerHeight();
+      onClose();
+    }
   };
 
   const handleKeyboardPressed = (event, optionId) => {
@@ -53,7 +57,7 @@ export default function MultiDropdownSelect({
       case 'Enter':
       case 'Escape':
         event.preventDefault();
-        handleClose();
+        handleClose(event);
         break;
     }
   };
@@ -69,7 +73,7 @@ export default function MultiDropdownSelect({
             <li
               key={`option-${id}`}
               className={currentlySelectedIds.includes(id) ? 'selected' : 'unselected'}
-              onClick={(event) => handleSelectItem(event, id)}
+              onMouseDown={(event) => handleSelectItem(event, id)}
               onKeyDown={(event) => handleKeyboardPressed(event, id)}
               tabIndex={0}
               role="option"

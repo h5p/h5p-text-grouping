@@ -27,6 +27,8 @@ export default function Category({
   setContainerHeight,
   resetContainerHeight,
   applyCategoryAssignment,
+  textItemDragStart,
+  dropzoneVisible,
   textItems: { category, categories, removeAnimations }
 }) {
   const { instance, l10n } = useContext(H5PContext);
@@ -34,7 +36,6 @@ export default function Category({
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
-  const [dropzoneVisible, setDropzoneVisible] = useState(false);
 
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
@@ -96,12 +97,13 @@ export default function Category({
         removeAnimations={removeAnimations}
         setContainerHeight={setContainerHeight}
         resetContainerHeight={resetContainerHeight}
+        dragStart={textItemDragStart}
       />
     );
   });
 
   return (
-    <div className="category">
+    <div className={`category ${categoryId}`}>
       <div className="header" ref={categoryHeaderRef}>
         <Button
           iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
