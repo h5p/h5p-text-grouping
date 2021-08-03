@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
 H5P = H5P || {};
@@ -9,6 +10,10 @@ H5P.TextGrouping = (() => {
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
     H5P.Question.call(this, 'textgrouping');
+
+    this.contentId = contentId;
+    this.params = params;
+    this.extras = extras || {};
 
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
@@ -38,17 +43,47 @@ H5P.TextGrouping = (() => {
       ];
     }
 
+    let categoryState = null;
+
+    /**
+     * Updates the state and triggers xAPI interacted event
+     *
+     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     */
+    const triggerInteracted = (currentCategoryState) => {
+      categoryState = currentCategoryState;
+      this.triggerXAPI('interacted');
+    };
+
+    /**
+     * Updates the state and triggers xAPI answered event
+     *
+     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     */
+    const triggerAnswered = (currentCategoryState) => {
+      categoryState = currentCategoryState;
+      this.trigger(
+        getAnsweredXAPIEvent(
+          this,
+          this.params.question,
+          this.params.textGroups,
+          this.getScore(),
+          this.getMaxScore(),
+          this.isPassed(),
+          categoryState
+        )
+      );
+    };
+
     const context = {
       params: params,
       l10n: params.l10n,
       instance: this,
       contentId: contentId,
-      randomizedTextItems: randomizedTextItems
+      randomizedTextItems: randomizedTextItems,
+      triggerInteracted: triggerInteracted,
+      triggerAnswered: triggerAnswered,
     };
-
-    this.contentId = contentId;
-    this.params = params;
-    this.extras = extras || {};
 
     // Register task media
     if (context.params.media && context.params.media.type && context.params.media.type.library) {
@@ -87,6 +122,60 @@ H5P.TextGrouping = (() => {
       </div>
     );
     this.setContent(ReactDOM.render(main, wrapper));
+
+    /**
+     * Get latest score
+     * @return {number} latest score
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-2}
+     */
+    this.getScore = () => {
+      // TODO: Dummy metod
+      return 5;
+    };
+
+    /**
+     * Get maximum possible score
+     * @return {number} Score necessary for mastering
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
+     */
+    this.getMaxScore = () => {
+      // TODO: Dummy metod
+      return 10;
+    };
+
+    /**
+     * Get whether the user has achieved a passing score or not
+     * @return {boolean} True if passed, false if not
+     */
+    this.isPassed = () => {
+      // TODO: Dummy metod
+      return true;
+    };
+
+    /**
+     * Packs the current state of the users interactivity into a
+     * serializable object.
+     * @public
+     */
+    this.getCurrentState = () => {
+      return getCurrentState(categoryState);
+    };
+
+    /**
+     * Retrieves the xAPI data necessary for generating result reports
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+     */
+    this.getXAPIData = () => {
+      return getXAPIData(
+        this,
+        this.params.question,
+        this.params.textGroups,
+        this.getScore(),
+        this.getMaxScore(),
+        this.isSuccess(),
+        categoryState,
+      );
+    };
   }
 
   // /**

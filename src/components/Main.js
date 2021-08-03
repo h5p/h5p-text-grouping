@@ -17,7 +17,9 @@ import deepCopy from '../helpers/deepCopy';
 export default function Main({ context }) {
   const {
     randomizedTextItems,
-    params: { textGroups }
+    params: { textGroups },
+    triggerInteracted,
+    triggerAnswered
   } = context;
 
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
@@ -64,6 +66,7 @@ export default function Main({ context }) {
     });
 
     setAppliedCategoryAssignment(deepCopy(appliedCategoryAssignment));
+    triggerInteracted(appliedCategoryAssignment);
   };
 
   /**
@@ -140,6 +143,8 @@ Main.propTypes = {
         content: PropTypes.string,
         shouldAnimate: PropTypes.bool
       })
-    )
+    ),
+    triggerInteracted: PropTypes.func.isRequired,
+    triggerAnswered: PropTypes.func.isRequired
   }).isRequired
 };
