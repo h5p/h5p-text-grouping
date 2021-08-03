@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './DropdownSelect.scss';
@@ -12,7 +12,6 @@ export default function MultiDropdownSelect({
   label,
   setContainerHeight,
   resetContainerHeight,
-  onChange,
   onClose,
   options,
   currentlySelectedIds
@@ -33,17 +32,43 @@ export default function MultiDropdownSelect({
     };
   }, []);
 
+  const optionDict = {};
+  options.forEach(option => optionDict[option.id] = false);
+  currentlySelectedIds.forEach(id => optionDict[id] = true);
+
+  const [addedIds, setAddedIds] = useState([]);
+  const [removedIds, setRemovedIds] = useState([]);
+  const [selectedOptionDict, setSelectedOptionDict] = useState(Object.assign({}, optionDict));
+
   const handleSelectItem = (event, optionId) => {
     if (!event.button) { // Left click or keyboard
       event.stopPropagation();
-      onChange(optionId);
+      if (optionDict[optionId]) {
+        setRemovedIds(prevRemovedIds => {
+          prevRemovedIds[optionId] = !prevRemovedIds[optionId];
+          return prevRemovedIds;
+        });
+      } 
+      else {
+        setAddedIds(prevAddedIds => {
+          prevAddedIds[optionId] = !prevAddedIds[optionId];
+          return prevAddedIds;
+        });
+      }
+      setSelectedOptionDict(prevSelectedOptionDict => {
+        prevSelectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
+        return prevSelectedOptionDict;
+      });
     }
   };
 
   const handleClose = event => {
     if (!event.button) { // Left click or keyboard
       resetContainerHeight();
-      onClose();
+      onClose(
+        Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []), 
+        Object.entries(removedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, [])
+      );
     }
   };
 
@@ -72,12 +97,12 @@ export default function MultiDropdownSelect({
           return (
             <li
               key={`option-${id}`}
-              className={currentlySelectedIds.includes(id) ? 'selected' : 'unselected'}
+              className={selectedOptionDict[id] ? 'selected' : 'unselected'}
               onMouseDown={(event) => handleSelectItem(event, id)}
               onKeyDown={(event) => handleKeyboardPressed(event, id)}
               tabIndex={0}
               role="option"
-              aria-selected={currentlySelectedIds.includes(id)}
+              aria-selected={selectedOptionDict[id]}
               dangerouslySetInnerHTML={{ __html: content }}
             />
           );
@@ -91,7 +116,6 @@ MultiDropdownSelect.propTypes = {
   label: PropTypes.string.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.exact({

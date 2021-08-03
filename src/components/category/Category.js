@@ -62,7 +62,9 @@ export default function Category({
 
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
 
-  const handleDropdownSelectClose = () => {
+  const handleDropdownSelectClose = (addedIds, removedIds) => {
+    addedIds.forEach(id => moveTextItem(id, categoryId));
+    removedIds.forEach(id => moveTextItem(id, uncategorizedId));
     assignItemsButtonRef.current.focus();
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
@@ -82,15 +84,6 @@ export default function Category({
   const handleOnMouseUp = () => {
     if (draggedTextItem.categoryId === -1) {
       setDropzoneVisible(false);
-    }
-  };
-
-  const toggleTextItem = (textItemId) => {
-    if (currentlySelectedIds.includes(textItemId)) {
-      moveTextItem(textItemId, uncategorizedId);
-    }
-    else {
-      moveTextItem(textItemId, categoryId);
     }
   };
 
@@ -153,7 +146,6 @@ export default function Category({
             label={l10n.assignItemsHelpText}
             setContainerHeight={setHeight}
             resetContainerHeight={resetContainerHeight}
-            onChange={(textItemId) => toggleTextItem(textItemId)}
             onClose={handleDropdownSelectClose}
             options={allTextItems}
             currentlySelectedIds={currentlySelectedIds}
