@@ -36,6 +36,7 @@ export default function TextItem({
 
   const uncategorizedId = categories.length - 1;
   const showSolution = showSelectedSolutions && uncategorizedId !== currentCategoryId;
+  const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
 
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
@@ -89,8 +90,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: showSolution && isCorrectlyPlaced(textItemId, currentCategoryId),
-        wrong: showSolution && !isCorrectlyPlaced(textItemId, currentCategoryId)
+        correct: showSolution && correctlyPlaced,
+        wrong: showSolution && !correctlyPlaced
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
@@ -102,7 +103,9 @@ export default function TextItem({
           {showSelectedSolutions ? (
             <>
               <div aria-hidden="true" className="solution-icon" />
-              <span className="offscreen">Correct answer</span>
+              <span className="offscreen">
+                {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
+              </span>
             </>
           ) : (
             <Button
