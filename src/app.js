@@ -283,14 +283,14 @@ H5P.TextGrouping = (() => {
     this.checkAnswer = () => {
       // this.content.disableSelectables();
 
-      // const score = this.getScore();
-      // const maxScore = this.getMaxScore();
-      // const textScore = H5P.Question.determineOverallFeedback(
-      //   this.params.overallFeedback,
-      //   score / maxScore
-      // );
+      const score = this.getScore();
+      const maxScore = this.getMaxScore();
+      const textScore = H5P.Question.determineOverallFeedback(
+        this.params.overallFeedback,
+        score / maxScore
+      );
 
-      // this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
+      this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
 
       // if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
       //   this.showButton('show-solution');
