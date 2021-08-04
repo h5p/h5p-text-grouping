@@ -69,7 +69,7 @@ H5P.TextGrouping = (() => {
     /**
      * Updates the state and triggers xAPI interacted event
      *
-     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
     const triggerInteracted = (currentCategoryState) => {
       categoryState = currentCategoryState;
@@ -79,7 +79,7 @@ H5P.TextGrouping = (() => {
     /**
      * Updates the state and triggers xAPI answered event
      *
-     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
     const triggerAnswered = () => {
       const score = this.getScore();
