@@ -55,7 +55,7 @@ export default function Main({ context }) {
 
   const uncategorizedId = textGroups.length;
 
-  const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: -1, categoryId: -1 });
+  const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: '-1', categoryId: -1 });
 
   /**
    * Update layout with current location of all text items

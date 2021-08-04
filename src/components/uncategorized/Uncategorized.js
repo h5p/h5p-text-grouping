@@ -86,7 +86,7 @@ Uncategorized.propTypes = {
   applyCategoryAssignment: PropTypes.func.isRequired,
   moveTextItem: PropTypes.func.isRequired,
   draggedTextItem: PropTypes.shape({
-    textItemId: PropTypes.isRequired,
+    textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired
   }).isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,

@@ -98,11 +98,11 @@ export default function Category({
    * Adds text item to category if it is not already there
    */
   const handleOnMouseUp = () => {
-    if (draggedTextItem.textItemId !== -1 && categoryId !== draggedTextItem.categoryId) {
+    if (draggedTextItem.textItemId !== '-1' && categoryId !== draggedTextItem.categoryId) {
       setDropzoneVisible(false);
       moveTextItem(draggedTextItem.textItemId, categoryId, draggedTextItem.categoryId);
       applyCategoryAssignment();
-      setDraggedTextItem({ textItemId: -1, categoryId: -1 });
+      setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
     }
   };
 
@@ -111,7 +111,7 @@ export default function Category({
    */
   document.onmouseup = () => {
     if (!dropzoneVisible) {
-      setDraggedTextItem({ textItemId: -1, categoryId: -1 });
+      setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
     }
   };
 
@@ -219,7 +219,7 @@ Category.propTypes = {
   resetContainerHeight: PropTypes.func.isRequired,
   applyCategoryAssignment: PropTypes.func.isRequired,
   draggedTextItem: PropTypes.shape({
-    textItemId: PropTypes.isRequired,
+    textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired
   }).isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
