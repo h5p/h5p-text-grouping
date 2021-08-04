@@ -157,14 +157,19 @@ H5P.TextGrouping = (() => {
      * @returns {number} max score possible without singlePoint
      */
     this.calculateMaxScore = () => {
-      let maxScore = 0;
+      // Cache the computation since the answer never changes
+      if (this.maxScore) {
+        this.maxScore;
+      }
+
+      this.maxScore = 0;
       this.params.textGroups.forEach((category) => {
-        maxScore += category.textElements.length;
+        this.maxScore += category.textElements.length;
       });
       if (!this.params.behaviour.penalties) {
-        maxScore += this.params.distractorGroup.length;
+        this.maxScore += this.params.distractorGroup.length;
       }
-      return maxScore;
+      return this.maxScore;
     };
 
     /**
