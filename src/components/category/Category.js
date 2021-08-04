@@ -37,9 +37,19 @@ export default function Category({
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
+  const [focused, setFocused] = useState(null);
 
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
+
+  /**
+   * Resets the state after the focus has been moved
+   */
+  useEffect(() => {
+    if (focused !== null) {
+      setFocused(null);
+    }
+  });
 
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
@@ -76,8 +86,8 @@ export default function Category({
    */
   const handleOnMouseEnter = () => {
     if (
-      draggedTextItem.categoryId !== categoryId && 
-      draggedTextItem.categoryId !== -1 && 
+      draggedTextItem.categoryId !== categoryId &&
+      draggedTextItem.categoryId !== -1 &&
       !narrowScreen
     ) {
       setDropzoneVisible(true);
@@ -121,14 +131,38 @@ export default function Category({
     );
   };
 
-  const textItems = category.map(({ id, content, shouldAnimate }) => {
+  /**
+   * Safely moves the focus to another element before the element is moved somewhere else
+   * @param {string} textItemId
+   * @param {string} newCategoryId
+   */
+  const removeTextItem = (textItemId, newCategoryId) => {
+    // If text item not only element in list
+    if (textItems.length > 0) {
+      category.forEach((textItem, index) => {
+        if ((textItemId === textItem.id)) {
+          // focus on the textitem after the removed one, or the one before if removing the last in the list
+          setFocused(index < category.length - 1 ? index : index - 1);
+        }
+      });
+    }
+    else {
+      // TODO
+      // Set to anchor point
+      // If unable, send the focus to another category via Main
+    }
+
+    moveTextItem(textItemId, newCategoryId, categoryId);
+  };
+
+  const textItems = category.map(({ id, content, shouldAnimate }, index) => {
     return (
       <TextItem
         key={id}
         textItemId={id}
         currentCategoryId={categoryId}
         categories={categories}
-        moveTextItem={moveTextItem}
+        moveTextItem={removeTextItem}
         applyAssignment={applyCategoryAssignment}
         textElement={content}
         shouldAnimate={shouldAnimate}
@@ -136,6 +170,7 @@ export default function Category({
         setContainerHeight={setContainerHeight}
         resetContainerHeight={resetContainerHeight}
         setDraggedTextItem={setDraggedTextItem}
+        focused={index === focused}
       />
     );
   });

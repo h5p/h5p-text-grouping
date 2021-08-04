@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -27,14 +27,23 @@ export default function TextItem({
   removeAnimations,
   setContainerHeight,
   resetContainerHeight,
-  setDraggedTextItem
+  setDraggedTextItem,
+  focused
 }) {
   const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const uncategorizedId = categories.length - 1;
   const showSolution = showSelectedSolutions && uncategorizedId !== currentCategoryId;
+
+  // Sets focus to the button
+  useEffect(() => {
+    if (focused) {
+      buttonRef.current.focus();
+    }
+  }, [focused]);
 
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
@@ -49,7 +58,7 @@ export default function TextItem({
   };
 
   const selectCategory = (categoryId) => {
-    moveTextItem(textItemId, categoryId, currentCategoryId);
+    moveTextItem(textItemId, categoryId);
     handleDropdownSelectClose();
   };
 
@@ -72,9 +81,9 @@ export default function TextItem({
    */
   const mouseDownHandler = (event, textItemId, currentCategoryId) => {
     if (
-      dropdownSelectOpen || 
+      dropdownSelectOpen ||
       showSelectedSolutions ||
-      event.button !== 0 || 
+      event.button !== 0 ||
       event.target.className.includes('button-move-to-category')
     ) {
       return;
@@ -107,6 +116,7 @@ export default function TextItem({
               ariaLabel={l10n.ariaMoveToCategory}
               hoverText={l10n.hoverMoveToCategory}
               onClick={handleDropdownSelectOpen}
+              ref={buttonRef}
             />
           )}
           {dropdownSelectOpen ? (
@@ -143,5 +153,6 @@ TextItem.propTypes = {
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired
+  setDraggedTextItem: PropTypes.func.isRequired,
+  focused: PropTypes.bool
 };
