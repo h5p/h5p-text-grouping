@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import isCorrectlyPlaced from './helpers/isCorrectlyPlaced';
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
@@ -68,7 +69,7 @@ H5P.TextGrouping = (() => {
     /**
      * Updates the state and triggers xAPI interacted event
      *
-     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
     const triggerInteracted = (currentCategoryState) => {
       categoryState = currentCategoryState;
@@ -78,11 +79,9 @@ H5P.TextGrouping = (() => {
     /**
      * Updates the state and triggers xAPI answered event
      *
-     * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+     * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
-    const triggerAnswered = () => {
-      const score = this.getScore();
-      const maxScore = this.getMaxScore();
+    const triggerAnswered = (score, maxScore) => {
       this.trigger(
         getAnsweredXAPIEvent(
           this,
@@ -158,14 +157,19 @@ H5P.TextGrouping = (() => {
      * @returns {number} max score possible without singlePoint
      */
     this.calculateMaxScore = () => {
-      let maxScore = 0;
+      // Cache the computation since the answer never changes
+      if (this.maxScore) {
+        this.maxScore;
+      }
+
+      this.maxScore = 0;
       this.params.textGroups.forEach((category) => {
-        maxScore += category.textElements.length;
+        this.maxScore += category.textElements.length;
       });
       if (!this.params.behaviour.penalties) {
-        maxScore += this.params.distractorGroup.length;
+        this.maxScore += this.params.distractorGroup.length;
       }
-      return maxScore;
+      return this.maxScore;
     };
 
     /**
@@ -185,12 +189,13 @@ H5P.TextGrouping = (() => {
     this.getScore = () => {
       let score = 0;
       const penalties = this.params.behaviour.penalties;
+      const uncategorizedId = categoryState.length - 1; // always the same as the last index
 
-      categoryState.forEach((category, categoryIndex) => {
+      categoryState.forEach((category, categoryId) => {
         // If penalties is selected, words in uncategorized should not be counted
-        if (!penalties || categoryIndex !== categoryState.length - 1) {
+        if (!penalties || categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
-            if (textItem.id.substring(0, 1) == categoryIndex) {
+            if (isCorrectlyPlaced(textItem.id, categoryId)) {
               score++;
             }
             else if (penalties) {
@@ -204,7 +209,7 @@ H5P.TextGrouping = (() => {
         return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
       }
 
-      return score >= 0 ? score : 0;
+      return Math.max(score, 0); // Negative score is not allowed
     };
 
     /**
@@ -301,20 +306,16 @@ H5P.TextGrouping = (() => {
       //   this.showButton('show-solution');
       // }
 
-      // if (this.params.behaviour.enableRetry && score !== maxScore) {
-      //   this.showButton('try-again');
-      // }
-
-      this.hideButton('check-answer');
-
-      if (this.params.behaviour.enableRetry && this.getScore() !== this.getMaxScore()) {
+      if (this.params.behaviour.enableRetry && score !== maxScore) {
         this.showButton('try-again');
       }
+
+      this.hideButton('check-answer');
 
       this.showSelectedSolutions = true;
       this.trigger('resize');
 
-      triggerAnswered();
+      triggerAnswered(score, maxScore);
     };
 
     /**
