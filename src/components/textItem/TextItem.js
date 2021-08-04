@@ -27,7 +27,7 @@ export default function TextItem({
   removeAnimations,
   setContainerHeight,
   resetContainerHeight,
-  dragStart
+  setDraggedTextItem
 }) {
   const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -64,6 +64,25 @@ export default function TextItem({
     }
   };
 
+  /**
+   * Start dragging text item
+   * @param {*} event MouseDown event
+   * @param {*} textItemId Id of text item being dragged
+   * @param {*} currentCategoryId ID of current category of text item
+   */
+  const mouseDownHandler = (event, textItemId, currentCategoryId) => {
+    if (
+      dropdownSelectOpen || 
+      showSelectedSolutions ||
+      event.button !== 0 || 
+      event.target.className.includes('button-move-to-category')
+    ) {
+      return;
+    }
+    event.preventDefault();
+    setDraggedTextItem({ textItemId: textItemId, categoryId: currentCategoryId });
+  };
+
   return (
     <li
       className={getClassNames({
@@ -74,11 +93,7 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      onMouseDown={(event) => {
-        if (!dropdownSelectOpen && !showSelectedSolutions) {
-          dragStart(event, textItemId, currentCategoryId);
-        }
-      }}
+      onMouseDown={event => mouseDownHandler(event, textItemId, currentCategoryId)}
     >
       <div className="text-item-border">
         <div className="text-item">
@@ -120,12 +135,13 @@ TextItem.propTypes = {
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
     })
-  ),
+  ).isRequired,
   moveTextItem: PropTypes.func.isRequired,
   applyAssignment: PropTypes.func.isRequired,
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired
+  resetContainerHeight: PropTypes.func.isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired
 };

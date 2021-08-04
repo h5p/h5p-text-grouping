@@ -19,8 +19,8 @@ export default function CategoryList({
   applyCategoryAssignment,
   temporaryCategoryAssignment,
   removeAnimations,
-  textItemDragStart,
-  draggedTextItem={draggedTextItem},
+  setDraggedTextItem,
+  draggedTextItem,
   checkSolution
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
@@ -44,7 +44,7 @@ export default function CategoryList({
           allTextItems={allTextItems}
           temporaryCategoryAssignment={temporaryCategoryAssignment}
           applyCategoryAssignment={applyCategoryAssignment}
-          textItemDragStart={textItemDragStart}
+          setDraggedTextItem={setDraggedTextItem}
           draggedTextItem={draggedTextItem}
           textItems={{
             category: category,
@@ -86,6 +86,13 @@ CategoryList.propTypes = {
     })
   ).isRequired,
   moveTextItem: PropTypes.func.isRequired,
+  allTextItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      content: PropTypes.string,
+      shouldAnimate: PropTypes.bool
+    })
+  ).isRequired,
   applyCategoryAssignment: PropTypes.func.isRequired,
   temporaryCategoryAssignment: PropTypes.arrayOf(
     PropTypes.arrayOf(
@@ -96,5 +103,10 @@ CategoryList.propTypes = {
       })
     )
   ).isRequired,
-  removeAnimations: PropTypes.func.isRequired
+  removeAnimations: PropTypes.func.isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired,
+  draggedTextItem: PropTypes.shape({
+    textItemId: PropTypes.isRequired,
+    categoryId: PropTypes.number.isRequired,
+  }).isRequired
 };
