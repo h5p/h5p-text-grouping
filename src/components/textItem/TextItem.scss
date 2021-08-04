@@ -34,7 +34,7 @@
       }
 
       .solution-icon:before {
-        @include styles.solution-button('check_circle', styles.$color-correct-dark);
+        @include styles.solution-icon('check_circle', styles.$color-correct-dark);
       }
     }
   }
@@ -49,7 +49,7 @@
       }
 
       .solution-icon:before {
-        @include styles.solution-button('cancel', styles.$color-wrong-dark);
+        @include styles.solution-icon('cancel', styles.$color-wrong-dark);
       }
     }
   }
@@ -66,7 +66,7 @@
     .text-item {
       background-color: styles.$text-item-background-neutral;
       border-radius: 5px;
-      padding: 0.5em;
+      padding: 0em 0.5em;
 
       display: flex;
       align-items: center;
@@ -75,7 +75,7 @@
       color: styles.$cornflower-blue-dark;
       font-family: Arial;
       font-size: 1em;
-      line-height: 2em;
+      line-height: 3em;
     }
 
     .dropdown-wrapper {
