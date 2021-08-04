@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
+import isCorrectlyPlaced from './helpers/isCorrectlyPlaced';
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
@@ -185,12 +186,13 @@ H5P.TextGrouping = (() => {
     this.getScore = () => {
       let score = 0;
       const penalties = this.params.behaviour.penalties;
+      const uncategorizedId = categoryState.length - 1; // always the same as the last index
 
-      categoryState.forEach((category, categoryIndex) => {
+      categoryState.forEach((category, categoryId) => {
         // If penalties is selected, words in uncategorized should not be counted
-        if (!penalties || categoryIndex !== categoryState.length - 1) {
+        if (!penalties || categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
-            if (textItem.id.substring(0, 1) == categoryIndex) {
+            if (isCorrectlyPlaced(textItem.id, categoryId)) {
               score++;
             }
             else if (penalties) {
@@ -204,7 +206,7 @@ H5P.TextGrouping = (() => {
         return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
       }
 
-      return score >= 0 ? score : 0;
+      return Math.max(score, 0); // Negative score is not allowed
     };
 
     /**
