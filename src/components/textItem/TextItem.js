@@ -70,7 +70,7 @@ export default function TextItem({
    * @param {*} textItemId Id of text item being dragged
    * @param {*} currentCategoryId ID of current category of text item
    */
-  const mouseDownHandler = (event, textItemId, currentCategoryId) => {
+  const mouseDownHandler = event => {
     if (
       dropdownSelectOpen || 
       showSelectedSolutions ||
@@ -93,7 +93,7 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      onMouseDown={event => mouseDownHandler(event, textItemId, currentCategoryId)}
+      onMouseDown={event => mouseDownHandler(event)}
     >
       <div className="text-item-border">
         <div className="text-item">
