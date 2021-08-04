@@ -159,7 +159,7 @@ H5P.TextGrouping = (() => {
     this.calculateMaxScore = () => {
       // Cache the computation since the answer never changes
       if (this.maxScore) {
-        this.maxScore;
+        return this.maxScore;
       }
 
       this.maxScore = 0;
