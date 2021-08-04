@@ -247,6 +247,14 @@
         "description": "Show points earned for each answer. This will not be an option in 'Single answer' mode or if 'Give one point for the whole task' option is enabled.",
         "importance": "low",
         "default": true
+      },
+      {
+        "name": "penalties",
+        "type": "boolean",
+        "label": "Give penalties",
+        "description": "Give a -1 penalty for placing a word in the wrong category. If disabled, distractor words correctly placed in Uncategorized will be awarded 1 point.",
+        "importance": "low",
+        "default": false
       }
     ]
   },

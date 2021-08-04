@@ -155,13 +155,16 @@ H5P.TextGrouping = (() => {
     /**
      * Calculates the maximum possible score,
      * but does not take into account the singlePoint setting
-     * @returns
+     * @returns {number} max score possible without singlePoint
      */
     this.calculateMaxScore = () => {
       let maxScore = 0;
       this.params.textGroups.forEach((category) => {
         maxScore += category.textElements.length;
       });
+      if (!this.params.behaviour.penalties) {
+        maxScore += this.params.distractorGroup.length;
+      }
       return maxScore;
     };
 
@@ -171,6 +174,7 @@ H5P.TextGrouping = (() => {
      * Text items in the correct category are worth 1 point.
      * Text items in the incorrect category are worth -1 point.
      * Text items Uncategorized are not counted.
+     * The score cannot be lower than 0.
      *
      * If singlePoint is enabled, the score is either 1 or 0,
      * depending on isPassed()
@@ -180,10 +184,11 @@ H5P.TextGrouping = (() => {
      */
     this.getScore = () => {
       let score = 0;
-      const penalties = true; // TODO: add to editor, or remove functionality
+      const penalties = this.params.behaviour.penalties;
 
       categoryState.forEach((category, categoryIndex) => {
-        if (categoryIndex !== categoryState.length - 1) {
+        // If penalties is selected, words in uncategorized should not be counted
+        if (!penalties || categoryIndex !== categoryState.length - 1) {
           category.forEach((textItem) => {
             if (textItem.id.substring(0, 1) == categoryIndex) {
               score++;
