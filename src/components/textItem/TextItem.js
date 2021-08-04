@@ -30,12 +30,16 @@ export default function TextItem({
   resetContainerHeight,
   setDraggedTextItem
 }) {
-  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, params, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
 
+  // Booleans for displaying solution states
   const uncategorizedId = categories.length - 1;
-  const showSolution = showSelectedSolutions && uncategorizedId !== currentCategoryId;
+  const isNotUncategorized = uncategorizedId !== currentCategoryId;
+  const shouldShowCorrectSolution =
+    showSelectedSolutions && (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
+  const shouldShowWrongSolution = showSelectedSolutions && isNotUncategorized; // Never show wrong in uncategorized
   const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
 
   const handleDropdownSelectOpen = () => {
@@ -56,7 +60,7 @@ export default function TextItem({
   };
 
   const setHeight = (height) => {
-    // If the dropdown can't fit in the textitem
+    // If the dropdown can't fit in the textItem
     if (height > textItemRef.current.offsetHeight / 2) {
       const offset =
         textItemRef.current.offsetTop +
@@ -90,8 +94,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: showSolution && correctlyPlaced,
-        wrong: showSolution && !correctlyPlaced
+        correct: shouldShowCorrectSolution && correctlyPlaced,
+        wrong: shouldShowWrongSolution && !correctlyPlaced
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
