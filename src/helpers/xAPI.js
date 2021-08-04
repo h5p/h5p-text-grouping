@@ -5,10 +5,10 @@
 /**
  * Packs the current state of the users interactivity into a serializable object.
  *
- * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+ * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
  */
-export function getCurrentState(currentCategoryAssignement) {
-  return { answers: getResponse(currentCategoryAssignement) };
+export function getCurrentState(currentCategoryAssignment) {
+  return { answers: getResponse(currentCategoryAssignment) };
 }
 
 /**
@@ -35,7 +35,7 @@ export function getXAPIData(app, question, textGroups, score, maxScore, success)
  * @param {number} score Score given for answering the question
  * @param {number} maxScore Maximum possible score that can be achieved for the question
  * @param {boolean} success True if the task was passed according to passPercentage
- * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+ * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
  */
 export function getAnsweredXAPIEvent(
   app,
@@ -44,13 +44,13 @@ export function getAnsweredXAPIEvent(
   score,
   maxScore,
   success,
-  currentCategoryAssignement
+  currentCategoryAssignment
 ) {
   const xAPIEvent = app.createXAPIEventTemplate('answered');
 
   addQuestionToXAPI(xAPIEvent, textGroups, question);
   xAPIEvent.setScoredResult(score, maxScore, app, true, success);
-  xAPIEvent.data.statement.result.response = getResponse(currentCategoryAssignement);
+  xAPIEvent.data.statement.result.response = getResponse(currentCategoryAssignment);
   return xAPIEvent;
 }
 
@@ -106,11 +106,11 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
  * Adds the response to the definition part of an xAPIEvent
  *
  * @param {H5P.XAPIEvent} xAPIEvent to add a response to
- * @param {Object[][]} currentCategoryAssignement Array describing which text items are in each category
+ * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
  */
-function getResponse(currentCategoryAssignement) {
+function getResponse(currentCategoryAssignment) {
   let response = '';
-  currentCategoryAssignement.forEach((category, categoryId) => {
+  currentCategoryAssignment.forEach((category, categoryId) => {
     category.forEach((textItem) => {
       if (response) {
         response += '[,]'; // Deliminator

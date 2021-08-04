@@ -106,7 +106,7 @@ CategoryList.propTypes = {
   removeAnimations: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
   draggedTextItem: PropTypes.shape({
-    textItemId: PropTypes.isRequired,
+    textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired,
   }).isRequired
 };

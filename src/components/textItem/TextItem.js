@@ -2,11 +2,12 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
+import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
-import './TextItem.scss';
 import getClassNames from '../../helpers/getClassNames';
-import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
+
+import './TextItem.scss';
 
 /**
  * A TextItem represents what the user is trying to
@@ -30,13 +31,18 @@ export default function TextItem({
   setDraggedTextItem,
   focused
 }) {
-  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, params, showSelectedSolutions } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
 
+  // Booleans for displaying solution states
   const uncategorizedId = categories.length - 1;
-  const showSolution = showSelectedSolutions && uncategorizedId !== currentCategoryId;
+  const isNotUncategorized = uncategorizedId !== currentCategoryId;
+  const shouldShowCorrectSolution =
+    showSelectedSolutions && (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
+  const shouldShowWrongSolution = showSelectedSolutions && isNotUncategorized; // Never show wrong in uncategorized
+  const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
 
   // Sets focus to the button
   useEffect(() => {
@@ -63,7 +69,7 @@ export default function TextItem({
   };
 
   const setHeight = (height) => {
-    // If the dropdown can't fit in the textitem
+    // If the dropdown can't fit in the textItem
     if (height > textItemRef.current.offsetHeight / 2) {
       const offset =
         textItemRef.current.offsetTop +
@@ -79,7 +85,7 @@ export default function TextItem({
    * @param {*} textItemId Id of text item being dragged
    * @param {*} currentCategoryId ID of current category of text item
    */
-  const mouseDownHandler = (event, textItemId, currentCategoryId) => {
+  const mouseDownHandler = (event) => {
     if (
       dropdownSelectOpen ||
       showSelectedSolutions ||
@@ -97,18 +103,23 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: showSolution && isCorrectlyPlaced(textItemId, currentCategoryId),
-        wrong: showSolution && !isCorrectlyPlaced(textItemId, currentCategoryId)
+        correct: shouldShowCorrectSolution && correctlyPlaced,
+        wrong: shouldShowWrongSolution && !correctlyPlaced
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      onMouseDown={event => mouseDownHandler(event, textItemId, currentCategoryId)}
+      onMouseDown={(event) => mouseDownHandler(event)}
     >
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
-            <div className="solution-icon" />
+            <>
+              <div aria-hidden="true" className="solution-icon" />
+              <span className="offscreen">
+                {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
+              </span>
+            </>
           ) : (
             <Button
               iconName="icon-move-to-category"
