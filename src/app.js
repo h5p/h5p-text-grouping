@@ -301,15 +301,11 @@ H5P.TextGrouping = (() => {
       //   this.showButton('show-solution');
       // }
 
-      // if (this.params.behaviour.enableRetry && score !== maxScore) {
-      //   this.showButton('try-again');
-      // }
-
-      this.hideButton('check-answer');
-
-      if (this.params.behaviour.enableRetry && this.getScore() !== this.getMaxScore()) {
+      if (this.params.behaviour.enableRetry && score !== maxScore) {
         this.showButton('try-again');
       }
+
+      this.hideButton('check-answer');
 
       this.showSelectedSolutions = true;
       this.trigger('resize');
