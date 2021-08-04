@@ -291,8 +291,6 @@ H5P.TextGrouping = (() => {
      * Check answer.
      */
     this.checkAnswer = () => {
-      // this.content.disableSelectables();
-
       const score = this.getScore();
       const maxScore = this.getMaxScore();
       const textScore = H5P.Question.determineOverallFeedback(
