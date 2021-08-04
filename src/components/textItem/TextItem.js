@@ -2,11 +2,12 @@ import React, { useState, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
+import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
-import './TextItem.scss';
 import getClassNames from '../../helpers/getClassNames';
-import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
+
+import './TextItem.scss';
 
 /**
  * A TextItem represents what the user is trying to
@@ -70,11 +71,11 @@ export default function TextItem({
    * @param {*} textItemId Id of text item being dragged
    * @param {*} currentCategoryId ID of current category of text item
    */
-  const mouseDownHandler = event => {
+  const mouseDownHandler = (event) => {
     if (
-      dropdownSelectOpen || 
+      dropdownSelectOpen ||
       showSelectedSolutions ||
-      event.button !== 0 || 
+      event.button !== 0 ||
       event.target.className.includes('button-move-to-category')
     ) {
       return;
