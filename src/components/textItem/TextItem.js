@@ -93,13 +93,16 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      onMouseDown={event => mouseDownHandler(event)}
+      onMouseDown={(event) => mouseDownHandler(event)}
     >
       <div className="text-item-border">
         <div className="text-item">
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
-            <div className="solution-icon" />
+            <>
+              <div aria-hidden="true" className="solution-icon" />
+              <span className="offscreen">Correct answer</span>
+            </>
           ) : (
             <Button
               iconName="icon-move-to-category"
