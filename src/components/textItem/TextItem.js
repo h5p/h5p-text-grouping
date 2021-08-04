@@ -75,7 +75,7 @@ export default function TextItem({
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       onMouseDown={(event) => {
-        if (!dropdownSelectOpen) {
+        if (!dropdownSelectOpen && !showSelectedSolutions) {
           dragStart(event, textItemId, currentCategoryId);
         }
       }}
