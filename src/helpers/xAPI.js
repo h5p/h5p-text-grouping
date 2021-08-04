@@ -73,6 +73,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
   const source = [];
   const target = [];
   let correctResponsePattern = '';
+
   textGroups.forEach((category, categoryId) => {
     target.push({
       id: categoryId,
@@ -81,10 +82,10 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
       }
     });
 
-    category.textElements.forEach((textItem, textItemId) => {
-      const textItemStringId = `${categoryId}${textItemId}`;
+    category.textElements.forEach((textItem, index) => {
+      const textItemId = `${categoryId}${index}`;
       source.push({
-        id: textItemStringId,
+        id: textItemId,
         description: {
           'en-US': htmlDecode(textItem)
         }
@@ -93,7 +94,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
       if (correctResponsePattern) {
         correctResponsePattern += '[,]'; // Deliminator
       }
-      correctResponsePattern += textItemStringId + '[.]' + categoryId;
+      correctResponsePattern += textItemId + '[.]' + categoryId;
     });
   });
 
@@ -128,9 +129,9 @@ function getResponse(currentCategoryAssignment) {
  * @param {String} html
  */
 const htmlDecode = (html) => {
-  const el = document.createElement('div');
-  el.innerHTML = html;
-  return el.textContent.trim();
+  const element = document.createElement('div');
+  element.innerHTML = html;
+  return element.textContent.trim();
 };
 
 export default { getXAPIData, getCurrentState, getAnsweredXAPIEvent };
