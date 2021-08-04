@@ -271,6 +271,16 @@ H5P.TextGrouping = (() => {
       }
     );
     this.addButton(
+      'show-solution',
+      this.params.l10n.showSolutionButtonText,
+      () => {
+        this.showSolutions();
+      },
+      false,
+      { 'aria-label': this.params.l10n.showSolution },
+      {}
+    );
+    this.addButton(
       'try-again',
       this.params.l10n.retryText,
       () => {
@@ -300,9 +310,9 @@ H5P.TextGrouping = (() => {
 
       this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
 
-      // if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
-      //   this.showButton('show-solution');
-      // }
+      if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
+        this.showButton('show-solution');
+      }
 
       if (this.params.behaviour.enableRetry && score !== maxScore) {
         this.showButton('try-again');
@@ -314,6 +324,32 @@ H5P.TextGrouping = (() => {
       this.trigger('resize');
 
       triggerAnswered(score, maxScore);
+    };
+
+    /**
+     * Show solutions.
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-4}
+     */
+    this.showSolutions = () => {
+      this.hideButton('check-answer');
+      this.hideButton('show-solution');
+
+      // console.log(categoryState);
+      // console.log(getRandomizedTextItems());
+      // if (
+      //   this.params.behaviour.showSolutionsRequiresInput &&
+      //   categoryState !== getRandomizedTextItems()
+      // ) {
+      //   // Require answer before solution can be viewed
+      //   this.updateFeedbackContent(this.params.l10n.noAnswer);
+      //   this.handleRead(this.params.l10n.noAnswer);
+      // }
+      // else {
+      //   this.content.showUnselectedSolutions();
+      //   this.content.focusUnselectedSolution();
+      // }
+
+      this.trigger('resize');
     };
 
     /**
