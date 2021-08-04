@@ -31,7 +31,7 @@ export default function Category({
   draggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
-  const { instance, l10n } = useContext(H5PContext);
+  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -63,8 +63,8 @@ export default function Category({
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
 
   const handleDropdownSelectClose = (addedIds, removedIds) => {
-    addedIds.forEach(id => moveTextItem(id, categoryId));
-    removedIds.forEach(id => moveTextItem(id, uncategorizedId, categoryId));
+    addedIds.forEach((id) => moveTextItem(id, categoryId));
+    removedIds.forEach((id) => moveTextItem(id, uncategorizedId, categoryId));
     assignItemsButtonRef.current.focus();
     applyCategoryAssignment();
     setDropdownSelectOpen(false);
@@ -113,11 +113,11 @@ export default function Category({
   });
 
   return (
-    <div 
-      className={`category ${categoryId}`} 
-      onMouseEnter={event => handleOnMouseEnter(event)} 
-      onMouseLeave={event => handleOnMouseLeave(event)} 
-      onMouseUp={event => handleOnMouseUp(event)}
+    <div
+      className={`category ${categoryId}`}
+      onMouseEnter={(event) => handleOnMouseEnter(event)}
+      onMouseLeave={(event) => handleOnMouseLeave(event)}
+      onMouseUp={(event) => handleOnMouseUp(event)}
     >
       <div className="header" ref={categoryHeaderRef}>
         <Button
@@ -129,16 +129,18 @@ export default function Category({
           aria-expanded={accordionOpen}
         />
         <div className="title">{titleWithChildCount}</div>
-        <Button
-          ref={assignItemsButtonRef}
-          iconName="icon-assign-items"
-          className="button-assign-items"
-          ariaLabel={l10n.assignItemsHelpText}
-          ariaHasPopup="listbox"
-          ariaExpanded={dropdownSelectOpen}
-          hoverText={l10n.assignItemsHelpText}
-          onClick={handleDropdownSelectOpen}
-        />
+        {showSelectedSolutions ? null : ( // hide assign button if done
+          <Button
+            ref={assignItemsButtonRef}
+            iconName="icon-assign-items"
+            className="button-assign-items"
+            ariaLabel={l10n.assignItemsHelpText}
+            ariaHasPopup="listbox"
+            ariaExpanded={dropdownSelectOpen}
+            hoverText={l10n.assignItemsHelpText}
+            onClick={handleDropdownSelectOpen}
+          />
+        )}
       </div>
       {dropdownSelectOpen ? (
         <div className="dropdown-wrapper">
