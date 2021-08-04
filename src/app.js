@@ -81,9 +81,7 @@ H5P.TextGrouping = (() => {
      *
      * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
-    const triggerAnswered = () => {
-      const score = this.getScore();
-      const maxScore = this.getMaxScore();
+    const triggerAnswered = (score, maxScore) => {
       this.trigger(
         getAnsweredXAPIEvent(
           this,
@@ -312,7 +310,7 @@ H5P.TextGrouping = (() => {
       this.showSelectedSolutions = true;
       this.trigger('resize');
 
-      triggerAnswered();
+      triggerAnswered(score, maxScore);
     };
 
     /**
