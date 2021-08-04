@@ -107,52 +107,6 @@ export default function Main({ context }) {
     applyCategoryAssignment();
   };
 
-  /**
-   * Start dragging text item
-   * @param {*} event MouseDown event
-   * @param {*} textItemId Id of text item being dragged
-   * @param {*} currentCategoryId ID of current category of text item
-   */
-  const textItemDragStart = (event, textItemId, currentCategoryId) => {
-    if (event.button !== 0 || event.target.className.includes('button-move-to-category')) return;
-    event.preventDefault();
-    setDraggedTextItem({ textItemId: textItemId, categoryId: currentCategoryId });
-  };
-
-  /**
-   * Finish dragging text item
-   * Moves the text item to a new category if relevant
-   * @param {*} _event MouseUp event
-   * @param {*} categoryId Id of category text item has been dragged to, if relevant
-   */
-  const textItemDragEnd = (_event, categoryId = null) => {
-    if (
-      categoryId !== null &&
-      draggedTextItem.textItemId !== -1 &&
-      categoryId !== draggedTextItem.categoryId
-    ) {
-      moveTextItem(draggedTextItem.textItemId, categoryId, draggedTextItem.categoryId);
-      applyCategoryAssignment();
-    }
-    setDraggedTextItem({ textItemId: -1, categoryId: -1 });
-  };
-
-  document.onmouseup = (event) => {
-    let node = event.target;
-    while (node.parentNode) {
-      if (node.className.includes('category ')) {
-        let className = node.className;
-        textItemDragEnd(event, parseInt(className.replace('category ', '')));
-        return;
-      }
-      else if (node.className === 'uncategorized') {
-        textItemDragEnd(event, uncategorizedId);
-      }
-      node = node.parentNode;
-    }
-    textItemDragEnd(event);
-  };
-
   return (
     <H5PContext.Provider value={{ ...context, showSelectedSolutions }}>
       <CategoryList
@@ -161,7 +115,7 @@ export default function Main({ context }) {
         moveTextItem={moveTextItem}
         allTextItems={getRandomizedTextItems().slice()}
         applyCategoryAssignment={applyCategoryAssignment}
-        textItemDragStart={textItemDragStart}
+        setDraggedTextItem={setDraggedTextItem}
         draggedTextItem={draggedTextItem}
         temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
@@ -170,7 +124,7 @@ export default function Main({ context }) {
         categoryId={uncategorizedId}
         applyCategoryAssignment={applyCategoryAssignment}
         moveTextItem={moveTextItem}
-        textItemDragStart={textItemDragStart}
+        setDraggedTextItem={setDraggedTextItem}
         draggedTextItem={draggedTextItem}
         textItems={{
           category: appliedCategoryAssignment[uncategorizedId],

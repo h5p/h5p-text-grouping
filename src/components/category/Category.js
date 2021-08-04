@@ -27,8 +27,8 @@ export default function Category({
   setContainerHeight,
   resetContainerHeight,
   applyCategoryAssignment,
-  textItemDragStart,
   draggedTextItem,
+  setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
   const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
@@ -71,19 +71,47 @@ export default function Category({
     instance.trigger('resize');
   };
 
+  /**
+   * Make dropzone visible when mouse hovers over category
+   */
   const handleOnMouseEnter = () => {
-    if (draggedTextItem.categoryId !== categoryId && draggedTextItem.categoryId !== -1) {
+    if (
+      draggedTextItem.categoryId !== categoryId && 
+      draggedTextItem.categoryId !== -1 && 
+      !narrowScreen
+    ) {
       setDropzoneVisible(true);
     }
   };
 
+  /**
+   * Make dropzone not visible when mouse does not hover over category
+   */
   const handleOnMouseLeave = () => {
-    setDropzoneVisible(false);
+    if (dropzoneVisible) {
+      setDropzoneVisible(false);
+    }
   };
 
+  /**
+   * Handle dropped text item if it exists
+   * Adds text item to category if it is not already there
+   */
   const handleOnMouseUp = () => {
-    if (draggedTextItem.categoryId === -1) {
+    if (draggedTextItem.textItemId !== -1 && categoryId !== draggedTextItem.categoryId) {
       setDropzoneVisible(false);
+      moveTextItem(draggedTextItem.textItemId, categoryId, draggedTextItem.categoryId);
+      applyCategoryAssignment();
+      setDraggedTextItem({ textItemId: -1, categoryId: -1 });
+    }
+  };
+
+  /**
+   * Cancel dragging when textItem is dropped outside a category
+   */
+  document.onmouseup = () => {
+    if (!dropzoneVisible) {
+      setDraggedTextItem({ textItemId: -1, categoryId: -1 });
     }
   };
 
@@ -107,7 +135,7 @@ export default function Category({
         removeAnimations={removeAnimations}
         setContainerHeight={setContainerHeight}
         resetContainerHeight={resetContainerHeight}
-        dragStart={textItemDragStart}
+        setDraggedTextItem={setDraggedTextItem}
       />
     );
   });
@@ -190,6 +218,11 @@ Category.propTypes = {
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
   applyCategoryAssignment: PropTypes.func.isRequired,
+  draggedTextItem: PropTypes.shape({
+    textItemId: PropTypes.isRequired,
+    categoryId: PropTypes.number.isRequired
+  }).isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired,
   textItems: PropTypes.exact({
     category: PropTypes.arrayOf(
       PropTypes.exact({

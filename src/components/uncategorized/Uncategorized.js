@@ -16,8 +16,8 @@ export default function Uncategorized({
   categoryId,
   applyCategoryAssignment,
   moveTextItem,
-  textItemDragStart,
   draggedTextItem,
+  setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
   const [minHeight, setMinHeight] = useState(null);
@@ -55,7 +55,7 @@ export default function Uncategorized({
         removeAnimations={removeAnimations}
         setContainerHeight={setMinHeight}
         resetContainerHeight={() => setMinHeight(0)}
-        dragStart={textItemDragStart}
+        setDraggedTextItem={setDraggedTextItem}
       />
     );
   });
@@ -85,6 +85,11 @@ Uncategorized.propTypes = {
   categoryId: PropTypes.number.isRequired,
   applyCategoryAssignment: PropTypes.func.isRequired,
   moveTextItem: PropTypes.func.isRequired,
+  draggedTextItem: PropTypes.shape({
+    textItemId: PropTypes.isRequired,
+    categoryId: PropTypes.number.isRequired
+  }).isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired,
   textItems: PropTypes.exact({
     category: PropTypes.arrayOf(
       PropTypes.exact({
