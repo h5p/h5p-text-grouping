@@ -25,9 +25,7 @@ export default function CategoryList({
 
   const setMargin = (height) => {
     const heightDifference = height - categoryListRef.current.offsetHeight;
-    if (heightDifference > 0) {
-      setMarginBottom(heightDifference);
-    }
+    setMarginBottom(heightDifference > 0 ? heightDifference : null);
   };
 
   const categoryElements = categoryAssignment.map((category, categoryId) => {
@@ -36,7 +34,6 @@ export default function CategoryList({
         <Category
           categoryId={categoryId}
           key={`category-${categoryId}`}
-          title={textGroups[categoryId].groupName}
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
           categoryAssignment={categoryAssignment}
@@ -48,7 +45,6 @@ export default function CategoryList({
             removeAnimations: removeAnimations
           }}
           setContainerHeight={setMargin}
-          resetContainerHeight={() => setMarginBottom(0)}
         />
       );
     }

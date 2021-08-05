@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../context/H5PContext';
-import Uncategorized from './uncategorized/Uncategorized';
+import Category from './category/Category';
 import CategoryList from './categoryList/CategoryList';
 
 import './Main.scss';
@@ -113,7 +113,7 @@ export default function Main({ context }) {
         removeAnimations={removeAnimations}
       />
       {showUnselectedSolutions ? null : (
-        <Uncategorized
+        <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
           setDraggedTextItem={setDraggedTextItem}

@@ -2,7 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
-import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
+import belongsToCategory from '../../helpers/belongsToCategory';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import TipButton from '../commons/TipButton';
@@ -28,10 +28,10 @@ export default function TextItem({
   isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
-  resetContainerHeight,
   setDraggedTextItem
 }) {
-  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } = useContext(H5PContext);
+  const { instance, l10n, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
+    useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -39,13 +39,8 @@ export default function TextItem({
   // Booleans for displaying solution states
   const uncategorizedId = categories.length - 1;
   const isNotUncategorized = uncategorizedId !== currentCategoryId;
-  const shouldShowCorrectSolution =
-    showSelectedSolutions &&
-    !isShowSolutionItem &&
-    (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
-  const shouldShowWrongSolution =
-    showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Never show wrong in uncategorized
-  const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
+  const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
+  const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
 
   // Sets focus to the button
@@ -63,11 +58,13 @@ export default function TextItem({
 
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      moveTextItems([{textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId}]);
+      moveTextItems([
+        { textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }
+      ]);
       setFocusedTextItem(textItemId);
     }
     setDropdownSelectOpen(false);
-    resetContainerHeight();
+    setContainerHeight(0);
     instance.trigger('resize');
   };
 
@@ -106,8 +103,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: shouldShowCorrectSolution && correctlyPlaced,
-        wrong: shouldShowWrongSolution && !correctlyPlaced,
+        correct: shouldShowSolution && correctlyPlaced,
+        wrong: shouldShowSolution && !correctlyPlaced,
         'show-correct': shouldShowUnselectedSolution
       })}
       ref={textItemRef}
@@ -116,10 +113,10 @@ export default function TextItem({
     >
       <div className="text-item-border">
         <div className="text-item">
-          <div dangerouslySetInnerHTML={{ __html: textElement }} />
+          <div className="content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowUnselectedSolution || shouldShowWrongSolution ? (
+              {shouldShowUnselectedSolution || !correctlyPlaced ? (
                 <TipButton tip={'Wrong category'}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>
@@ -144,7 +141,6 @@ export default function TextItem({
               <SingleDropdownSelect
                 label={l10n.moveItemsHelpText}
                 setContainerHeight={setHeight}
-                resetContainerHeight={resetContainerHeight}
                 onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
                 currentlySelectedId={currentCategoryId}
@@ -170,6 +166,6 @@ TextItem.propTypes = {
   shouldAnimate: PropTypes.bool.isRequired,
   isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired,
+  setContainerHeight: PropTypes.func.isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired
 };

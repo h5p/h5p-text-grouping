@@ -11,7 +11,6 @@ import './DropdownSelect.scss';
 export default function MultiDropdownSelect({
   label,
   setContainerHeight,
-  resetContainerHeight,
   onClose,
   options,
   currentlySelectedIds
@@ -64,7 +63,7 @@ export default function MultiDropdownSelect({
 
   const handleClose = event => {
     if (!event.button) { // Left click or keyboard
-      resetContainerHeight();
+      setContainerHeight(0);
       onClose(
         Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []), 
         Object.entries(removedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, [])
@@ -115,7 +114,6 @@ export default function MultiDropdownSelect({
 MultiDropdownSelect.propTypes = {
   label: PropTypes.string.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.exact({

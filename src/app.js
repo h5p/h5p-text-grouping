@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
-import isCorrectlyPlaced from './helpers/isCorrectlyPlaced';
+import belongsToCategory from './helpers/belongsToCategory';
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
@@ -22,24 +22,19 @@ H5P.TextGrouping = (() => {
       categoryState = [...this.params.textGroups.map(() => []), randomizedTextItems.slice()];
     };
 
+    // Builder for a textItem object
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
       content,
       shouldAnimate
     });
+
     let randomizedTextItems = [];
 
     // Construct text item elements for categorized words
-    params.textGroups.forEach((category, i) => {
-      category.textElements.forEach((element, j) => {
-        randomizedTextItems.push(createTextItem(`${i}${j}`, element, false));
-      });
-    });
-
-    // Construct text item elements for distractor words
-    params.distractorGroup.forEach((element, i) => {
-      randomizedTextItems.push(createTextItem(`${params.textGroups.length}${i}`, element, false));
-    });
+    randomizedTextItems = params.textGroups.flatMap((category, i) =>
+      category.textElements.map((element, j) => createTextItem(`${i}${j}`, element, false))
+    );
 
     let reset = true;
 
@@ -101,7 +96,7 @@ H5P.TextGrouping = (() => {
       instance: this,
       contentId: contentId,
       getRandomizedTextItems: getRandomizedTextItems,
-      triggerInteracted: triggerInteracted,
+      triggerInteracted: triggerInteracted
     };
 
     // Register task media
@@ -169,9 +164,6 @@ H5P.TextGrouping = (() => {
       this.params.textGroups.forEach((category) => {
         this.maxScore += category.textElements.length;
       });
-      if (!this.params.behaviour.penalties) {
-        this.maxScore += this.params.distractorGroup.length;
-      }
       return this.maxScore;
     };
 
@@ -191,18 +183,14 @@ H5P.TextGrouping = (() => {
      */
     this.getScore = () => {
       let score = 0;
-      const penalties = this.params.behaviour.penalties;
       const uncategorizedId = categoryState.length - 1; // always the same as the last index
 
       categoryState.forEach((category, categoryId) => {
-        // If penalties is selected, words in uncategorized should not be counted
-        if (!penalties || categoryId !== uncategorizedId) {
+        // Words in uncategorized should not be counted
+        if (categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
-            if (isCorrectlyPlaced(textItem.id, categoryId)) {
+            if (belongsToCategory(textItem.id, categoryId)) {
               score++;
-            }
-            else if (penalties) {
-              score--;
             }
           });
         }
@@ -217,8 +205,6 @@ H5P.TextGrouping = (() => {
 
     /**
      * Get maximum possible score
-     *
-     * Distractor words do not contribute to scoring.
      * If singlePoint is enabled, the max score is 1.
      *
      * @return {number} Max score achievable for this task

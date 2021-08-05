@@ -100,6 +100,10 @@
       font-family: Arial;
       font-size: 1em;
       line-height: 3em;
+
+      .content {
+        flex-grow: 1;
+      }
     }
 
     .dropdown-wrapper {
