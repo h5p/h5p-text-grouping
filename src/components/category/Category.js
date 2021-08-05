@@ -21,12 +21,11 @@ import './Category.scss';
 export default function Category({
   categoryId,
   title,
-  moveTextItem,
+  moveTextItems,
   allTextItems,
-  temporaryCategoryAssignment,
+  categoryAssignment,
   setContainerHeight,
   resetContainerHeight,
-  applyCategoryAssignment,
   draggedTextItem,
   setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
@@ -45,9 +44,9 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const uncategorizedId = temporaryCategoryAssignment.length - 1;
+  const uncategorizedId = categoryAssignment.length - 1;
 
-  const currentlySelectedIds = temporaryCategoryAssignment[categoryId].map(
+  const currentlySelectedIds = categoryAssignment[categoryId].map(
     (textItem) => textItem.id
   );
   const titleWithChildCount = `${title} (${category ? category.length : 0})`;
@@ -63,10 +62,11 @@ export default function Category({
   const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
 
   const handleDropdownSelectClose = (addedIds, removedIds) => {
-    addedIds.forEach((id) => moveTextItem(id, categoryId));
-    removedIds.forEach((id) => moveTextItem(id, uncategorizedId, categoryId));
+    moveTextItems([
+      ...addedIds.map(id => ({ textItemId: id, newCategoryId: categoryId})), 
+      ...removedIds.map(id => ({textItemId: id, newCategoryId: uncategorizedId, prevCategoryId: categoryId}))
+    ]);
     assignItemsButtonRef.current.focus();
-    applyCategoryAssignment();
     setDropdownSelectOpen(false);
     instance.trigger('resize');
   };
@@ -100,8 +100,11 @@ export default function Category({
   const handleOnMouseUp = () => {
     if (draggedTextItem.textItemId !== '-1' && categoryId !== draggedTextItem.categoryId) {
       setDropzoneVisible(false);
-      moveTextItem(draggedTextItem.textItemId, categoryId, draggedTextItem.categoryId);
-      applyCategoryAssignment();
+      moveTextItems([{
+        textItemId: draggedTextItem.textItemId, 
+        newCategoryId: categoryId, prevCategoryId: 
+        draggedTextItem.categoryId
+      }]);
       setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
     }
   };
@@ -128,8 +131,7 @@ export default function Category({
         textItemId={id}
         currentCategoryId={categoryId}
         categories={categories}
-        moveTextItem={moveTextItem}
-        applyAssignment={applyCategoryAssignment}
+        moveTextItems={moveTextItems}
         textElement={content}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
@@ -198,7 +200,7 @@ export default function Category({
 Category.propTypes = {
   categoryId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  moveTextItem: PropTypes.func.isRequired,
+  moveTextItems: PropTypes.func.isRequired,
   allTextItems: PropTypes.arrayOf(
     PropTypes.exact({
       id: PropTypes.string,
@@ -217,7 +219,6 @@ Category.propTypes = {
   ),
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
-  applyCategoryAssignment: PropTypes.func.isRequired,
   draggedTextItem: PropTypes.shape({
     textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired

@@ -12,12 +12,10 @@ import './CategoryList.scss';
  * @returns {JSX.Element} The CategoryList element
  */
 export default function CategoryList({
-  categories,
   textGroups,
-  moveTextItem,
-  allTextItems,
-  applyCategoryAssignment,
-  temporaryCategoryAssignment,
+  moveTextItems,
+  allTextItems,  
+  categoryAssignment,
   removeAnimations,
   setDraggedTextItem,
   draggedTextItem,
@@ -33,17 +31,16 @@ export default function CategoryList({
     }
   };
 
-  const categoryElements = categories.map((category, categoryId) => {
+  const categoryElements = categoryAssignment.map((category, categoryId) => {
     if (categoryId < textGroups.length) {
       return (
         <Category
           categoryId={categoryId}
           key={`category-${categoryId}`}
           title={textGroups[categoryId].groupName}
-          moveTextItem={moveTextItem}
+          moveTextItems={moveTextItems}
           allTextItems={allTextItems}
-          temporaryCategoryAssignment={temporaryCategoryAssignment}
-          applyCategoryAssignment={applyCategoryAssignment}
+          categoryAssignment={categoryAssignment}
           setDraggedTextItem={setDraggedTextItem}
           draggedTextItem={draggedTextItem}
           textItems={{
@@ -71,21 +68,12 @@ export default function CategoryList({
 }
 
 CategoryList.propTypes = {
-  categories: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        content: PropTypes.string,
-        shouldAnimate: PropTypes.bool
-      })
-    )
-  ).isRequired,
   textGroups: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
     })
   ).isRequired,
-  moveTextItem: PropTypes.func.isRequired,
+  moveTextItems: PropTypes.func.isRequired,
   allTextItems: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -93,8 +81,7 @@ CategoryList.propTypes = {
       shouldAnimate: PropTypes.bool
     })
   ).isRequired,
-  applyCategoryAssignment: PropTypes.func.isRequired,
-  temporaryCategoryAssignment: PropTypes.arrayOf(
+  categoryAssignment: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,

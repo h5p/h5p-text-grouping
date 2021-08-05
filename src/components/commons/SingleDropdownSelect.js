@@ -11,9 +11,7 @@ import './DropdownSelect.scss';
 export default function SingleDropdownSelect({
   label,
   setContainerHeight,
-  resetContainerHeight,
   onChange,
-  onClose,
   options,
   currentlySelectedId
 }) {
@@ -27,9 +25,9 @@ export default function SingleDropdownSelect({
   }, []);
 
   useEffect(() => {
-    window.addEventListener('click', handleClose);
+    window.addEventListener('click', handleSelectItem);
     return () => {
-      window.removeEventListener('click', handleClose);
+      window.removeEventListener('click', handleSelectItem);
     };
   }, []);
 
@@ -38,16 +36,14 @@ export default function SingleDropdownSelect({
     .filter((optionId) => optionId !== currentlySelectedId);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleSelectItem = (event, optionId) => {
-    if (optionId !== currentlySelectedId) {
+  const handleSelectItem = (event, optionId = null) => {
+    if (optionId !== currentlySelectedId && optionId !== null) {
       onChange(optionId);
       event.stopPropagation();
     }
-  };
-
-  const handleClose = () => {
-    resetContainerHeight();
-    onClose();
+    else {
+      onChange();
+    }
   };
 
   const handleKeyboardPressed = (event) => {
@@ -112,9 +108,7 @@ export default function SingleDropdownSelect({
 SingleDropdownSelect.propTypes = {
   label: PropTypes.string.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string
