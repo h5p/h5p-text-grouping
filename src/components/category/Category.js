@@ -70,8 +70,6 @@ export default function Category({
     instance.trigger('resize');
   };
 
-  const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
-
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     moveTextItems([
       ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
@@ -207,7 +205,7 @@ export default function Category({
             ariaHasPopup="listbox"
             ariaExpanded={dropdownSelectOpen}
             hoverText={l10n.assignItemsHelpText}
-            onClick={handleDropdownSelectOpen}
+            onClick={() => setDropdownSelectOpen(true)}
           />
         )}
       </div>
