@@ -113,7 +113,7 @@ export default function TextItem({
     >
       <div className="text-item-border">
         <div className="text-item">
-          <div dangerouslySetInnerHTML={{ __html: textElement }} />
+          <div className="content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
               {shouldShowUnselectedSolution || !correctlyPlaced ? (
@@ -167,5 +167,5 @@ TextItem.propTypes = {
   isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired,
+  setDraggedTextItem: PropTypes.func.isRequired
 };
