@@ -30,7 +30,7 @@ export default function Category({
   setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
-  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, showSelectedSolutions, showUnselectedSolutions } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -56,10 +56,17 @@ export default function Category({
 
   const uncategorizedId = categoryAssignment.length - 1;
 
-  const currentlySelectedIds = categoryAssignment[categoryId].map(
-    (textItem) => textItem.id
-  );
+  const currentlySelectedIds = categoryAssignment[categoryId].map((textItem) => textItem.id);
   const titleWithChildCount = `${title} (${category ? category.length : 0})`;
+
+  /**
+   * Finds the unselected textItems belonging to this category
+   * @returns {object[]} list of unselected textItems belonging to this category
+   */
+  const getUnselectedSolutions = () =>
+    allTextItems.filter(
+      (textItem) => textItem.id[0] == categoryId && !currentlySelectedIds.includes(textItem.id)
+    );
 
   /**
    * Toggle whether the accordion is open or not
@@ -73,8 +80,12 @@ export default function Category({
 
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     moveTextItems([
-      ...addedIds.map(id => ({ textItemId: id, newCategoryId: categoryId})), 
-      ...removedIds.map(id => ({textItemId: id, newCategoryId: uncategorizedId, prevCategoryId: categoryId}))
+      ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
+      ...removedIds.map((id) => ({
+        textItemId: id,
+        newCategoryId: uncategorizedId,
+        prevCategoryId: categoryId
+      }))
     ]);
     assignItemsButtonRef.current.focus();
     setDropdownSelectOpen(false);
@@ -110,11 +121,13 @@ export default function Category({
   const handleOnMouseUp = () => {
     if (draggedTextItem.textItemId !== '-1' && categoryId !== draggedTextItem.categoryId) {
       setDropzoneVisible(false);
-      moveTextItems([{
-        textItemId: draggedTextItem.textItemId, 
-        newCategoryId: categoryId, prevCategoryId: 
-        draggedTextItem.categoryId
-      }]);
+      moveTextItems([
+        {
+          textItemId: draggedTextItem.textItemId,
+          newCategoryId: categoryId,
+          prevCategoryId: draggedTextItem.categoryId
+        }
+      ]);
       setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
     }
   };
@@ -143,7 +156,7 @@ export default function Category({
     // If text item not only element in list
     if (textItems.length > 0) {
       category.forEach((textItem, index) => {
-        if ((textItemId === textItem.id)) {
+        if (textItemId === textItem.id) {
           // focus on the textitem after the removed one, or the one before if removing the last in the list
           setFocused(index < category.length - 1 ? index : index - 1);
         }
@@ -155,11 +168,13 @@ export default function Category({
       // If unable, send the focus to another category via Main
     }
 
-    moveTextItems([{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }]);
+    moveTextItems([
+      { textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }
+    ]);
   };
 
-  const textItems = category.map(({ id, content, shouldAnimate }, index) => {
-    return (
+  const buildTextItems = (textItems) =>
+    textItems.map(({ id, content, shouldAnimate }, index) => (
       <TextItem
         key={id}
         textItemId={id}
@@ -174,8 +189,13 @@ export default function Category({
         setDraggedTextItem={setDraggedTextItem}
         focused={index === focused}
       />
-    );
-  });
+    ));
+
+  let textItems = buildTextItems(category);
+
+  if (showUnselectedSolutions) {
+    textItems.push(buildTextItems(getUnselectedSolutions()));
+  }
 
   return (
     <div
