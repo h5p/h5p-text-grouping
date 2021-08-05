@@ -12,27 +12,27 @@ import TextItem from '../textItem/TextItem';
 import './Category.scss';
 
 /**
- * A Category renders a list of TextElements received
- * through parameters, a dropzone, a title and buttons
- * for collapsing and adding other TextElements.
+ * A Category renders a list of TextElements received through
+ * parameters, a dropzone, a title and, for some categories,
+ * buttons for collapsing and adding other TextElements
  * @param {object} props Props object
  * @returns {JSX.Element} A single category element
  */
 export default function Category({
   categoryId,
-  title,
   moveTextItems,
   allTextItems,
-  categoryAssignment,
   setContainerHeight,
-  resetContainerHeight,
   draggedTextItem,
   setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
 }) {
+  const uncategorized = categoryId === categories.length - 1;
+
   const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
+  const [minHeight, setMinHeight] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
@@ -54,12 +54,11 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const uncategorizedId = categoryAssignment.length - 1;
-
-  const currentlySelectedIds = categoryAssignment[categoryId].map(
-    (textItem) => textItem.id
-  );
-  const titleWithChildCount = `${title} (${category ? category.length : 0})`;
+  const uncategorizedId = categories.length - 1;
+  const currentlySelectedIds = uncategorized 
+    ? null 
+    : category.map((textItem) => textItem.id);
+  const titleWithChildCount = `${categories[categoryId].groupName} ${uncategorized ? '' : `(${category ? category.length : 0})`}`;
 
   /**
    * Toggle whether the accordion is open or not
@@ -73,8 +72,12 @@ export default function Category({
 
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     moveTextItems([
-      ...addedIds.map(id => ({ textItemId: id, newCategoryId: categoryId})), 
-      ...removedIds.map(id => ({textItemId: id, newCategoryId: uncategorizedId, prevCategoryId: categoryId}))
+      ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
+      ...removedIds.map((id) => ({
+        textItemId: id,
+        newCategoryId: uncategorizedId,
+        prevCategoryId: categoryId
+      }))
     ]);
     assignItemsButtonRef.current.focus();
     setDropdownSelectOpen(false);
@@ -110,11 +113,13 @@ export default function Category({
   const handleOnMouseUp = () => {
     if (draggedTextItem.textItemId !== '-1' && categoryId !== draggedTextItem.categoryId) {
       setDropzoneVisible(false);
-      moveTextItems([{
-        textItemId: draggedTextItem.textItemId, 
-        newCategoryId: categoryId, prevCategoryId: 
-        draggedTextItem.categoryId
-      }]);
+      moveTextItems([
+        {
+          textItemId: draggedTextItem.textItemId,
+          newCategoryId: categoryId,
+          prevCategoryId: draggedTextItem.categoryId
+        }
+      ]);
       setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
     }
   };
@@ -143,7 +148,7 @@ export default function Category({
     // If text item not only element in list
     if (textItems.length > 0) {
       category.forEach((textItem, index) => {
-        if ((textItemId === textItem.id)) {
+        if (textItemId === textItem.id) {
           // focus on the textitem after the removed one, or the one before if removing the last in the list
           setFocused(index < category.length - 1 ? index : index - 1);
         }
@@ -169,8 +174,7 @@ export default function Category({
         textElement={content}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
-        setContainerHeight={setContainerHeight}
-        resetContainerHeight={resetContainerHeight}
+        setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
         setDraggedTextItem={setDraggedTextItem}
         focused={index === focused}
       />
@@ -179,22 +183,24 @@ export default function Category({
 
   return (
     <div
-      className={`category ${categoryId}`}
+      className={`category${uncategorized ? ' uncategorized' : ''}`}
       onMouseEnter={(event) => handleOnMouseEnter(event)}
       onMouseLeave={(event) => handleOnMouseLeave(event)}
       onMouseUp={(event) => handleOnMouseUp(event)}
     >
-      <div className="header" ref={categoryHeaderRef}>
-        <Button
-          iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
-          className="expand-collapse-button"
-          ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
-          hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
-          onClick={handleAccordionToggle}
-          aria-expanded={accordionOpen}
-        />
+      <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
+        {uncategorized ? null : (
+          <Button
+            iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
+            className="expand-collapse-button"
+            ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
+            hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}
+            onClick={handleAccordionToggle}
+            aria-expanded={accordionOpen}
+          />
+        )}
         <div className="title">{titleWithChildCount}</div>
-        {showSelectedSolutions ? null : ( // hide assign button if done
+        {showSelectedSolutions || uncategorized ? null : (
           <Button
             ref={assignItemsButtonRef}
             iconName="icon-assign-items"
@@ -212,16 +218,18 @@ export default function Category({
           <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
             setContainerHeight={setHeight}
-            resetContainerHeight={resetContainerHeight}
             onClose={handleDropdownSelectClose}
             options={allTextItems}
             currentlySelectedIds={currentlySelectedIds}
           />
         </div>
       ) : null}
-      <div className={accordionOpen ? undefined : 'collapsed'}>
-        <hr />
-        <ul className="content">
+      <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
+        {uncategorized ? null : <hr />}
+        <ul 
+          style={uncategorized ? { minHeight: minHeight } : {}}
+          className={'content'}
+        >
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
@@ -234,7 +242,6 @@ export default function Category({
 
 Category.propTypes = {
   categoryId: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
   moveTextItems: PropTypes.func.isRequired,
   allTextItems: PropTypes.arrayOf(
     PropTypes.exact({
@@ -243,17 +250,7 @@ Category.propTypes = {
       shouldAnimate: PropTypes.bool
     })
   ),
-  temporaryCategoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string,
-        content: PropTypes.string,
-        shouldAnimate: PropTypes.bool
-      })
-    )
-  ),
-  setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired,
+  setContainerHeight: PropTypes.func,
   draggedTextItem: PropTypes.shape({
     textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired

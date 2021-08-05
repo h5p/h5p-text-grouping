@@ -26,7 +26,6 @@ export default function TextItem({
   shouldAnimate,
   removeAnimations,
   setContainerHeight,
-  resetContainerHeight,
   setDraggedTextItem,
   focused
 }) {
@@ -60,7 +59,7 @@ export default function TextItem({
       removeTextItem(textItemId, categoryId);
     }
     setDropdownSelectOpen(false);
-    resetContainerHeight();
+    setContainerHeight(0);
     instance.trigger('resize');
   };
 
@@ -131,7 +130,6 @@ export default function TextItem({
               <SingleDropdownSelect
                 label={l10n.moveItemsHelpText}
                 setContainerHeight={setHeight}
-                resetContainerHeight={resetContainerHeight}
                 onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
                 currentlySelectedId={currentCategoryId}
@@ -157,7 +155,6 @@ TextItem.propTypes = {
   shouldAnimate: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  resetContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
   focused: PropTypes.bool
 };
