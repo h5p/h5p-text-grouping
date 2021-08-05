@@ -46,7 +46,9 @@ export default function Category({
 
   const uncategorizedId = categories.length - 1;
   const currentlySelectedIds = category.map((textItem) => textItem.id);
-  const titleWithChildCount = `${categories[categoryId].groupName} ${uncategorized ? '' : `(${category ? category.length : 0})`}`;
+  const titleWithChildCount = `${categories[categoryId].groupName} ${
+    uncategorized ? '' : `(${category.length})`
+  }`;
 
   /**
    * Finds the unselected textItems belonging to this category
@@ -204,10 +206,7 @@ export default function Category({
       ) : null}
       <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
         {uncategorized ? null : <hr />}
-        <ul 
-          style={uncategorized ? { minHeight: minHeight } : {}}
-          className={'content'}
-        >
+        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'content'}>
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
