@@ -1,0 +1,146 @@
+.h5p-react-tip-button {
+  text-align: left;
+  position: relative;
+  display: inline-block;
+
+  &.positioned {
+    position: unset;
+  }
+
+  &.bottom .tip-wrapper {
+    top: 115%;
+
+    .arrow:after {
+      top: -0.6em;
+      border-bottom-color: black;
+      border-top-color: transparent;
+    }
+  }
+
+  &.right > .tip-wrapper {
+    top: 50%;
+    left: auto;
+    right: 1em;
+    transform: translate(100%, -50%);
+
+    .arrow:after {
+      border-top-color: transparent;
+      border-right-color: black;
+
+      left: 1px;
+      transform: translate(-100%, -50%);
+      top: 50%;
+    }
+
+    &.tip-wrapper-enter {
+      transform: translate(145%, -50%);
+    }
+
+    &.tip-wrapper-exit,
+    &.tip-wrapper-enter-active {
+      transform: translate(100%, -50%);
+    }
+
+    &.tip-wrapper-exit-active {
+      transform: translate(145%, -50%);
+    }
+  }
+
+  button {
+    font-size: 1em;
+    display: inline-block;
+    padding: 0.5em;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    box-sizing: content-box;
+    cursor: pointer;
+  }
+
+  .tip-wrapper {
+    display: none;
+    position: absolute;
+    top: -3.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    border-radius: 0.4em;
+    z-index: 1;
+    pointer-events: none;
+
+    &.tip-wrapper-enter-done,
+    &.tip-wrapper-enter,
+    &.tip-wrapper-enter-active,
+    &.tip-wrapper-exit,
+    &.tip-wrapper-exit-active {
+      display: block;
+    }
+
+    &.tip-wrapper-enter {
+      transform: translate(-50%, 30%);
+      opacity: 0;
+    }
+
+    &.tip-wrapper-enter-active {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    &.tip-wrapper-exit {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    &.tip-wrapper-exit-active {
+      transform: translate(-50%, 30%);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .tip {
+      white-space: nowrap;
+      background: black;
+      padding: 0.3em 1em;
+      border-radius: 0.4em;
+    }
+
+    &.left {
+      left: 0;
+      transform: none;
+
+      .arrow:after {
+        left: 1.4em;
+      }
+
+      &.tip-wrapper-enter {
+        transform: translate(0, 30%);
+      }
+
+      &.tip-wrapper-enter-active {
+        transform: translate(0, 0);
+      }
+
+      &.tip-wrapper-exit {
+        transform: translate(0, 0);
+      }
+
+      &.tip-wrapper-exit-active {
+        transform: translate(0, 30%);
+      }
+    }
+
+    .arrow:after {
+      content: ' ';
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -1px);
+
+      pointer-events: none;
+      border: 0.4em solid transparent;
+      border-top-color: black;
+    }
+  }
+}

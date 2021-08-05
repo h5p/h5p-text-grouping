@@ -5,6 +5,7 @@ import { H5PContext } from '../../context/H5PContext';
 import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
+import TipButton from '../commons/TipButton';
 import getClassNames from '../../helpers/getClassNames';
 
 import './TextItem.scss';
@@ -118,6 +119,11 @@ export default function TextItem({
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
+              {shouldShowUnselectedSolution || shouldShowWrongSolution ? (
+                <TipButton tip={'Wrong category'}>
+                  <div aria-hidden="true" className="swap-icon" />
+                </TipButton>
+              ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
                 {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
