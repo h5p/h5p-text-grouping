@@ -31,7 +31,7 @@ export default function TextItem({
   resetContainerHeight,
   setDraggedTextItem
 }) {
-  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
+  const { instance, l10n, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
     useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
@@ -40,12 +40,7 @@ export default function TextItem({
   // Booleans for displaying solution states
   const uncategorizedId = categories.length - 1;
   const isNotUncategorized = uncategorizedId !== currentCategoryId;
-  const shouldShowCorrectSolution =
-    showSelectedSolutions &&
-    !isShowSolutionItem &&
-    (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
-  const shouldShowWrongSolution =
-    showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Never show wrong in uncategorized
+  const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
 
@@ -109,8 +104,8 @@ export default function TextItem({
       className={getClassNames({
         'text-item-wrapper': true,
         animate: shouldAnimate,
-        correct: shouldShowCorrectSolution && correctlyPlaced,
-        wrong: shouldShowWrongSolution && !correctlyPlaced,
+        correct: shouldShowSolution && correctlyPlaced,
+        wrong: shouldShowSolution && !correctlyPlaced,
         'show-correct': shouldShowUnselectedSolution
       })}
       ref={textItemRef}
@@ -122,7 +117,7 @@ export default function TextItem({
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowUnselectedSolution || shouldShowWrongSolution ? (
+              {shouldShowUnselectedSolution || !correctlyPlaced ? (
                 <TipButton tip={'Wrong category'}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>

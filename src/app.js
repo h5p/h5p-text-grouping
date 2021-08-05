@@ -169,9 +169,6 @@ H5P.TextGrouping = (() => {
       this.params.textGroups.forEach((category) => {
         this.maxScore += category.textElements.length;
       });
-      if (!this.params.behaviour.penalties) {
-        this.maxScore += this.params.distractorGroup.length;
-      }
       return this.maxScore;
     };
 
@@ -191,18 +188,14 @@ H5P.TextGrouping = (() => {
      */
     this.getScore = () => {
       let score = 0;
-      const penalties = this.params.behaviour.penalties;
       const uncategorizedId = categoryState.length - 1; // always the same as the last index
 
       categoryState.forEach((category, categoryId) => {
-        // If penalties is selected, words in uncategorized should not be counted
-        if (!penalties || categoryId !== uncategorizedId) {
+        // Words in uncategorized should not be counted
+        if (categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
             if (belongsToCategory(textItem.id, categoryId)) {
               score++;
-            }
-            else if (penalties) {
-              score--;
             }
           });
         }
