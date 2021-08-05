@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import './DropdownSelect.scss';
@@ -15,7 +15,10 @@ export default function SingleDropdownSelect({
   options,
   currentlySelectedId
 }) {
+  const [selectedOption, setSelectedOption] = useState(0);
   const dropdownRef = useRef(null);
+  const listBoxRef = useRef(null);
+  const optionRefs = useRef([]);
 
   useEffect(() => {
     const dropdownHeight = dropdownRef.current.offsetHeight;
@@ -31,10 +34,10 @@ export default function SingleDropdownSelect({
     };
   }, []);
 
-  const selectableOptions = options
-    .map((_option, optionId) => optionId)
-    .filter((optionId) => optionId !== currentlySelectedId);
-  const [selectedOption, setSelectedOption] = useState(null);
+  //Set focus to the option list on mount
+  useEffect(() => {
+    optionRefs.current[0].current.focus();
+  }, []);
 
   const handleSelectItem = (event, optionId = null) => {
     if (optionId !== currentlySelectedId && optionId !== null) {
@@ -50,49 +53,57 @@ export default function SingleDropdownSelect({
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        if (selectedOption === selectableOptions.length - 1) return;
+        if (selectedOption === options.length - 1) return;
         setSelectedOption(selectedOption + 1);
+        optionRefs.current[selectedOption + 1].current.focus();
         break;
 
       case 'ArrowUp':
         event.preventDefault();
         if (selectedOption === 0) return;
         setSelectedOption(selectedOption - 1);
+        optionRefs.current[selectedOption - 1].current.focus();
         break;
 
       case 'Enter':
       case 'Escape':
       case ' ': // The space key
         event.preventDefault();
-        handleSelectItem(event, selectableOptions[selectedOption]);
+        if (selectedOption === currentlySelectedId) {
+          return;
+        }
+        handleSelectItem(event, selectedOption);
         break;
     }
   };
 
-  const handleListboxSelected = () => {
-    setSelectedOption(0);
-  };
+  if (optionRefs.current.length === 0) {
+    optionRefs.current = Array(options.length)
+      .fill()
+      .map(() => createRef());
+  }
 
   return (
     <div className="dropdown-select" ref={dropdownRef}>
       <div className="label">{label}</div>
       <hr />
       <ul
+        ref={listBoxRef}
         role="listbox"
         tabIndex={0}
-        onFocus={(event) => handleListboxSelected(event)}
         onKeyDown={(event) => handleKeyboardPressed(event)}
       >
         {options.map(({ groupName }, id) => {
           const disabled = id === currentlySelectedId;
-          let className = id === selectableOptions[selectedOption] ? 'radioSelected' : '';
-          className = disabled ? 'disabled' : className;
+          let className = id === selectedOption ? 'radioSelected ' : '';
+          className += disabled ? 'disabled' : className;
           return (
             <li
+              ref={optionRefs.current[id]}
               key={`option-${id}`}
               className={className}
               onClick={(event) => handleSelectItem(event, id)}
-              tabIndex={-1}
+              tabIndex={id === selectedOption ? -1 : 0}
               role="option"
               aria-selected={false}
               aria-disabled={disabled}
