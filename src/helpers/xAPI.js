@@ -72,7 +72,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
   // Add source, target and correct response pattern
   const source = [];
   const target = [];
-  let correctResponsePattern = '';
+  let correctResponsesPattern = '';
 
   textGroups.forEach((category, categoryId) => {
     target.push({
@@ -91,16 +91,16 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
         }
       });
 
-      if (correctResponsePattern) {
-        correctResponsePattern += '[,]'; // Deliminator
+      if (correctResponsesPattern) {
+        correctResponsesPattern += '[,]'; // Deliminator
       }
-      correctResponsePattern += textItemId + '[.]' + categoryId;
+      correctResponsesPattern += textItemId + '[.]' + categoryId;
     });
   });
 
   definition.source = source;
   definition.target = target;
-  definition.correctResponsePattern = [correctResponsePattern];
+  definition.correctResponsesPattern = [correctResponsesPattern];
 }
 
 /**
