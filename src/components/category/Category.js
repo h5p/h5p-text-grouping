@@ -29,42 +29,39 @@ export default function Category({
 }) {
   const uncategorized = categoryId === categories.length - 1;
 
-  const { instance, l10n, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, showSelectedSolutions, showUnselectedSolutions } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
   const [minHeight, setMinHeight] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
-  const [focused, setFocused] = useState(null);
 
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
-
-  /**
-   * Resets the state after the focus has been moved
-   */
-  useEffect(() => {
-    if (focused !== null) {
-      setFocused(null);
-    }
-  });
 
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
   const uncategorizedId = categories.length - 1;
-  const currentlySelectedIds = uncategorized 
-    ? null 
-    : category.map((textItem) => textItem.id);
+  const currentlySelectedIds = category.map((textItem) => textItem.id);
   const titleWithChildCount = `${categories[categoryId].groupName} ${uncategorized ? '' : `(${category ? category.length : 0})`}`;
+
+  /**
+   * Finds the unselected textItems belonging to this category
+   * @returns {object[]} list of unselected textItems belonging to this category
+   */
+  const getUnselectedSolutions = () =>
+    allTextItems.filter(
+      (textItem) => textItem.id[0] == categoryId && !currentlySelectedIds.includes(textItem.id)
+    );
 
   /**
    * Toggle whether the accordion is open or not
    */
   const handleAccordionToggle = () => {
-    setAccordionOpen(!accordionOpen);
+    setAccordionOpen((accordionOpen) => !accordionOpen);
     instance.trigger('resize');
   };
 
@@ -139,47 +136,28 @@ export default function Category({
     );
   };
 
-  /**
-   * Safely moves the focus to another element before the element is moved somewhere else
-   * @param {string} textItemId
-   * @param {string} newCategoryId
-   */
-  const removeTextItem = (textItemId, newCategoryId) => {
-    // If text item not only element in list
-    if (textItems.length > 0) {
-      category.forEach((textItem, index) => {
-        if (textItemId === textItem.id) {
-          // focus on the textitem after the removed one, or the one before if removing the last in the list
-          setFocused(index < category.length - 1 ? index : index - 1);
-        }
-      });
-    }
-    else {
-      // TODO
-      // Set to anchor point
-      // If unable, send the focus to another category via Main
-    }
-
-    moveTextItems([{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }]);
-  };
-
-  const textItems = category.map(({ id, content, shouldAnimate }, index) => {
-    return (
+  const buildTextItems = (textItems, isShowSolutionItem) =>
+    textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
         key={id}
         textItemId={id}
         currentCategoryId={categoryId}
         categories={categories}
-        removeTextItem={removeTextItem}
+        moveTextItems={moveTextItems}
         textElement={content}
+        isShowSolutionItem={isShowSolutionItem}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
         setDraggedTextItem={setDraggedTextItem}
-        focused={index === focused}
       />
-    );
-  });
+    ));
+
+  let textItems = buildTextItems(category, false);
+
+  if (showUnselectedSolutions) {
+    textItems.push(buildTextItems(getUnselectedSolutions(), true));
+  }
 
   return (
     <div

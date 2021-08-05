@@ -14,3 +14,14 @@
 
   z-index: 1;
 }
+
+@mixin swap-icon($color) {
+  display: block;
+  font-family: 'Material Icons';
+  font-size: 2.5em;
+  content: 'swap_horiz';
+  color: $color;
+
+  line-height: 1em;
+  z-index: 1;
+}

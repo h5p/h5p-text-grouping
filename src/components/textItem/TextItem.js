@@ -5,6 +5,7 @@ import { H5PContext } from '../../context/H5PContext';
 import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
+import TipButton from '../commons/TipButton';
 import getClassNames from '../../helpers/getClassNames';
 
 import './TextItem.scss';
@@ -21,15 +22,15 @@ export default function TextItem({
   textItemId,
   currentCategoryId,
   categories,
-  removeTextItem,
+  moveTextItems,
   textElement,
   shouldAnimate,
+  isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
-  setDraggedTextItem,
-  focused
+  setDraggedTextItem
 }) {
-  const { instance, l10n, params, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -38,16 +39,21 @@ export default function TextItem({
   const uncategorizedId = categories.length - 1;
   const isNotUncategorized = uncategorizedId !== currentCategoryId;
   const shouldShowCorrectSolution =
-    showSelectedSolutions && (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
-  const shouldShowWrongSolution = showSelectedSolutions && isNotUncategorized; // Never show wrong in uncategorized
+    showSelectedSolutions &&
+    !isShowSolutionItem &&
+    (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
+  const shouldShowWrongSolution =
+    showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Never show wrong in uncategorized
   const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
+  const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
 
   // Sets focus to the button
   useEffect(() => {
-    if (focused) {
+    if (focusedTextItem === textItemId) {
       buttonRef.current.focus();
+      setFocusedTextItem(null);
     }
-  }, [focused]);
+  }, [focusedTextItem]);
 
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
@@ -56,7 +62,8 @@ export default function TextItem({
 
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      removeTextItem(textItemId, categoryId);
+      moveTextItems([{textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId}]);
+      setFocusedTextItem(textItemId);
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0);
@@ -99,7 +106,8 @@ export default function TextItem({
         'text-item-wrapper': true,
         animate: shouldAnimate,
         correct: shouldShowCorrectSolution && correctlyPlaced,
-        wrong: shouldShowWrongSolution && !correctlyPlaced
+        wrong: shouldShowWrongSolution && !correctlyPlaced,
+        'show-correct': shouldShowUnselectedSolution
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
@@ -110,6 +118,11 @@ export default function TextItem({
           <div dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
+              {shouldShowUnselectedSolution || shouldShowWrongSolution ? (
+                <TipButton tip={'Wrong category'}>
+                  <div aria-hidden="true" className="swap-icon" />
+                </TipButton>
+              ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
                 {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
@@ -150,11 +163,11 @@ TextItem.propTypes = {
       groupName: PropTypes.string.isRequired
     })
   ).isRequired,
-  removeTextItem: PropTypes.func.isRequired,
+  moveTextItems: PropTypes.func.isRequired,
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
+  isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
-  focused: PropTypes.bool
 };
