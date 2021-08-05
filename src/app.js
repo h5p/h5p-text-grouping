@@ -200,7 +200,7 @@ H5P.TextGrouping = (() => {
         return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
       }
 
-      return Math.max(score, 0); // Negative score is not allowed
+      return score;
     };
 
     /**
