@@ -2,7 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
-import isCorrectlyPlaced from '../../helpers/isCorrectlyPlaced';
+import belongsToCategory from '../../helpers/belongsToCategory';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import TipButton from '../commons/TipButton';
@@ -30,7 +30,8 @@ export default function TextItem({
   setContainerHeight,
   setDraggedTextItem
 }) {
-  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } = useContext(H5PContext);
+  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
+    useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -44,7 +45,7 @@ export default function TextItem({
     (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
   const shouldShowWrongSolution =
     showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Never show wrong in uncategorized
-  const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
+  const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
 
   // Sets focus to the button
@@ -62,7 +63,9 @@ export default function TextItem({
 
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      moveTextItems([{textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId}]);
+      moveTextItems([
+        { textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }
+      ]);
       setFocusedTextItem(textItemId);
     }
     setDropdownSelectOpen(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
-import isCorrectlyPlaced from './helpers/isCorrectlyPlaced';
+import belongsToCategory from './helpers/belongsToCategory';
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
@@ -101,7 +101,7 @@ H5P.TextGrouping = (() => {
       instance: this,
       contentId: contentId,
       getRandomizedTextItems: getRandomizedTextItems,
-      triggerInteracted: triggerInteracted,
+      triggerInteracted: triggerInteracted
     };
 
     // Register task media
@@ -198,7 +198,7 @@ H5P.TextGrouping = (() => {
         // If penalties is selected, words in uncategorized should not be counted
         if (!penalties || categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
-            if (isCorrectlyPlaced(textItem.id, categoryId)) {
+            if (belongsToCategory(textItem.id, categoryId)) {
               score++;
             }
             else if (penalties) {
