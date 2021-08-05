@@ -85,32 +85,6 @@
     }
   },
   {
-    "name": "distractorGroup",
-    "type": "group",
-    "label": "Words with no category",
-    "importance": "high",
-    "fields": [
-      {
-        "name": "distractorElements",
-        "type": "list",
-        "importance": "medium",
-        "label": "Words/paragraphs",
-        "entity": "option",
-        "enterMode": "p",
-        "min": 1,
-        "defaultNum": 1,
-        "field": {
-          "name": "distractorElement",
-          "type": "text",
-          "importance": "medium",
-          "widget": "html",
-          "label": "Word/paragraph",
-          "tags": ["strong", "em", "sub", "sup", "code"]
-        }
-      }
-    ]
-  },
-  {
     "name": "overallFeedback",
     "type": "group",
     "label": "Overall Feedback",

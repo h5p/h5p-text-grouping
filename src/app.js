@@ -36,11 +36,6 @@ H5P.TextGrouping = (() => {
       });
     });
 
-    // Construct text item elements for distractor words
-    params.distractorGroup.forEach((element, i) => {
-      randomizedTextItems.push(createTextItem(`${params.textGroups.length}${i}`, element, false));
-    });
-
     let reset = true;
 
     /**
@@ -210,8 +205,6 @@ H5P.TextGrouping = (() => {
 
     /**
      * Get maximum possible score
-     *
-     * Distractor words do not contribute to scoring.
      * If singlePoint is enabled, the max score is 1.
      *
      * @return {number} Max score achievable for this task
