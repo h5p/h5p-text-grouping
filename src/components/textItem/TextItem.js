@@ -28,10 +28,9 @@ export default function TextItem({
   removeAnimations,
   setContainerHeight,
   resetContainerHeight,
-  setDraggedTextItem,
-  focused
+  setDraggedTextItem
 }) {
-  const { instance, l10n, params, showSelectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, params, showSelectedSolutions, focusedTextItem, setFocusedTextItem } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -46,10 +45,11 @@ export default function TextItem({
 
   // Sets focus to the button
   useEffect(() => {
-    if (focused) {
+    if (focusedTextItem === textItemId) {
       buttonRef.current.focus();
+      setFocusedTextItem(null);
     }
-  }, [focused]);
+  }, [focusedTextItem]);
 
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
@@ -64,8 +64,9 @@ export default function TextItem({
   };
 
   const selectCategory = (categoryId) => {
-    moveTextItem(textItemId, categoryId);
+    moveTextItem(textItemId, categoryId, currentCategoryId);
     handleDropdownSelectClose();
+    setFocusedTextItem(textItemId);
   };
 
   const setHeight = (height) => {
@@ -165,5 +166,4 @@ TextItem.propTypes = {
   setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
-  focused: PropTypes.bool
 };

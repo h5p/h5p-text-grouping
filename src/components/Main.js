@@ -23,6 +23,7 @@ export default function Main({ context }) {
   } = context;
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
+  const [focusedTextItem, setFocusedTextItem] = useState(null);
 
   const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
     ...textGroups.map(() => []),
@@ -110,7 +111,7 @@ export default function Main({ context }) {
   };
 
   return (
-    <H5PContext.Provider value={{ ...context, showSelectedSolutions }}>
+    <H5PContext.Provider value={{ ...context, showSelectedSolutions, focusedTextItem, setFocusedTextItem }}>
       <CategoryList
         categories={appliedCategoryAssignment}
         textGroups={textGroups}
