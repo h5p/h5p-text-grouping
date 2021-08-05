@@ -22,19 +22,19 @@ H5P.TextGrouping = (() => {
       categoryState = [...this.params.textGroups.map(() => []), randomizedTextItems.slice()];
     };
 
+    // Builder for a textItem object
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
       content,
       shouldAnimate
     });
+
     let randomizedTextItems = [];
 
     // Construct text item elements for categorized words
-    params.textGroups.forEach((category, i) => {
-      category.textElements.forEach((element, j) => {
-        randomizedTextItems.push(createTextItem(`${i}${j}`, element, false));
-      });
-    });
+    randomizedTextItems = params.textGroups.flatMap((category, i) =>
+      category.textElements.map((element, j) => createTextItem(`${i}${j}`, element, false))
+    );
 
     let reset = true;
 
