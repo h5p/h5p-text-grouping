@@ -62,7 +62,7 @@ export default function Category({
    * Toggle whether the accordion is open or not
    */
   const handleAccordionToggle = () => {
-    setAccordionOpen(!accordionOpen);
+    setAccordionOpen((accordionOpen) => !accordionOpen);
     instance.trigger('resize');
   };
 
