@@ -47,10 +47,11 @@ export default function Category({
   }, [narrowScreen]);
 
   const uncategorizedId = categories.length - 1;
-  const currentlySelectedIds = category.map((textItem) => textItem.id);
   const titleWithChildCount = `${categories[categoryId].groupName} ${
     uncategorized ? '' : `(${category.length})`
   }`;
+
+  const getCurrentlySelectedIds = () => category.map((textItem) => textItem.id);
 
   /**
    * Finds the unselected textItems belonging to this category
@@ -59,7 +60,8 @@ export default function Category({
   const getUnselectedSolutions = () =>
     allTextItems.filter(
       (textItem) =>
-        belongsToCategory(textItem.id, categoryId) && !currentlySelectedIds.includes(textItem.id)
+        belongsToCategory(textItem.id, categoryId) &&
+        !getCurrentlySelectedIds().includes(textItem.id)
     );
 
   /**
@@ -216,7 +218,7 @@ export default function Category({
             setContainerHeight={setHeight}
             onClose={handleDropdownSelectClose}
             options={allTextItems}
-            currentlySelectedIds={currentlySelectedIds}
+            currentlySelectedIds={getCurrentlySelectedIds()}
           />
         </div>
       ) : null}
