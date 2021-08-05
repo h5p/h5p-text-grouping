@@ -137,7 +137,7 @@ export default function Category({
     );
   };
 
-  const buildTextItems = (textItems) =>
+  const buildTextItems = (textItems, isShowSolutionItem) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
         key={id}
@@ -146,6 +146,7 @@ export default function Category({
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
+        isShowSolutionItem={isShowSolutionItem}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={setContainerHeight}
@@ -154,10 +155,10 @@ export default function Category({
       />
     ));
 
-  let textItems = buildTextItems(category);
+  let textItems = buildTextItems(category, false);
 
   if (showUnselectedSolutions) {
-    textItems.push(buildTextItems(getUnselectedSolutions()));
+    textItems.push(buildTextItems(getUnselectedSolutions(), true));
   }
 
   return (

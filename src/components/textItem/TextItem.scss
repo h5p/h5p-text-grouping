@@ -54,6 +54,22 @@
     }
   }
 
+  &.show-correct {
+    .text-item-border {
+      border-style: dotted;
+      border-color: styles.$color-show-correct-dark;
+
+      .text-item {
+        color: styles.$color-show-correct-dark;
+        background-color: styles.$color-show-correct-light;
+      }
+
+      .solution-icon:before {
+        @include styles.solution-icon('check_circle', styles.$color-show-correct-dark);
+      }
+    }
+  }
+
   .text-item-border {
     padding: 0.25em;
 

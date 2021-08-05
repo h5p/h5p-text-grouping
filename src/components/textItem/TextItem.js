@@ -24,6 +24,7 @@ export default function TextItem({
   moveTextItems,
   textElement,
   shouldAnimate,
+  isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
   resetContainerHeight,
@@ -38,9 +39,13 @@ export default function TextItem({
   const uncategorizedId = categories.length - 1;
   const isNotUncategorized = uncategorizedId !== currentCategoryId;
   const shouldShowCorrectSolution =
-    showSelectedSolutions && (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
-  const shouldShowWrongSolution = showSelectedSolutions && isNotUncategorized; // Never show wrong in uncategorized
+    showSelectedSolutions &&
+    !isShowSolutionItem &&
+    (isNotUncategorized || !params.behaviour.penalties); // Always show unless when in uncategorized penalties is enabled
+  const shouldShowWrongSolution =
+    showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Never show wrong in uncategorized
   const correctlyPlaced = isCorrectlyPlaced(textItemId, currentCategoryId);
+  const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
 
   // Sets focus to the button
   useEffect(() => {
@@ -101,7 +106,8 @@ export default function TextItem({
         'text-item-wrapper': true,
         animate: shouldAnimate,
         correct: shouldShowCorrectSolution && correctlyPlaced,
-        wrong: shouldShowWrongSolution && !correctlyPlaced
+        wrong: shouldShowWrongSolution && !correctlyPlaced,
+        'show-correct': shouldShowUnselectedSolution
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
@@ -156,6 +162,7 @@ TextItem.propTypes = {
   moveTextItems: PropTypes.func.isRequired,
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
+  isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,

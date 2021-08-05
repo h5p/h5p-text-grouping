@@ -49,6 +49,7 @@ export default function Uncategorized({
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
+        isShowSolutionItem={false}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={setMinHeight}
