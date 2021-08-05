@@ -86,7 +86,7 @@ export default function TextItem({
       dropdownSelectOpen ||
       showSelectedSolutions ||
       event.button !== 0 ||
-      event.target.className.includes('button-move-to-category')
+      event.target === buttonRef.current
     ) {
       return;
     }
@@ -152,7 +152,7 @@ TextItem.propTypes = {
       groupName: PropTypes.string.isRequired
     })
   ).isRequired,
-  moveTextItems: PropTypes.func.isRequired,
+  removeTextItem: PropTypes.func.isRequired,
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
