@@ -23,6 +23,7 @@ export default function Main({ context }) {
   } = context;
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
+  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
     ...textGroups.map(() => []),
@@ -38,8 +39,15 @@ export default function Main({ context }) {
   }, []);
 
   useEffect(() => {
+    instance.on('show-solution', function () {
+      setShowUnselectedSolutions(true);
+    });
+  }, []);
+
+  useEffect(() => {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
+      setShowUnselectedSolutions(false);
       setCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
     });
   }, []);
@@ -56,9 +64,9 @@ export default function Main({ context }) {
    */
   const moveTextItems = (textItems) => {
     const newCategories = deepCopy(categoryAssignment);
-    let textItem;  
+    let textItem;
 
-    textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {    
+    textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {
       // Reduce looping if the previous category is known
       let i = prevCategoryId === undefined ? 0 : prevCategoryId;
       const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
@@ -73,11 +81,11 @@ export default function Main({ context }) {
           }
         });
       }
-      
+
       // Add to new category
       newCategories[newCategoryId].push(textItem);
     });
-  
+
     setCategoryAssignment(newCategories);
     triggerInteracted(categoryAssignment);
   };
@@ -86,14 +94,14 @@ export default function Main({ context }) {
    * Remove animations for all text items
    */
   const removeAnimations = () => {
-    setCategoryAssignment(prevCategoryAssignment => {
-      prevCategoryAssignment.flat().forEach(textItem => textItem.shouldAnimate = false);
+    setCategoryAssignment((prevCategoryAssignment) => {
+      prevCategoryAssignment.flat().forEach((textItem) => (textItem.shouldAnimate = false));
       return prevCategoryAssignment;
     });
   };
 
   return (
-    <H5PContext.Provider value={{ ...context, showSelectedSolutions }}>
+    <H5PContext.Provider value={{ ...context, showSelectedSolutions, showUnselectedSolutions }}>
       <CategoryList
         categoryAssignment={categoryAssignment}
         textGroups={textGroups}
@@ -103,17 +111,19 @@ export default function Main({ context }) {
         draggedTextItem={draggedTextItem}
         removeAnimations={removeAnimations}
       />
-      <Uncategorized
-        categoryId={uncategorizedId}
-        moveTextItems={moveTextItems}
-        setDraggedTextItem={setDraggedTextItem}
-        draggedTextItem={draggedTextItem}
-        textItems={{
-          category: categoryAssignment[uncategorizedId],
-          categories: [...textGroups, { groupName: 'Uncategorized' }],
-          removeAnimations: removeAnimations
-        }}
-      />
+      {showUnselectedSolutions ? null : (
+        <Uncategorized
+          categoryId={uncategorizedId}
+          moveTextItems={moveTextItems}
+          setDraggedTextItem={setDraggedTextItem}
+          draggedTextItem={draggedTextItem}
+          textItems={{
+            category: categoryAssignment[uncategorizedId],
+            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            removeAnimations: removeAnimations
+          }}
+        />
+      )}
     </H5PContext.Provider>
   );
 }
