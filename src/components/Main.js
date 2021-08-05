@@ -88,7 +88,7 @@ export default function Main({ context }) {
     });
 
     setCategoryAssignment(newCategories);
-    triggerInteracted(categoryAssignment);
+    triggerInteracted(newCategories);
   };
 
   /**
