@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import belongsToCategory from '../../helpers/belongsToCategory';
