@@ -21,8 +21,7 @@ export default function TextItem({
   textItemId,
   currentCategoryId,
   categories,
-  moveTextItem,
-  applyAssignment,
+  moveTextItems,
   textElement,
   shouldAnimate,
   removeAnimations,
@@ -56,17 +55,14 @@ export default function TextItem({
     instance.trigger('resize');
   };
 
-  const handleDropdownSelectClose = () => {
-    applyAssignment();
+  const handleDropdownSelectAction = (categoryId = null) => {
+    if (categoryId !== null) {
+      moveTextItems([{textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId}]);
+      setFocusedTextItem(textItemId);
+    }
     setDropdownSelectOpen(false);
     resetContainerHeight();
     instance.trigger('resize');
-  };
-
-  const selectCategory = (categoryId) => {
-    moveTextItem(textItemId, categoryId, currentCategoryId);
-    handleDropdownSelectClose();
-    setFocusedTextItem(textItemId);
   };
 
   const setHeight = (height) => {
@@ -91,7 +87,7 @@ export default function TextItem({
       dropdownSelectOpen ||
       showSelectedSolutions ||
       event.button !== 0 ||
-      event.target.className.includes('button-move-to-category')
+      event.target === buttonRef.current
     ) {
       return;
     }
@@ -137,8 +133,7 @@ export default function TextItem({
                 label={l10n.moveItemsHelpText}
                 setContainerHeight={setHeight}
                 resetContainerHeight={resetContainerHeight}
-                onChange={(categoryId) => selectCategory(categoryId)}
-                onClose={handleDropdownSelectClose}
+                onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
                 currentlySelectedId={currentCategoryId}
               />
@@ -158,12 +153,10 @@ TextItem.propTypes = {
       groupName: PropTypes.string.isRequired
     })
   ).isRequired,
-  moveTextItem: PropTypes.func.isRequired,
-  applyAssignment: PropTypes.func.isRequired,
+  moveTextItems: PropTypes.func.isRequired,
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
-  setContainerHeight: PropTypes.func.isRequired,
   resetContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired,
 };

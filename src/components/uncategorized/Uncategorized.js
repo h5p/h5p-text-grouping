@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import './Uncategorized.scss';
@@ -14,8 +14,7 @@ import { H5PContext } from '../../context/H5PContext';
  */
 export default function Uncategorized({
   categoryId,
-  applyCategoryAssignment,
-  moveTextItem,
+  moveTextItems,
   draggedTextItem,
   setDraggedTextItem,
   textItems: { category, categories, removeAnimations }
@@ -48,8 +47,7 @@ export default function Uncategorized({
         textItemId={id}
         currentCategoryId={categoryId}
         categories={categories}
-        moveTextItem={moveTextItem}
-        applyAssignment={applyCategoryAssignment}
+        moveTextItems={moveTextItems}
         textElement={content}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
@@ -83,8 +81,7 @@ export default function Uncategorized({
 
 Uncategorized.propTypes = {
   categoryId: PropTypes.number.isRequired,
-  applyCategoryAssignment: PropTypes.func.isRequired,
-  moveTextItem: PropTypes.func.isRequired,
+  moveTextItems: PropTypes.func.isRequired,
   draggedTextItem: PropTypes.shape({
     textItemId: PropTypes.string.isRequired,
     categoryId: PropTypes.number.isRequired

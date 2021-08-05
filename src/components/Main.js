@@ -24,13 +24,9 @@ export default function Main({ context }) {
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
+  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
-  const [appliedCategoryAssignment, setAppliedCategoryAssignment] = useState([
-    ...textGroups.map(() => []),
-    getRandomizedTextItems().slice()
-  ]);
-
-  const [temporaryCategoryAssignment, setTemporaryCategoryAssignment] = useState([
+  const [categoryAssignment, setCategoryAssignment] = useState([
     ...textGroups.map(() => []),
     getRandomizedTextItems().slice()
   ]);
@@ -44,13 +40,16 @@ export default function Main({ context }) {
   }, []);
 
   useEffect(() => {
+    instance.on('show-solution', function () {
+      setShowUnselectedSolutions(true);
+    });
+  }, []);
+
+  useEffect(() => {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
-      setAppliedCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
-      setTemporaryCategoryAssignment([
-        ...textGroups.map(() => []),
-        getRandomizedTextItems().slice()
-      ]);
+      setShowUnselectedSolutions(false);
+      setCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
     });
   }, []);
 
@@ -59,82 +58,73 @@ export default function Main({ context }) {
   const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: '-1', categoryId: -1 });
 
   /**
-   * Update layout with current location of all text items
-   */
-  const applyCategoryAssignment = () => {
-    setAppliedCategoryAssignment(deepCopy(temporaryCategoryAssignment));
-    triggerInteracted(appliedCategoryAssignment);
-  };
-
-  /**
-   * Moves a text item from its current category to a new one
-   * Does not apply the updated locations in the layout
+   * Moves n text items from their current category to new ones
    * @param {String} textItemId Id of text item that should be moved
    * @param {number} newCategoryId Id of category the text item should be moved to
    * @param {number} prevCategoryId Id of category the text item currently belongs to, if available
    */
-  const moveTextItem = (textItemId, newCategoryId, prevCategoryId = null) => {
-    const newCategories = temporaryCategoryAssignment.slice();
+  const moveTextItems = (textItems) => {
+    const newCategories = deepCopy(categoryAssignment);
     let textItem;
 
-    // Remove from previous category
-    // Reduce looping if the previous category is known
-    let i = prevCategoryId === null ? 0 : prevCategoryId;
-    const limit = prevCategoryId === null ? textGroups.length : prevCategoryId;
+    textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {
+      // Reduce looping if the previous category is known
+      let i = prevCategoryId === undefined ? 0 : prevCategoryId;
+      const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
 
-    for (i; i <= limit; i++) {
-      newCategories[i].forEach((item, index) => {
-        if (item.id === textItemId) {
-          textItem = item;
-          textItem.shouldAnimate = true;
-          newCategories[i].splice(index, 1);
-        }
-      });
-    }
+      // Remove from previous category
+      for (i; i <= limit; i++) {
+        newCategories[i].forEach((item, index) => {
+          if (item.id === textItemId) {
+            textItem = item;
+            textItem.shouldAnimate = true;
+            newCategories[i].splice(index, 1);
+          }
+        });
+      }
 
-    // Add to new category
-    newCategories[newCategoryId].push(textItem);
-    setTemporaryCategoryAssignment(newCategories);
+      // Add to new category
+      newCategories[newCategoryId].push(textItem);
+    });
+
+    setCategoryAssignment(newCategories);
+    triggerInteracted(categoryAssignment);
   };
 
   /**
    * Remove animations for all text items
    */
   const removeAnimations = () => {
-    setTemporaryCategoryAssignment((prevTemporaryCategoryAssignment) => {
-      prevTemporaryCategoryAssignment
-        .flat()
-        .forEach((textItem) => (textItem.shouldAnimate = false));
-      return prevTemporaryCategoryAssignment;
+    setCategoryAssignment((prevCategoryAssignment) => {
+      prevCategoryAssignment.flat().forEach((textItem) => (textItem.shouldAnimate = false));
+      return prevCategoryAssignment;
     });
-    applyCategoryAssignment();
   };
 
   return (
-    <H5PContext.Provider value={{ ...context, showSelectedSolutions, focusedTextItem, setFocusedTextItem }}>
+    <H5PContext.Provider value={{ ...context, showSelectedSolutions, showUnselectedSolutions, focusedTextItem, setFocusedTextItem }}>
       <CategoryList
-        categories={appliedCategoryAssignment}
+        categoryAssignment={categoryAssignment}
         textGroups={textGroups}
-        moveTextItem={moveTextItem}
+        moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems().slice()}
-        applyCategoryAssignment={applyCategoryAssignment}
         setDraggedTextItem={setDraggedTextItem}
         draggedTextItem={draggedTextItem}
-        temporaryCategoryAssignment={temporaryCategoryAssignment}
         removeAnimations={removeAnimations}
       />
-      <Uncategorized
-        categoryId={uncategorizedId}
-        applyCategoryAssignment={applyCategoryAssignment}
-        moveTextItem={moveTextItem}
-        setDraggedTextItem={setDraggedTextItem}
-        draggedTextItem={draggedTextItem}
-        textItems={{
-          category: appliedCategoryAssignment[uncategorizedId],
-          categories: [...textGroups, { groupName: 'Uncategorized' }],
-          removeAnimations: removeAnimations
-        }}
-      />
+      {showUnselectedSolutions ? null : (
+        <Uncategorized
+          categoryId={uncategorizedId}
+          moveTextItems={moveTextItems}
+          setDraggedTextItem={setDraggedTextItem}
+          draggedTextItem={draggedTextItem}
+          textItems={{
+            category: categoryAssignment[uncategorizedId],
+            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            removeAnimations: removeAnimations
+          }}
+        />
+      )}
     </H5PContext.Provider>
   );
 }

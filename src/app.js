@@ -343,7 +343,7 @@ H5P.TextGrouping = (() => {
         this.read(this.params.l10n.noAnswer);
       }
       else {
-        console.log('Show solution...'); // TODO: Set flag in context
+        this.trigger('show-solution');
       }
 
       this.trigger('resize');
