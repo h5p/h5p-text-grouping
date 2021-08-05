@@ -78,8 +78,8 @@ export default function Main({ context }) {
 
     // Remove from previous category
     // Reduce looping if the previous category is known
-    let i = (prevCategoryId === null ? 0 : prevCategoryId); 
-    const limit = (prevCategoryId === null ? textGroups.length : prevCategoryId);
+    let i = prevCategoryId === null ? 0 : prevCategoryId;
+    const limit = prevCategoryId === null ? textGroups.length : prevCategoryId;
 
     for (i; i <= limit; i++) {
       newCategories[i].forEach((item, index) => {
@@ -100,8 +100,10 @@ export default function Main({ context }) {
    * Remove animations for all text items
    */
   const removeAnimations = () => {
-    setTemporaryCategoryAssignment(prevTemporaryCategoryAssignment => {
-      prevTemporaryCategoryAssignment.flat().forEach(textItem => textItem.shouldAnimate = false);
+    setTemporaryCategoryAssignment((prevTemporaryCategoryAssignment) => {
+      prevTemporaryCategoryAssignment
+        .flat()
+        .forEach((textItem) => (textItem.shouldAnimate = false));
       return prevTemporaryCategoryAssignment;
     });
     applyCategoryAssignment();
@@ -137,13 +139,17 @@ export default function Main({ context }) {
 }
 
 Main.propTypes = {
-  context: PropTypes.exact({
-    params: PropTypes.object,
-    l10n: PropTypes.object,
+  context: PropTypes.shape({
+    params: PropTypes.shape({
+      textGroups: PropTypes.arrayOf(
+        PropTypes.exact({
+          groupName: PropTypes.string.isRequired,
+          textElements: PropTypes.arrayOf(PropTypes.string)
+        })
+      ).isRequired
+    }),
     instance: PropTypes.object,
-    contentId: PropTypes.number,
     getRandomizedTextItems: PropTypes.func.isRequired,
-    triggerInteracted: PropTypes.func.isRequired,
-    showSelectedSolutions: PropTypes.bool
+    triggerInteracted: PropTypes.func.isRequired
   }).isRequired
 };

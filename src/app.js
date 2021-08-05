@@ -102,7 +102,6 @@ H5P.TextGrouping = (() => {
       contentId: contentId,
       getRandomizedTextItems: getRandomizedTextItems,
       triggerInteracted: triggerInteracted,
-      showSelectedSolutions: this.showSelectedSolutions
     };
 
     // Register task media
