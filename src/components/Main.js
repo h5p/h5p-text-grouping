@@ -60,8 +60,8 @@ export default function Main({ context }) {
 
     textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {    
       // Reduce looping if the previous category is known
-      let i = (prevCategoryId === undefined ? 0 : prevCategoryId); 
-      const limit = (prevCategoryId === undefined ? textGroups.length : prevCategoryId);
+      let i = prevCategoryId === undefined ? 0 : prevCategoryId;
+      const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
 
       // Remove from previous category
       for (i; i <= limit; i++) {
@@ -119,13 +119,17 @@ export default function Main({ context }) {
 }
 
 Main.propTypes = {
-  context: PropTypes.exact({
-    params: PropTypes.object,
-    l10n: PropTypes.object,
+  context: PropTypes.shape({
+    params: PropTypes.shape({
+      textGroups: PropTypes.arrayOf(
+        PropTypes.exact({
+          groupName: PropTypes.string.isRequired,
+          textElements: PropTypes.arrayOf(PropTypes.string)
+        })
+      ).isRequired
+    }),
     instance: PropTypes.object,
-    contentId: PropTypes.number,
     getRandomizedTextItems: PropTypes.func.isRequired,
-    triggerInteracted: PropTypes.func.isRequired,
-    showSelectedSolutions: PropTypes.bool
+    triggerInteracted: PropTypes.func.isRequired
   }).isRequired
 };

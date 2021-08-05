@@ -102,7 +102,6 @@ H5P.TextGrouping = (() => {
       contentId: contentId,
       getRandomizedTextItems: getRandomizedTextItems,
       triggerInteracted: triggerInteracted,
-      showSelectedSolutions: this.showSelectedSolutions
     };
 
     // Register task media
@@ -142,6 +141,10 @@ H5P.TextGrouping = (() => {
       </div>
     );
     this.setContent(ReactDOM.render(main, wrapper));
+
+    this.hasNotChanged = () => {
+      return false; // TODO: Placeholder. Find a way to check this
+    };
 
     /**
      * Get whether the user has achieved a passing score or not
@@ -271,6 +274,16 @@ H5P.TextGrouping = (() => {
       }
     );
     this.addButton(
+      'show-solution',
+      this.params.l10n.showSolutionButtonText,
+      () => {
+        this.showSolutions();
+      },
+      false,
+      { 'aria-label': this.params.l10n.showSolution },
+      {}
+    );
+    this.addButton(
       'try-again',
       this.params.l10n.retryText,
       () => {
@@ -291,8 +304,6 @@ H5P.TextGrouping = (() => {
      * Check answer.
      */
     this.checkAnswer = () => {
-      // this.content.disableSelectables();
-
       const score = this.getScore();
       const maxScore = this.getMaxScore();
       const textScore = H5P.Question.determineOverallFeedback(
@@ -302,9 +313,9 @@ H5P.TextGrouping = (() => {
 
       this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
 
-      // if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
-      //   this.showButton('show-solution');
-      // }
+      if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
+        this.showButton('show-solution');
+      }
 
       if (this.params.behaviour.enableRetry && score !== maxScore) {
         this.showButton('try-again');
@@ -316,6 +327,26 @@ H5P.TextGrouping = (() => {
       this.trigger('resize');
 
       triggerAnswered(score, maxScore);
+    };
+
+    /**
+     * Show solutions.
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-4}
+     */
+    this.showSolutions = () => {
+      this.hideButton('check-answer');
+      this.hideButton('show-solution');
+
+      if (this.params.behaviour.showSolutionsRequiresInput && this.hasNotChanged()) {
+        // Require answer before solution can be viewed
+        this.updateFeedbackContent(this.params.l10n.noAnswer);
+        this.read(this.params.l10n.noAnswer);
+      }
+      else {
+        console.log('Show solution...'); // TODO: Set flag in context
+      }
+
+      this.trigger('resize');
     };
 
     /**

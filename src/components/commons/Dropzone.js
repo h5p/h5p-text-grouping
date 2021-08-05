@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Dropzone.scss';
 
 /**
@@ -10,3 +11,7 @@ export default function Dropzone({
   // TODO: Dummy return statement
   return (<div className={`dropzone${visible ? '' : ' hidden'}`}/>);
 }
+
+Dropzone.propTypes = {
+  visible: PropTypes.bool
+};

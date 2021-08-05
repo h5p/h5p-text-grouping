@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import './Uncategorized.scss';
@@ -20,9 +20,19 @@ export default function Uncategorized({
   textItems: { category, categories, removeAnimations }
 }) {
   const [minHeight, setMinHeight] = useState(null);
+  const [focused, setFocused] = useState(null);
   const { l10n } = useContext(H5PContext);
 
   const [dropzoneVisible, setDropzoneVisible] = useState(false);
+
+  /**
+   * Resets the state after the focus has been moved
+   */
+  useEffect(() => {
+    if (focused !== null) {
+      setFocused(null);
+    }
+  });
 
   const handleOnMouseEnter = () => {
     if (draggedTextItem.categoryId !== categoryId && draggedTextItem.categoryId !== -1) {
@@ -40,30 +50,55 @@ export default function Uncategorized({
     }
   };
 
-  const textItems = category.map(({ id, content, shouldAnimate }) => {
+  /**
+   * Safely moves the focus to another element before the element is moved somewhere else
+   * @param {string} textItemId
+   * @param {string} newCategoryId
+   */
+  const removeTextItem = (textItemId, newCategoryId) => {
+    // If text item not only element in list
+    if (textItems.length > 0) {
+      category.forEach((textItem, index) => {
+        if ((textItemId === textItem.id)) {
+          // focus on the textitem after the removed one, or the one before if removing the last in the list
+          setFocused(index < category.length - 1 ? index : index - 1);
+        }
+      });
+    }
+    else {
+      // TODO
+      // Set to anchor point
+      // If unable, send the focus to another category via Main
+    }
+
+    moveTextItems([{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }]);
+  };
+
+  const textItems = category.map(({ id, content, shouldAnimate }, index) => {
     return (
       <TextItem
         key={id}
         textItemId={id}
         currentCategoryId={categoryId}
         categories={categories}
-        moveTextItems={moveTextItems}
+        removeTextItem={removeTextItem}
         textElement={content}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={setMinHeight}
         resetContainerHeight={() => setMinHeight(0)}
         setDraggedTextItem={setDraggedTextItem}
+        focused={index === focused}
       />
     );
   });
 
   return (
-    <div 
-      className="uncategorized" 
-      onMouseEnter={event => handleOnMouseEnter(event)} 
-      onMouseLeave={event => handleOnMouseLeave(event)} 
-      onMouseUp={event => handleOnMouseUp(event)}
+    <div
+      className="uncategorized"
+      onMouseEnter={(event) => handleOnMouseEnter(event)}
+      onMouseLeave={(event) => handleOnMouseLeave(event)}
+      onMouseUp={(event) => handleOnMouseUp(event)}
     >
       <div className="uncategorized-heading">{l10n.uncategorizedLabel}</div>
       <ul
