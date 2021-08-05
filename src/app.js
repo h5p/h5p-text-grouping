@@ -143,6 +143,10 @@ H5P.TextGrouping = (() => {
     );
     this.setContent(ReactDOM.render(main, wrapper));
 
+    this.hasNotChanged = () => {
+      return false; // TODO: Placeholder. Find a way to check this
+    };
+
     /**
      * Get whether the user has achieved a passing score or not
      * @return {boolean} True if passed, false if not
@@ -334,20 +338,14 @@ H5P.TextGrouping = (() => {
       this.hideButton('check-answer');
       this.hideButton('show-solution');
 
-      // console.log(categoryState);
-      // console.log(getRandomizedTextItems());
-      // if (
-      //   this.params.behaviour.showSolutionsRequiresInput &&
-      //   categoryState !== getRandomizedTextItems()
-      // ) {
-      //   // Require answer before solution can be viewed
-      //   this.updateFeedbackContent(this.params.l10n.noAnswer);
-      //   this.handleRead(this.params.l10n.noAnswer);
-      // }
-      // else {
-      //   this.content.showUnselectedSolutions();
-      //   this.content.focusUnselectedSolution();
-      // }
+      if (this.params.behaviour.showSolutionsRequiresInput && this.hasNotChanged()) {
+        // Require answer before solution can be viewed
+        this.updateFeedbackContent(this.params.l10n.noAnswer);
+        this.read(this.params.l10n.noAnswer);
+      }
+      else {
+        console.log('Show solution...'); // TODO: Set flag in context
+      }
 
       this.trigger('resize');
     };
