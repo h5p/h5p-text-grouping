@@ -102,7 +102,16 @@ export default function Main({ context }) {
   };
 
   return (
-    <H5PContext.Provider value={{ ...context, showSelectedSolutions, showUnselectedSolutions, focusedTextItem, setFocusedTextItem }}>
+    <H5PContext.Provider
+      value={{
+        ...context,
+        categoryAssignment,
+        showSelectedSolutions,
+        showUnselectedSolutions,
+        focusedTextItem,
+        setFocusedTextItem
+      }}
+    >
       <CategoryList
         categoryAssignment={categoryAssignment}
         textGroups={textGroups}

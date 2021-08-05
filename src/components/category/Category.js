@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import useNarrowScreen from '../../helpers/useNarrowScreen';
+import belongsToCategory from '../../helpers/belongsToCategory';
 
 import Button from '../commons/Button';
 import Dropzone from '../commons/Dropzone';
@@ -29,7 +30,8 @@ export default function Category({
 }) {
   const uncategorized = categoryId === categories.length - 1;
 
-  const { instance, l10n, showSelectedSolutions, showUnselectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
+    useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
   const [minHeight, setMinHeight] = useState(null);
@@ -56,7 +58,8 @@ export default function Category({
    */
   const getUnselectedSolutions = () =>
     allTextItems.filter(
-      (textItem) => textItem.id[0] == categoryId && !currentlySelectedIds.includes(textItem.id)
+      (textItem) =>
+        belongsToCategory(textItem.id, categoryId) && !currentlySelectedIds.includes(textItem.id)
     );
 
   /**
@@ -138,7 +141,7 @@ export default function Category({
     );
   };
 
-  const buildTextItems = (textItems, isShowSolutionItem) =>
+  const buildTextItems = (textItems, isShowSolutionItem, showSwapIcon) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
         key={id}
@@ -147,18 +150,33 @@ export default function Category({
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
-        isShowSolutionItem={isShowSolutionItem}
         shouldAnimate={shouldAnimate}
+        isShowSolutionItem={isShowSolutionItem}
+        showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
         setDraggedTextItem={setDraggedTextItem}
       />
     ));
 
-  let textItems = buildTextItems(category, false);
+  let textItems = buildTextItems(category, false, false);
 
   if (showUnselectedSolutions) {
-    textItems.push(buildTextItems(getUnselectedSolutions(), true));
+    const unselectedSolutions = getUnselectedSolutions();
+    const categorized = [];
+    const uncategorized = [];
+
+    unselectedSolutions.forEach((textItem) => {
+      if (categoryAssignment[uncategorizedId].find(({ id }) => id === textItem.id)) {
+        categorized.push(textItem);
+      }
+      else {
+        uncategorized.push(textItem);
+      }
+    });
+
+    textItems.push(buildTextItems(categorized, true, false));
+    textItems.push(buildTextItems(uncategorized, true, true));
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import belongsToCategory from '../../helpers/belongsToCategory';
@@ -26,12 +26,19 @@ export default function TextItem({
   textElement,
   shouldAnimate,
   isShowSolutionItem,
+  showSwapIcon,
   removeAnimations,
   setContainerHeight,
   setDraggedTextItem
 }) {
-  const { instance, l10n, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
-    useContext(H5PContext);
+  const {
+    instance,
+    l10n,
+    showSelectedSolutions,
+    showUnselectedSolutions,
+    focusedTextItem,
+    setFocusedTextItem
+  } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -42,6 +49,7 @@ export default function TextItem({
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
+  const shouldShowShowSwapIcon = showSwapIcon || (showUnselectedSolutions && !correctlyPlaced);
 
   // Sets focus to the button
   useEffect(() => {
@@ -116,7 +124,7 @@ export default function TextItem({
           <div className="content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowUnselectedSolution || !correctlyPlaced ? (
+              {shouldShowShowSwapIcon ? (
                 <TipButton tip={'Wrong category'}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>
@@ -165,6 +173,7 @@ TextItem.propTypes = {
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   isShowSolutionItem: PropTypes.bool.isRequired,
+  showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   setDraggedTextItem: PropTypes.func.isRequired
