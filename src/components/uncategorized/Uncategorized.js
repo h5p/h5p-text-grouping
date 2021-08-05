@@ -59,7 +59,7 @@ export default function Uncategorized({
     // If text item not only element in list
     if (textItems.length > 0) {
       category.forEach((textItem, index) => {
-        if ((textItemId === textItem.id)) {
+        if (textItemId === textItem.id) {
           // focus on the textitem after the removed one, or the one before if removing the last in the list
           setFocused(index < category.length - 1 ? index : index - 1);
         }
@@ -71,7 +71,9 @@ export default function Uncategorized({
       // If unable, send the focus to another category via Main
     }
 
-    moveTextItems([{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }]);
+    moveTextItems([
+      { textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: categoryId }
+    ]);
   };
 
   const textItems = category.map(({ id, content, shouldAnimate }, index) => {
@@ -83,6 +85,7 @@ export default function Uncategorized({
         categories={categories}
         removeTextItem={removeTextItem}
         textElement={content}
+        isShowSolutionItem={false}
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={setMinHeight}
