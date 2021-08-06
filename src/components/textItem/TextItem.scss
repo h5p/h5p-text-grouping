@@ -106,13 +106,15 @@
       }
     }
 
-    &:hover {
-      cursor: pointer;
-      border-style: dotted;
-      border-color: styles.$text-item-border-color;
+    &:enabled {
+      &:hover {
+        cursor: pointer;
+        border-style: dotted;
+        border-color: styles.$text-item-border-color;
 
-      .text-item {
-        background-color: styles.$text-item-background-dark;
+        .text-item {
+          background-color: styles.$text-item-background-dark;
+        }
       }
     }
 

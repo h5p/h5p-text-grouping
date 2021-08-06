@@ -124,7 +124,8 @@ export default function TextItem({
         animate: shouldAnimate,
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
-        'show-correct': shouldShowUnselectedSolution
+        'show-correct': shouldShowUnselectedSolution,
+        enabled: !showSelectedSolutions
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
