@@ -178,24 +178,29 @@ export default function Category({
       />
     ));
 
+  // Build the assigned text items for the category
   let textItems = buildTextItems(category, false, false);
 
   if (showUnselectedSolutions) {
+    // Build the show solution state text items to show which items should have been placed in the category
     const unselectedSolutions = getUnselectedSolutions();
     const categorized = [];
     const uncategorized = [];
 
+    // Partition the missing text items into already categorized and uncategorized
     unselectedSolutions.forEach((textItem) => {
       if (categoryAssignment[uncategorizedId].find(({ id }) => id === textItem.id)) {
-        categorized.push(textItem);
+        uncategorized.push(textItem);
       }
       else {
-        uncategorized.push(textItem);
+        categorized.push(textItem);
       }
     });
 
-    textItems.push(buildTextItems(categorized, true, false));
-    textItems.push(buildTextItems(uncategorized, true, true));
+    // Categorized items gets a swap icon
+    textItems.push(buildTextItems(categorized, true, true));
+    // Uncategorized items does not get a swap icon
+    textItems.push(buildTextItems(uncategorized, true, false));
   }
 
   return (
