@@ -17,11 +17,6 @@ H5P.TextGrouping = (() => {
     this.extras = extras || {};
     this.showSelectedSolutions = false;
 
-    let categoryState = null;
-    const initiateCategoryState = () => {
-      categoryState = [...this.params.textGroups.map(() => []), randomizedTextItems.slice()];
-    };
-
     // Builder for a textItem object
     const createTextItem = (id, content, shouldAnimate) => ({
       id,
@@ -29,14 +24,12 @@ H5P.TextGrouping = (() => {
       shouldAnimate
     });
 
-    let randomizedTextItems = [];
-
     // Construct text item elements for categorized words
-    randomizedTextItems = params.textGroups.flatMap((category, i) =>
+    this.randomizedTextItems = params.textGroups.flatMap((category, i) =>
       category.textElements.map((element, j) => createTextItem(`${i}${j}`, element, false))
     );
 
-    let reset = true;
+    this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
 
     /**
      * Randomizes the order of text items, if reset has been set
@@ -44,22 +37,14 @@ H5P.TextGrouping = (() => {
      *
      * @return {object[]} An array of text item objects
      */
-    const getRandomizedTextItems = () => {
-      if (reset) {
-        for (let i = randomizedTextItems.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [randomizedTextItems[i], randomizedTextItems[j]] = [
-            randomizedTextItems[j],
-            randomizedTextItems[i]
-          ];
-        }
-        initiateCategoryState();
-        reset = false;
+    const randomizeList = (list) => {
+      const randomizedList = [...list];
+      for (let i = randomizedList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [randomizedList[i], randomizedList[j]] = [randomizedList[j], randomizedList[i]];
       }
-      return randomizedTextItems;
+      return randomizedList;
     };
-
-    initiateCategoryState();
 
     /**
      * Updates the state and triggers xAPI interacted event
@@ -67,7 +52,7 @@ H5P.TextGrouping = (() => {
      * @param {Object[][]} currentCategoryAssignment Array describing which text items are in each category
      */
     const triggerInteracted = (currentCategoryState) => {
-      categoryState = currentCategoryState;
+      this.categoryState = currentCategoryState;
       this.triggerXAPI('interacted');
     };
 
@@ -85,7 +70,7 @@ H5P.TextGrouping = (() => {
           score,
           maxScore,
           this.isPassed(score, maxScore),
-          categoryState
+          this.categoryState
         )
       );
     };
@@ -95,7 +80,7 @@ H5P.TextGrouping = (() => {
       l10n: params.l10n,
       instance: this,
       contentId: contentId,
-      getRandomizedTextItems: getRandomizedTextItems,
+      getRandomizedTextItems: () => this.randomizedTextItems,
       triggerInteracted: triggerInteracted
     };
 
@@ -142,12 +127,11 @@ H5P.TextGrouping = (() => {
      * @returns {boolean} true if there are no assigned items, false otherwise
      */
     this.hasNotChanged = () => {
-      const uncategorizedId = categoryState.length - 1; // always the same as the last index
-      const uncategorizedItems = getRandomizedTextItems();
-      const currentlyUncategorizedItems = categoryState[uncategorizedId];
+      const uncategorizedId = this.categoryState.length - 1; // always the same as the last index
+      const currentlyUncategorizedItems = this.categoryState[uncategorizedId];
 
       // If all items are uncategorized, then there has been no change
-      return uncategorizedItems.length === currentlyUncategorizedItems.length;
+      return this.randomizedTextItems.length === currentlyUncategorizedItems.length;
     };
 
     /**
@@ -191,9 +175,9 @@ H5P.TextGrouping = (() => {
      */
     this.getScore = () => {
       let score = 0;
-      const uncategorizedId = categoryState.length - 1; // always the same as the last index
+      const uncategorizedId = this.categoryState.length - 1; // always the same as the last index
 
-      categoryState.forEach((category, categoryId) => {
+      this.categoryState.forEach((category, categoryId) => {
         // Words in uncategorized should not be counted
         if (categoryId !== uncategorizedId) {
           category.forEach((textItem) => {
@@ -228,7 +212,7 @@ H5P.TextGrouping = (() => {
      * @public
      */
     this.getCurrentState = () => {
-      return getCurrentState(categoryState);
+      return getCurrentState(this.categoryState);
     };
 
     /**
@@ -246,7 +230,7 @@ H5P.TextGrouping = (() => {
         score,
         maxScore,
         this.isPassed(score, maxScore),
-        categoryState
+        this.categoryState
       );
     };
 
@@ -349,7 +333,8 @@ H5P.TextGrouping = (() => {
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
      */
     this.resetTask = () => {
-      reset = true;
+      this.randomizedTextItems = randomizeList(this.randomizedTextItems);
+      this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
       this.trigger('reset-task');
 
       this.showButton('check-answer');
