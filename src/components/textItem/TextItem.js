@@ -49,7 +49,7 @@ export default function TextItem({
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
-  const shouldShowShowSwapIcon = showSwapIcon || (showUnselectedSolutions && !correctlyPlaced);
+  const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
 
   // Sets focus to the button
   useLayoutEffect(() => {
@@ -73,9 +73,10 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      moveTextItems([
-        { textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }
-      ], true);
+      moveTextItems(
+        [{ textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }],
+        true
+      );
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0);
@@ -129,7 +130,7 @@ export default function TextItem({
       onAnimationEnd={removeAnimations}
       onMouseDown={(event) => mouseDownHandler(event)}
     >
-      <div className="text-item-border">
+      <div className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}>
         <div className="text-item">
           <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (

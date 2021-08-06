@@ -153,6 +153,13 @@ export default function Category({
     );
   };
 
+  /**
+   * Builder for creating different text items
+   * @param {object[]} textItems list of text item objects to build elements from
+   * @param {boolean} isShowSolutionItem if the text item is used to show the correct solution
+   * @param {boolean} showSwapIcon if the text item should show that it should have been in another category
+   * @returns {Element[]} list of textItem elements
+   */
   const buildTextItems = (textItems, isShowSolutionItem, showSwapIcon) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
@@ -171,24 +178,29 @@ export default function Category({
       />
     ));
 
+  // Build the assigned text items for the category
   let textItems = buildTextItems(category, false, false);
 
   if (showUnselectedSolutions) {
+    // Build the show solution state text items to show which items should have been placed in the category
     const unselectedSolutions = getUnselectedSolutions();
     const categorized = [];
     const uncategorized = [];
 
+    // Partition the missing text items into already categorized and uncategorized
     unselectedSolutions.forEach((textItem) => {
       if (categoryAssignment[uncategorizedId].find(({ id }) => id === textItem.id)) {
-        categorized.push(textItem);
+        uncategorized.push(textItem);
       }
       else {
-        uncategorized.push(textItem);
+        categorized.push(textItem);
       }
     });
 
-    textItems.push(buildTextItems(categorized, true, false));
-    textItems.push(buildTextItems(uncategorized, true, true));
+    // Categorized items gets a swap icon
+    textItems.push(buildTextItems(categorized, true, true));
+    // Uncategorized items does not get a swap icon
+    textItems.push(buildTextItems(uncategorized, true, false));
   }
 
   return (

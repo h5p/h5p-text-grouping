@@ -107,12 +107,14 @@
     }
 
     &:hover {
-      cursor: pointer;
-      border-style: dotted;
-      border-color: styles.$text-item-border-color;
+      &:not(.show-solution) {
+        cursor: pointer;
+        border-style: dotted;
+        border-color: styles.$text-item-border-color;
 
-      .text-item {
-        background-color: styles.$text-item-background-dark;
+        .text-item {
+          background-color: styles.$text-item-background-dark;
+        }
       }
     }
 
