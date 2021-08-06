@@ -106,8 +106,8 @@
       }
     }
 
-    &:enabled {
-      &:hover {
+    &:hover {
+      &:not(.show-solution) {
         cursor: pointer;
         border-style: dotted;
         border-color: styles.$text-item-border-color;

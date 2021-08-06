@@ -124,14 +124,13 @@ export default function TextItem({
         animate: shouldAnimate,
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
-        'show-correct': shouldShowUnselectedSolution,
-        enabled: !showSelectedSolutions
+        'show-correct': shouldShowUnselectedSolution
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       onMouseDown={(event) => mouseDownHandler(event)}
     >
-      <div className="text-item-border">
+      <div className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}>
         <div className="text-item">
           <div className="content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
