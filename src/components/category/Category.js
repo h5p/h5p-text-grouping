@@ -42,6 +42,9 @@ export default function Category({
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
 
+  /**
+   * Collapse or expand the category based on how wide the screen is
+   */
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
@@ -72,6 +75,11 @@ export default function Category({
     instance.trigger('resize');
   };
 
+  /**
+   * Apply the changes that has been made through the dropdown
+   * @param {String[]} addedIds Ids of text items to be added to the category
+   * @param {String[]} removedIds Ids of text items to be removed from the category
+   */
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     moveTextItems([
       ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
@@ -135,6 +143,10 @@ export default function Category({
     }
   };
 
+  /**
+   * Inform the container of which height is needed to show the category (with dropdown)
+   * @param {number} height The height of the dropdown
+   */
   const setHeight = (height) => {
     setContainerHeight(
       categoryHeaderRef.current.offsetTop + height - categoryHeaderRef.current.offsetHeight

@@ -31,6 +31,9 @@ export default function Main({ context }) {
     getRandomizedTextItems().slice()
   ]);
 
+  /**
+   * Shows the solutions of which text items where placed correctly or wrongly
+   */
   useEffect(() => {
     instance.on('xAPI', function (event) {
       if (event.getVerb() === 'answered') {
@@ -39,6 +42,9 @@ export default function Main({ context }) {
     });
   }, []);
 
+  /**
+   * Shows the solutions of where text items should have been placed
+   */
   useEffect(() => {
     instance.on('show-solution', function () {
       setShowUnselectedSolutions(true);
@@ -61,7 +67,7 @@ export default function Main({ context }) {
   const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: '-1', categoryId: -1 });
 
   /**
-   * Moves n text items from their current category to new ones
+   * Moves n text items from their current category to a new one
    * @param {String} textItems.textItemId Id of text item that should be moved
    * @param {number} textItems.newCategoryId Id of category the text item should be moved to
    * @param {number} textItems.prevCategoryId Id of category the text item currently belongs to, if available

@@ -20,6 +20,9 @@ export default function SingleDropdownSelect({
   const listBoxRef = useRef(null);
   const optionRefs = useRef([]);
 
+  /**
+   * Inform the parent of how much space is needed for the dropdown
+   */
   useEffect(() => {
     const dropdownHeight = dropdownRef.current.offsetHeight;
     if (dropdownHeight > 0) {
@@ -39,6 +42,11 @@ export default function SingleDropdownSelect({
     optionRefs.current[0].current.focus();
   }, []);
 
+  /**
+   * Call the given function when an option has been selected
+   * @param {*} event
+   * @param {number} optionId Which option waas selected
+   */
   const handleSelectItem = (event, optionId = null) => {
     if (optionId !== currentlySelectedId && optionId !== null) {
       onChange(optionId);
@@ -49,6 +57,10 @@ export default function SingleDropdownSelect({
     }
   };
 
+  /**
+   * Handle navigation within the dropdown
+   * @param {*} event
+   */
   const handleKeyboardPressed = (event) => {
     switch (event.key) {
       case 'ArrowDown':
@@ -77,6 +89,7 @@ export default function SingleDropdownSelect({
     }
   };
 
+  // Create ref for all options
   if (optionRefs.current.length === 0) {
     optionRefs.current = Array(options.length)
       .fill()

@@ -59,11 +59,18 @@ export default function TextItem({
     }
   }, [focusedTextItem]);
 
+  /**
+   * Opens the dropdown
+   */
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
 
+  /**
+   * Move the text item to the selected category
+   * @param {number} categoryId The id of the category that has been chosen
+   */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
       moveTextItems([
@@ -75,6 +82,10 @@ export default function TextItem({
     instance.trigger('resize');
   };
 
+  /**
+   * Inform the container of which height is needed to show the text item (with dropdown)
+   * @param {number} height The height needed for the dropdown
+   */
   const setHeight = (height) => {
     // If the dropdown can't fit in the textItem
     if (height > textItemRef.current.offsetHeight / 2) {
