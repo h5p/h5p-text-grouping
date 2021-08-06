@@ -179,7 +179,6 @@ H5P.TextGrouping = (() => {
      * Get latest score
      *
      * Text items in the correct category are worth 1 point.
-     * Text items in the incorrect category are worth -1 point.
      * Text items Uncategorized are not counted.
      * The score cannot be lower than 0.
      *
