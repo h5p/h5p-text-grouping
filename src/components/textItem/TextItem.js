@@ -131,7 +131,7 @@ export default function TextItem({
     >
       <div className="text-item-border">
         <div className="text-item">
-          <div className="content" dangerouslySetInnerHTML={{ __html: textElement }} />
+          <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
               {shouldShowShowSwapIcon ? (

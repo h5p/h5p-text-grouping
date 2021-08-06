@@ -236,7 +236,7 @@ export default function Category({
       ) : null}
       <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
         {uncategorized ? null : <hr />}
-        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'content'}>
+        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'category-content'}>
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
