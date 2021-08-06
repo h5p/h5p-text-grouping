@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './components/Main';
 import belongsToCategory from './helpers/belongsToCategory';
+import randomizeArray from './helpers/randomizeArray';
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 
 // Load library
@@ -30,21 +31,6 @@ H5P.TextGrouping = (() => {
     );
 
     this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
-
-    /**
-     * Randomizes the order of text items, if reset has been set
-     * since last time they were randomized.
-     *
-     * @return {object[]} An array of text item objects
-     */
-    const randomizeList = (list) => {
-      const randomizedList = [...list];
-      for (let i = randomizedList.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [randomizedList[i], randomizedList[j]] = [randomizedList[j], randomizedList[i]];
-      }
-      return randomizedList;
-    };
 
     /**
      * Updates the state and triggers xAPI interacted event
@@ -333,7 +319,7 @@ H5P.TextGrouping = (() => {
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
      */
     this.resetTask = () => {
-      this.randomizedTextItems = randomizeList(this.randomizedTextItems);
+      this.randomizedTextItems = randomizeArray(this.randomizedTextItems);
       this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
       this.trigger('reset-task');
 
