@@ -153,6 +153,13 @@ export default function Category({
     );
   };
 
+  /**
+   * Builder for creating different text items
+   * @param {object[]} textItems list of text item objects to build elements from
+   * @param {boolean} isShowSolutionItem if the text item is used to show the correct solution
+   * @param {boolean} showSwapIcon if the text item should show that it should have been in another category
+   * @returns {Element[]} list of textItem elements
+   */
   const buildTextItems = (textItems, isShowSolutionItem, showSwapIcon) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
