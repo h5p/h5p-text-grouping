@@ -138,7 +138,15 @@ H5P.TextGrouping = (() => {
     this.setContent(ReactDOM.render(main, wrapper));
 
     this.hasNotChanged = () => {
-      return false; // TODO: Placeholder. Find a way to check this
+      const uncategorizedId = categoryState.length - 1; // always the same as the last index
+      const randomizedTextItems = getRandomizedTextItems();
+      // Check if the uncategorized items are unaltered
+      for (let i = 0; i < categoryState[uncategorizedId].length; i++) {
+        if (categoryState[uncategorizedId][i].id !== randomizedTextItems[i].id) {
+          return false;
+        }
+      }
+      return true;
     };
 
     /**
@@ -200,7 +208,7 @@ H5P.TextGrouping = (() => {
         return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
       }
 
-      return Math.max(score, 0); // Negative score is not allowed
+      return score;
     };
 
     /**

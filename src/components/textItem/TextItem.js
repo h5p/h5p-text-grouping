@@ -130,7 +130,11 @@ export default function TextItem({
               ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
-                {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
+                {isShowSolutionItem
+                  ? l10n.shouldHaveBeenPlacedInCategory
+                  : correctlyPlaced
+                    ? l10n.correctCategory
+                    : l10n.wrongCategory}
               </span>
             </>
           ) : (
