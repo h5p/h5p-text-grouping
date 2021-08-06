@@ -146,7 +146,7 @@ export default function Main({ context }) {
         draggedTextItem={draggedTextItem}
         removeAnimations={removeAnimations}
       />
-      {showUnselectedSolutions ? null : (
+      {showUnselectedSolutions || categoryAssignment[uncategorizedId].length === 0 ? null : (
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
