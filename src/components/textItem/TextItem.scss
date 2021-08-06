@@ -106,6 +106,16 @@
       }
     }
 
+    &:hover {
+      cursor: pointer;
+      border-style: dotted;
+      border-color: styles.$text-item-border-color;
+
+      .text-item {
+        background-color: styles.$text-item-background-dark;
+      }
+    }
+
     .dropdown-wrapper {
       top: calc(50% + 1.2em);
       position: absolute;
