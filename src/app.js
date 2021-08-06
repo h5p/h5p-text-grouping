@@ -352,11 +352,9 @@ H5P.TextGrouping = (() => {
       reset = true;
       this.trigger('reset-task');
 
-      //resetSelections();
       this.showButton('check-answer');
       this.hideButton('try-again');
       this.hideButton('show-solution');
-      //hideSolutions();
       this.removeFeedback();
     };
   }
