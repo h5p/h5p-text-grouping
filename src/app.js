@@ -137,10 +137,14 @@ H5P.TextGrouping = (() => {
     );
     this.setContent(ReactDOM.render(main, wrapper));
 
+    /**
+     * Checks if the state has changed from the initial order
+     * @returns {boolean} true if the state has not changed, false otherwise
+     */
     this.hasNotChanged = () => {
       const uncategorizedId = categoryState.length - 1; // always the same as the last index
       const randomizedTextItems = getRandomizedTextItems();
-      // Check if the uncategorized items are unaltered
+      // Check if the uncategorized items are different to the randomized items list
       for (let i = 0; i < categoryState[uncategorizedId].length; i++) {
         if (categoryState[uncategorizedId][i].id !== randomizedTextItems[i].id) {
           return false;
