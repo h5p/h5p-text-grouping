@@ -45,6 +45,9 @@ export default function Main({ context }) {
     });
   }, []);
 
+  /**
+   * Hides solutions and resets TextItem placement
+   */
   useEffect(() => {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
