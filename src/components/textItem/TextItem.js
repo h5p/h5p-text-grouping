@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -52,7 +52,7 @@ export default function TextItem({
   const shouldShowShowSwapIcon = showSwapIcon || (showUnselectedSolutions && !correctlyPlaced);
 
   // Sets focus to the button
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (focusedTextItem === textItemId) {
       buttonRef.current.focus();
       setFocusedTextItem(null);
@@ -68,8 +68,7 @@ export default function TextItem({
     if (categoryId !== null) {
       moveTextItems([
         { textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }
-      ]);
-      setFocusedTextItem(textItemId);
+      ], true);
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0);
