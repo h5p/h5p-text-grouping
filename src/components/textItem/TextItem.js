@@ -68,6 +68,7 @@ export default function TextItem({
    * Opens the dropdown
    */
   const handleDropdownSelectOpen = () => {
+    textItemRef.current.style.zIndex = 1; // To make sure the dropdown isn't below other textItems
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
@@ -84,6 +85,7 @@ export default function TextItem({
       );
     }
     setDropdownSelectOpen(false);
+    textItemRef.current.style.zIndex = 0;
     setContainerHeight(0);
     instance.trigger('resize');
   };
