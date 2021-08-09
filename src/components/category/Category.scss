@@ -98,8 +98,7 @@
 }
 
 .icon-assign-items {
-  border-style: solid;
-  border-color: #ffffff00;
+  background-color: #ffffff;
 
   &:before {
     font-family: 'Material Icons';
@@ -108,15 +107,16 @@
     color: styles.$action-icon-color;
   }
 
-  &:hover {
+  &:hover:before {
     cursor: pointer;
-    filter: brightness(80%);
+    color: styles.$action-icon-color-dark;
   }
 
   &:focus {
     outline: none;
     border-radius: 4px;
-    border-color: styles.$text-item-border-color;
+    border-color: #ffffff00;
+    box-shadow: 0 0 4px 1px styles.$action-icon-color;
   }
 }
 

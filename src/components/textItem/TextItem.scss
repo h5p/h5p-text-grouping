@@ -133,7 +133,7 @@
 
   &:hover {
     cursor: pointer;
-    filter: brightness(80%);
+    background-color: styles.$text-item-background-dark;
   }
 }
 
