@@ -79,7 +79,7 @@
 
     &.drag-over-category {
       border-color: styles.$text-item-border-color;
-      box-shadow: 0 0 4px 1px styles.$action-icon-color;
+      box-shadow: 0 0 16px 1px styles.$action-icon-color;
       .text-item {
         background: styles.$text-item-background-dark;
       }
