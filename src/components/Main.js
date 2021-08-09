@@ -85,7 +85,7 @@ export default function Main({ context }) {
 
   /**
    * Handle mouse moved when item is being dragged
-   * @param {MouseEvent} event MousMove event
+   * @param {MouseEvent} event MouseMove event
    */
   const mouseMoveHandler = (event) => {
     if (!dragState.dragging) return;
@@ -107,10 +107,12 @@ export default function Main({ context }) {
 
       // If the mouse is inside the category and dropzone is not visible
       if (checkIfInsideCategory(i, mouseCoordinates)) {
+        dragState.textItemRef.current.children[0].classList.add('drag-over-category');
         setDropzoneVisible(i);
         return;
       }
       else {
+        dragState.textItemRef.current.children[0].classList.remove('drag-over-category');
         setDropzoneVisible(-1);
       }
     }
@@ -135,6 +137,7 @@ export default function Main({ context }) {
     dragState.textItemRef.current.style.zIndex = '';
     dragState.textItemRef.current.style.left = '';
     dragState.textItemRef.current.style.top = '';
+    dragState.textItemRef.current.children[0].classList.remove('text-item-selected');
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
@@ -180,8 +183,8 @@ export default function Main({ context }) {
   /**
    * Checks if mouse is inside a category
    * @param {number} categoryId Index of the category checked
-   * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
-   * @returns
+   * @param {object} mouseCoordinates Coordinates of the mouse in the format {x, y}
+   * @returns {boolean} true if mouse is inside a category, false otherwise
    */
   const checkIfInsideCategory = (categoryId, mouseCoordinates) => {
     const { x1, x2, y1, y2 } = categoryDimensions[categoryId];
@@ -214,10 +217,11 @@ export default function Main({ context }) {
 
   /**
    * Moves n text items from their current category to a new one
-   * @param {String} textItems.textItemId Id of text item that should be moved
+   * @param {object} textItems Id of text item that should be moved
+   * @param {string} textItems.textItemId Id of text item that should be moved
    * @param {number} textItems.newCategoryId Id of category the text item should be moved to
    * @param {number} textItems.prevCategoryId Id of category the text item currently belongs to, if available
-   * @param {boolean} shouldFocus Whether the text item should recieve focused after the move
+   * @param {boolean} shouldFocus Whether the text item should receive focused after the move
    */
   const moveTextItems = (textItems, shouldFocus) => {
     const newCategories = deepCopy(categoryAssignment);

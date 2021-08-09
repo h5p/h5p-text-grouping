@@ -22,7 +22,6 @@ export default function SingleDropdownSelect({
 
   const [selectedOption, setSelectedOption] = useState(0);
   const dropdownRef = useRef(null);
-  const listBoxRef = useRef(null);
   const optionRefs = useRef([]);
 
   /**
@@ -115,9 +114,7 @@ export default function SingleDropdownSelect({
       <div className="label">{label}</div>
       <hr />
       <ul
-        ref={listBoxRef}
         role="listbox"
-        tabIndex={0}
         onKeyDown={(event) => handleKeyboardPressed(event)}
       >
         {options.map(({ groupName }, id) => {
@@ -130,7 +127,7 @@ export default function SingleDropdownSelect({
               key={`option-${id}`}
               className={className}
               onClick={(event) => handleSelectItem(event, id)}
-              tabIndex={id === selectedOption ? -1 : 0}
+              tabIndex={id === selectedOption ? 0 : -1}
               role="option"
               aria-selected={false}
               aria-disabled={disabled}
