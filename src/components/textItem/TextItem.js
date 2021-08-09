@@ -140,7 +140,6 @@ export default function TextItem({
     textItemRef.current.style.width = `${itemWidth}px`;
     textItemRef.current.style.zIndex = 1;
     draggingStartedHandler();
-    event.stopPropagation();
     event.preventDefault();
   };
 
