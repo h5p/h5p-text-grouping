@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { H5PContext } from '../../context/H5PContext';
 import useNarrowScreen from '../../helpers/useNarrowScreen';
 import belongsToCategory from '../../helpers/belongsToCategory';
+import getClassNames from '../../helpers/getClassNames';
 
 import Button from '../commons/Button';
 import Dropzone from '../commons/Dropzone';
@@ -225,8 +226,11 @@ export default function Category({
         {showSelectedSolutions || uncategorized ? null : (
           <Button
             ref={assignItemsButtonRef}
-            iconName="icon-assign-items"
-            className="button-assign-items"
+            className="icon-assign-items"
+            iconName={getClassNames({
+              'button-assign-items ': true,
+              'icon-assign-items-expanded-state': dropdownSelectOpen
+            })}
             ariaLabel={l10n.assignItemsHelpText}
             ariaHasPopup="listbox"
             ariaExpanded={dropdownSelectOpen}

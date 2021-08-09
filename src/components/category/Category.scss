@@ -94,18 +94,7 @@
 
 .button-assign-items {
   border: none;
-  background: none;
-}
-
-.icon-assign-items {
   background-color: #ffffff;
-
-  &:before {
-    font-family: 'Material Icons';
-    font-size: 2em;
-    content: 'queue';
-    color: styles.$action-icon-color;
-  }
 
   &:hover:before {
     cursor: pointer;
@@ -113,10 +102,34 @@
   }
 
   &:focus {
-    outline: none;
-    border-radius: 4px;
-    border-color: #ffffff00;
-    box-shadow: 0 0 4px 1px styles.$action-icon-color;
+    &:not(.icon-assign-items-expanded-state) {
+      outline: none;
+      border-radius: 4px;
+      border-color: #ffffff00;
+      box-shadow: 0 0 4px 1px styles.$action-icon-color;
+    }
+  }
+}
+
+.icon-assign-items {
+  &:before {
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: 'queue';
+    color: styles.$action-icon-color;
+  }
+}
+
+.icon-assign-items-expanded-state {
+  transform: rotate(0deg);
+  &:after {
+    top: 0.75em;
+    right: 0em;
+    position: absolute;
+    font-family: 'Material Icons';
+    font-size: 2em;
+    content: '\e5c5';
+    color: styles.$action-icon-color;
   }
 }
 
