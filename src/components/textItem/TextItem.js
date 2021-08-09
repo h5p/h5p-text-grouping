@@ -39,7 +39,8 @@ export default function TextItem({
     showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
-    setDragState
+    setDragState, 
+    dragState
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
 
@@ -129,14 +130,11 @@ export default function TextItem({
       categoryId: currentCategoryId,
       textItemRef: textItemRef,
       dragging: true,
-      rel: currentPos
+      rel: currentPos,
+      style: { position: 'fixed', width: `${itemWidth}px`, zIndex: 1 }
     });
 
     // Make text item visually draggable
-    textItemRef.current.style.position = 'fixed';
-    textItemRef.current.style.width = `${itemWidth}px`;
-    textItemRef.current.style.zIndex = 1;
-    textItemRef.current.children[0].classList.add('text-item-selected');
     draggingStartedHandler();
     event.preventDefault();
   };
@@ -152,11 +150,13 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
+      style={dragState.textItemId === textItemId ? dragState.style : {}}
     >
       <div
         className={getClassNames({
           'text-item-border': true,
-          'show-solution': showSelectedSolutions
+          'show-solution': showSelectedSolutions,
+          'text-item-selected': dragState.textItemId === textItemId
         })}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
