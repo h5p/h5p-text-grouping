@@ -119,6 +119,10 @@
       }
     }
 
+    &:focus-within {
+      box-shadow: 0 0 4px 1px styles.$action-icon-color;
+    }
+
     .dropdown-wrapper {
       top: calc(50% + 1.2em);
       position: absolute;
@@ -128,6 +132,7 @@
 }
 
 .button-move-to-category {
+  outline: none;
   border: none;
   background: none;
   margin-left: 0.75em;
@@ -137,6 +142,10 @@
       cursor: pointer;
       background: styles.$text-item-background-dark;
     }
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 
