@@ -24,6 +24,15 @@ export default function Main({ context }) {
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
+  const [categoryDimensions, setCategoryDimensions] = useState({});
+  const [dropzoneVisible, setDropzoneVisible] = useState(-1);
+  const [dragState, setDragState] = useState({
+    textItemId: null,
+    categoryId: null,
+    textItemRef: null,
+    dragging: false,
+    rel: { x: 0, y: 0 }
+  });
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
@@ -55,7 +64,128 @@ export default function Main({ context }) {
 
   const uncategorizedId = textGroups.length;
 
-  const [draggedTextItem, setDraggedTextItem] = useState({ textItemId: '-1', categoryId: -1 });
+  /**
+   * Handle mouse moved when item is being dragged
+   * @param {MouseEvent} event MousMove event
+   */
+  const mouseMoveHandler = (event) => {
+    if (!dragState.dragging) return;
+    dragState.textItemRef.current.style.left = `${event.clientX - dragState.rel.x}px`;
+    dragState.textItemRef.current.style.top = `${event.clientY - dragState.rel.y}px`;
+    handleDraggableMoved({ x: event.clientX, y: event.clientY });
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
+  /**
+   * Make dropzone visible when text item hovers over category
+   * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
+   */
+  const handleDraggableMoved = (mouseCoordinates) => {
+    for (let i = 0; i < categoryAssignment.length; i++) {
+      // If the text item hovers over its current category, do nothing
+      if (i === dragState.categoryId) continue;
+
+      // If the mouse is inside the category and dropzone is not visible
+      if (checkIfInsideCategory(i, mouseCoordinates)) {
+        setDropzoneVisible(i);
+        return;
+      }
+      else {
+        setDropzoneVisible(-1);
+      }
+    }
+  };
+
+  /**
+   * Update dimensions of categories when dragging a text item is started
+   */
+  const draggingStartedHandler = () => {
+    updateCategoryDimensions();
+  };
+
+  /**
+   * Handle text item being dropped
+   * @param {MouseEvent} event MouseUp event
+   */
+  const mouseUpHandler = (event) => {
+    // Reset style of dragged text item
+    dragState.textItemRef.current.style.position = '';
+    dragState.textItemRef.current.style.width = '';
+    dragState.textItemRef.current.style.zIndex = '';
+    dragState.textItemRef.current.style.left = '';
+    dragState.textItemRef.current.style.top = '';
+
+    // Move text item to new category if it was dropped in a new category
+    let insideCategoryIndex = -1;
+    for (let i = 0; i < categoryAssignment.length; i++) {
+      if (
+        checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }) &&
+        i !== dragState.categoryId
+      ) {
+        insideCategoryIndex = i;
+      }
+    }
+    if (insideCategoryIndex !== -1) {
+      moveTextItems([
+        {
+          textItemId: dragState.textItemId,
+          newCategoryId: insideCategoryIndex,
+          prevCategoryId: dragState.categoryId
+        }
+      ]);
+    }
+
+    // Remove listeners, reset dragstate and dropzone
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+    setDragState((prevDragState) => {
+      prevDragState.textItemId = null;
+      prevDragState.categoryId = null;
+      prevDragState.textItemRef = null;
+      prevDragState.dragging = false;
+      prevDragState.rel = { x: 0, y: 0 };
+      return prevDragState;
+    });
+    setDropzoneVisible(-1);
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
+  /**
+   * Checks if mouse is inside a category
+   * @param {number} categoryId Index of the category checked
+   * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
+   * @returns
+   */
+  const checkIfInsideCategory = (categoryId, mouseCoordinates) => {
+    const { x1, x2, y1, y2 } = categoryDimensions[categoryId];
+    return (
+      x1 <= mouseCoordinates.x &&
+      mouseCoordinates.x <= x2 &&
+      y1 <= mouseCoordinates.y &&
+      mouseCoordinates.y <= y2
+    );
+  };
+
+  /**
+   * Update dimensions of each category
+   */
+  const updateCategoryDimensions = () => {
+    for (let i = 0; i < categoryAssignment.length; i++) {
+      const clientRect = document.getElementById(`category ${i}`).getBoundingClientRect();
+      const coordinates = {
+        x1: clientRect.x,
+        x2: clientRect.x + clientRect.width,
+        y1: clientRect.y,
+        y2: clientRect.y + clientRect.height
+      };
+      setCategoryDimensions((prevCategoryDimensions) => {
+        prevCategoryDimensions[i] = coordinates;
+        return prevCategoryDimensions;
+      });
+    }
+  };
 
   /**
    * Moves n text items from their current category to new ones
@@ -102,22 +232,36 @@ export default function Main({ context }) {
   };
 
   return (
-    <H5PContext.Provider value={{ ...context, showSelectedSolutions, showUnselectedSolutions, focusedTextItem, setFocusedTextItem }}>
+    <H5PContext.Provider
+      value={{
+        ...context,
+        showSelectedSolutions,
+        showUnselectedSolutions,
+        focusedTextItem,
+        setFocusedTextItem,
+        dragState,
+        setDragState
+      }}
+    >
       <CategoryList
         categoryAssignment={categoryAssignment}
         textGroups={textGroups}
         moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems().slice()}
-        setDraggedTextItem={setDraggedTextItem}
-        draggedTextItem={draggedTextItem}
         removeAnimations={removeAnimations}
+        mouseMoveHandler={mouseMoveHandler}
+        mouseUpHandler={mouseUpHandler}
+        draggingStartedHandler={draggingStartedHandler}
+        dropzoneVisible={dropzoneVisible}
       />
       {showUnselectedSolutions ? null : (
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
-          setDraggedTextItem={setDraggedTextItem}
-          draggedTextItem={draggedTextItem}
+          mouseMoveHandler={mouseMoveHandler}
+          mouseUpHandler={mouseUpHandler}
+          draggingStartedHandler={draggingStartedHandler}
+          dropzoneVisible={dropzoneVisible === uncategorizedId ? true : false}
           textItems={{
             category: categoryAssignment[uncategorizedId],
             categories: [...textGroups, { groupName: 'Uncategorized' }],

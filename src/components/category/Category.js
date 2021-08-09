@@ -23,8 +23,10 @@ export default function Category({
   moveTextItems,
   allTextItems,
   setContainerHeight,
-  draggedTextItem,
-  setDraggedTextItem,
+  mouseMoveHandler,
+  mouseUpHandler,
+  draggingStartedHandler,
+  dropzoneVisible,
   textItems: { category, categories, removeAnimations }
 }) {
   const uncategorized = categoryId === categories.length - 1;
@@ -35,7 +37,6 @@ export default function Category({
   const [minHeight, setMinHeight] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
-  const [dropzoneVisible, setDropzoneVisible] = useState(false);
 
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
@@ -46,7 +47,9 @@ export default function Category({
 
   const uncategorizedId = categories.length - 1;
   const currentlySelectedIds = category.map((textItem) => textItem.id);
-  const titleWithChildCount = `${categories[categoryId].groupName} ${uncategorized ? '' : `(${category ? category.length : 0})`}`;
+  const titleWithChildCount = `${categories[categoryId].groupName} ${
+    uncategorized ? '' : `(${category ? category.length : 0})`
+  }`;
 
   /**
    * Finds the unselected textItems belonging to this category
@@ -81,55 +84,6 @@ export default function Category({
     instance.trigger('resize');
   };
 
-  /**
-   * Make dropzone visible when mouse hovers over category
-   */
-  const handleOnMouseEnter = () => {
-    if (
-      draggedTextItem.categoryId !== categoryId &&
-      draggedTextItem.categoryId !== -1 &&
-      !narrowScreen
-    ) {
-      setDropzoneVisible(true);
-    }
-  };
-
-  /**
-   * Make dropzone not visible when mouse does not hover over category
-   */
-  const handleOnMouseLeave = () => {
-    if (dropzoneVisible) {
-      setDropzoneVisible(false);
-    }
-  };
-
-  /**
-   * Handle dropped text item if it exists
-   * Adds text item to category if it is not already there
-   */
-  const handleOnMouseUp = () => {
-    if (draggedTextItem.textItemId !== '-1' && categoryId !== draggedTextItem.categoryId) {
-      setDropzoneVisible(false);
-      moveTextItems([
-        {
-          textItemId: draggedTextItem.textItemId,
-          newCategoryId: categoryId,
-          prevCategoryId: draggedTextItem.categoryId
-        }
-      ]);
-      setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
-    }
-  };
-
-  /**
-   * Cancel dragging when textItem is dropped outside a category
-   */
-  document.onmouseup = () => {
-    if (!dropzoneVisible) {
-      setDraggedTextItem({ textItemId: '-1', categoryId: -1 });
-    }
-  };
-
   const setHeight = (height) => {
     setContainerHeight(
       categoryHeaderRef.current.offsetTop + height - categoryHeaderRef.current.offsetHeight
@@ -149,7 +103,10 @@ export default function Category({
         shouldAnimate={shouldAnimate}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
-        setDraggedTextItem={setDraggedTextItem}
+        mouseMoveHandler={mouseMoveHandler}
+        mouseUpHandler={mouseUpHandler}
+        draggingStartedHandler={draggingStartedHandler}
+        narrowScreen={narrowScreen}
       />
     ));
 
@@ -161,10 +118,8 @@ export default function Category({
 
   return (
     <div
+      id={`category ${categoryId}`}
       className={`category${uncategorized ? ' uncategorized' : ''}`}
-      onMouseEnter={(event) => handleOnMouseEnter(event)}
-      onMouseLeave={(event) => handleOnMouseLeave(event)}
-      onMouseUp={(event) => handleOnMouseUp(event)}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
         {uncategorized ? null : (
@@ -204,10 +159,7 @@ export default function Category({
       ) : null}
       <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
         {uncategorized ? null : <hr />}
-        <ul 
-          style={uncategorized ? { minHeight: minHeight } : {}}
-          className={'content'}
-        >
+        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'content'}>
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
@@ -229,11 +181,10 @@ Category.propTypes = {
     })
   ),
   setContainerHeight: PropTypes.func,
-  draggedTextItem: PropTypes.shape({
-    textItemId: PropTypes.string.isRequired,
-    categoryId: PropTypes.number.isRequired
-  }).isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired,
+  mouseMoveHandler: PropTypes.func.isRequired,
+  mouseUpHandler: PropTypes.func.isRequired,
+  draggingStartedHandler: PropTypes.func.isRequired,
+  dropzoneVisible: PropTypes.bool.isRequired,
   textItems: PropTypes.exact({
     category: PropTypes.arrayOf(
       PropTypes.exact({

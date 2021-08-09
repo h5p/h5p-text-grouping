@@ -28,11 +28,21 @@ export default function TextItem({
   isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
-  setDraggedTextItem
+  mouseMoveHandler,
+  mouseUpHandler,
+  draggingStartedHandler,
+  narrowScreen
 }) {
-  const { instance, l10n, showSelectedSolutions, focusedTextItem, setFocusedTextItem } =
-    useContext(H5PContext);
+  const {
+    instance,
+    l10n,
+    showSelectedSolutions,
+    focusedTextItem,
+    setFocusedTextItem,
+    setDragState
+  } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
+
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -81,21 +91,43 @@ export default function TextItem({
 
   /**
    * Start dragging text item
-   * @param {*} event MouseDown event
-   * @param {*} textItemId Id of text item being dragged
-   * @param {*} currentCategoryId ID of current category of text item
+   * @param {MouseEvent} event MouseDown event
    */
   const mouseDownHandler = (event) => {
     if (
       dropdownSelectOpen ||
       showSelectedSolutions ||
+      narrowScreen ||
       event.button !== 0 ||
       event.target === buttonRef.current
     ) {
       return;
     }
+
+    // Set drag state and position of mouse, width of text element
+    let itemPos = textItemRef.current.getBoundingClientRect();
+    let mousePos = { x: event.clientX, y: event.clientY };
+    let currentPos = { x: mousePos.x - itemPos.x, y: mousePos.y - itemPos.y };
+    let itemWidth = textItemRef.current.offsetWidth;
+    setDragState((prevDragState) => {
+      prevDragState.textItemId = textItemId;
+      prevDragState.categoryId = currentCategoryId;
+      prevDragState.textItemRef = textItemRef;
+      prevDragState.dragging = true;
+      prevDragState.rel = currentPos;
+      return prevDragState;
+    });
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+
+    // Make text item visually draggable
+    textItemRef.current.style.position = 'fixed';
+    textItemRef.current.style.width = `${itemWidth}px`;
+    textItemRef.current.style.zIndex = 1;
+    draggingStartedHandler();
+    event.stopPropagation();
     event.preventDefault();
-    setDraggedTextItem({ textItemId: textItemId, categoryId: currentCategoryId });
   };
 
   return (
@@ -167,5 +199,8 @@ TextItem.propTypes = {
   isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired,
+  mouseMoveHandler: PropTypes.func.isRequired,
+  mouseUpHandler: PropTypes.func.isRequired,
+  draggingStartedHandler: PropTypes.func.isRequired,
+  narrowScreen: PropTypes.bool.isRequired
 };

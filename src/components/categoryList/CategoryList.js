@@ -17,8 +17,10 @@ export default function CategoryList({
   allTextItems,  
   categoryAssignment,
   removeAnimations,
-  setDraggedTextItem,
-  draggedTextItem
+  mouseMoveHandler,
+  mouseUpHandler,
+  draggingStartedHandler,
+  dropzoneVisible
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
@@ -37,14 +39,16 @@ export default function CategoryList({
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
           categoryAssignment={categoryAssignment}
-          setDraggedTextItem={setDraggedTextItem}
-          draggedTextItem={draggedTextItem}
+          dropzoneVisible={dropzoneVisible === categoryId ? true : false}
           textItems={{
             category: category,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
           }}
           setContainerHeight={setMargin}
+          mouseMoveHandler={mouseMoveHandler}
+          mouseUpHandler={mouseUpHandler}
+          draggingStartedHandler={draggingStartedHandler}
         />
       );
     }
@@ -85,9 +89,8 @@ CategoryList.propTypes = {
     )
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
-  setDraggedTextItem: PropTypes.func.isRequired,
-  draggedTextItem: PropTypes.shape({
-    textItemId: PropTypes.string.isRequired,
-    categoryId: PropTypes.number.isRequired,
-  }).isRequired
+  mouseMoveHandler: PropTypes.func.isRequired,
+  mouseUpHandler: PropTypes.func.isRequired,
+  draggingStartedHandler: PropTypes.func.isRequired,
+  dropzoneVisible: PropTypes.number.isRequired
 };
