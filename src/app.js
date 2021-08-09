@@ -102,13 +102,6 @@ H5P.TextGrouping = (() => {
       this.setIntroduction(this.introduction);
     }
 
-    const wrapper = document.createElement('div');
-    const main = (
-      <div>
-        <Main context={context} />
-      </div>
-    );
-    this.setContent(ReactDOM.render(main, wrapper));
 
     /**
      * Checks if any items has been assigned to a category
@@ -330,6 +323,15 @@ H5P.TextGrouping = (() => {
       this.hideButton('show-solution');
       this.removeFeedback();
     };
+
+    // Render react part of application
+    const wrapper = document.createElement('div');
+    const main = (
+      <div>
+        <Main context={context} />
+      </div>
+    );
+    this.setContent(ReactDOM.render(main, wrapper));
   }
 
   TextGrouping.prototype = Object.create(H5P.Question.prototype);
