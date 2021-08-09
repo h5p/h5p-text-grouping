@@ -41,7 +41,7 @@ export default function TextItem({
     showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
-    setDragState,
+    setDragState
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
 
@@ -154,9 +154,11 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      onMouseDown={(event) => mouseDownHandler(event)}
     >
-      <div className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}>
+      <div
+        className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}
+        onMouseDown={(event) => mouseDownHandler(event)}
+      >
         <div className="text-item">
           <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
@@ -223,5 +225,5 @@ TextItem.propTypes = {
   mouseMoveHandler: PropTypes.func.isRequired,
   mouseUpHandler: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
-  narrowScreen: PropTypes.bool.isRequired,
+  narrowScreen: PropTypes.bool.isRequired
 };
