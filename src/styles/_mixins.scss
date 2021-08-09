@@ -1,3 +1,5 @@
+@use 'colors';
+
 @mixin solution-icon($icon, $color) {
   display: block;
   font-family: 'Material Icons';
@@ -25,4 +27,18 @@
 
   line-height: 1em;
   z-index: 1;
+}
+
+@mixin move-item-icon($color, $background: inherit) {
+  position: relative;
+  font-family: 'Material Icons';
+  font-size: 2em;
+  content: 'more_horiz';
+  color: $color;
+  background: $background;
+
+  border-radius: 5px;
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: colors.$action-icon-color;
 }
