@@ -85,32 +85,6 @@
     }
   },
   {
-    "name": "distractorGroup",
-    "type": "group",
-    "label": "Words with no category",
-    "importance": "high",
-    "fields": [
-      {
-        "name": "distractorElements",
-        "type": "list",
-        "importance": "medium",
-        "label": "Words/paragraphs",
-        "entity": "option",
-        "enterMode": "p",
-        "min": 1,
-        "defaultNum": 1,
-        "field": {
-          "name": "distractorElement",
-          "type": "text",
-          "importance": "medium",
-          "widget": "html",
-          "label": "Word/paragraph",
-          "tags": ["strong", "em", "sub", "sup", "code"]
-        }
-      }
-    ]
-  },
-  {
     "name": "overallFeedback",
     "type": "group",
     "label": "Overall Feedback",
@@ -349,18 +323,26 @@
         "default": "Show the solution. The correct options will be marked."
       },
       {
-        "name": "correctAnswer",
+        "name": "correctCategory",
         "type": "text",
-        "label": "Correct Answer (not displayed)",
+        "label": "Correct Category (not displayed)",
         "importance": "low",
-        "default": "Correct answer"
+        "default": "Correct category."
       },
       {
-        "name": "wrongAnswer",
+        "name": "wrongCategory",
         "type": "text",
-        "label": "Wrong Answer (not displayed)",
+        "label": "Wrong Category (not displayed)",
         "importance": "low",
-        "default": "Wrong answer"
+        "default": "Wrong category."
+      },
+      {
+        "name": "shouldHaveBeenPlacedInCategory",
+        "type": "text",
+        "label": "Should have been placed in category (not displayed)",
+        "importance": "low",
+        "default": "This item should have been placed in this category.",
+        "optional": true
       },
       {
         "label": "Text for \"Requires answer\" message",

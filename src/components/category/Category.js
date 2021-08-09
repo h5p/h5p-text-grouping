@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import useNarrowScreen from '../../helpers/useNarrowScreen';
+import belongsToCategory from '../../helpers/belongsToCategory';
+import getClassNames from '../../helpers/getClassNames';
 
 import Button from '../commons/Button';
 import Dropzone from '../commons/Dropzone';
@@ -31,7 +33,8 @@ export default function Category({
 }) {
   const uncategorized = categoryId === categories.length - 1;
 
-  const { instance, l10n, showSelectedSolutions, showUnselectedSolutions } = useContext(H5PContext);
+  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
+    useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
 
   const [minHeight, setMinHeight] = useState(null);
@@ -41,14 +44,17 @@ export default function Category({
   const categoryHeaderRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
 
+  /**
+   * Collapse or expand the category based on how wide the screen is
+   */
   useEffect(() => {
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
   const uncategorizedId = categories.length - 1;
-  const currentlySelectedIds = category.map((textItem) => textItem.id);
+  const getCurrentlySelectedIds = () => category.map((textItem) => textItem.id);
   const titleWithChildCount = `${categories[categoryId].groupName} ${
-    uncategorized ? '' : `(${category ? category.length : 0})`
+    uncategorized ? '' : `(${category.length})`
   }`;
 
   /**
@@ -57,7 +63,9 @@ export default function Category({
    */
   const getUnselectedSolutions = () =>
     allTextItems.filter(
-      (textItem) => textItem.id[0] == categoryId && !currentlySelectedIds.includes(textItem.id)
+      (textItem) =>
+        belongsToCategory(textItem.id, categoryId) &&
+        !getCurrentlySelectedIds().includes(textItem.id)
     );
 
   /**
@@ -68,8 +76,11 @@ export default function Category({
     instance.trigger('resize');
   };
 
-  const handleDropdownSelectOpen = () => setDropdownSelectOpen(true);
-
+  /**
+   * Apply the changes that has been made through the dropdown
+   * @param {String[]} addedIds Ids of text items to be added to the category
+   * @param {String[]} removedIds Ids of text items to be removed from the category
+   */
   const handleDropdownSelectClose = (addedIds, removedIds) => {
     moveTextItems([
       ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
@@ -84,13 +95,24 @@ export default function Category({
     instance.trigger('resize');
   };
 
+  /**
+   * Inform the container of which height is needed to show the category (with dropdown)
+   * @param {number} height The height of the dropdown
+   */
   const setHeight = (height) => {
     setContainerHeight(
       categoryHeaderRef.current.offsetTop + height - categoryHeaderRef.current.offsetHeight
     );
   };
 
-  const buildTextItems = (textItems, isShowSolutionItem) =>
+  /**
+   * Builder for creating different text items
+   * @param {object[]} textItems list of text item objects to build elements from
+   * @param {boolean} isShowSolutionItem if the text item is used to show the correct solution
+   * @param {boolean} showSwapIcon if the text item should show that it should have been in another category
+   * @returns {Element[]} list of textItem elements
+   */
+  const buildTextItems = (textItems, isShowSolutionItem, showSwapIcon) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
         key={id}
@@ -99,8 +121,9 @@ export default function Category({
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
-        isShowSolutionItem={isShowSolutionItem}
         shouldAnimate={shouldAnimate}
+        isShowSolutionItem={isShowSolutionItem}
+        showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
         mouseMoveHandler={mouseMoveHandler}
@@ -110,10 +133,29 @@ export default function Category({
       />
     ));
 
-  let textItems = buildTextItems(category, false);
+  // Build the assigned text items for the category
+  let textItems = buildTextItems(category, false, false);
 
   if (showUnselectedSolutions) {
-    textItems.push(buildTextItems(getUnselectedSolutions(), true));
+    // Build the show solution state text items to show which items should have been placed in the category
+    const unselectedSolutions = getUnselectedSolutions();
+    const categorized = [];
+    const uncategorized = [];
+
+    // Partition the missing text items into already categorized and uncategorized
+    unselectedSolutions.forEach((textItem) => {
+      if (categoryAssignment[uncategorizedId].find(({ id }) => id === textItem.id)) {
+        uncategorized.push(textItem);
+      }
+      else {
+        categorized.push(textItem);
+      }
+    });
+
+    // Categorized items gets a swap icon
+    textItems.push(buildTextItems(categorized, true, true));
+    // Uncategorized items does not get a swap icon
+    textItems.push(buildTextItems(uncategorized, true, false));
   }
 
   return (
@@ -136,13 +178,16 @@ export default function Category({
         {showSelectedSolutions || uncategorized ? null : (
           <Button
             ref={assignItemsButtonRef}
-            iconName="icon-assign-items"
-            className="button-assign-items"
+            className="icon-assign-items"
+            iconName={getClassNames({
+              'button-assign-items ': true,
+              'icon-assign-items-expanded-state': dropdownSelectOpen
+            })}
             ariaLabel={l10n.assignItemsHelpText}
             ariaHasPopup="listbox"
             ariaExpanded={dropdownSelectOpen}
             hoverText={l10n.assignItemsHelpText}
-            onClick={handleDropdownSelectOpen}
+            onClick={() => setDropdownSelectOpen(true)}
           />
         )}
       </div>
@@ -153,13 +198,13 @@ export default function Category({
             setContainerHeight={setHeight}
             onClose={handleDropdownSelectClose}
             options={allTextItems}
-            currentlySelectedIds={currentlySelectedIds}
+            currentlySelectedIds={getCurrentlySelectedIds()}
           />
         </div>
       ) : null}
       <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
         {uncategorized ? null : <hr />}
-        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'content'}>
+        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'category-content'}>
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />

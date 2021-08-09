@@ -4,6 +4,11 @@ import { CSSTransition } from 'react-transition-group';
 
 import './TipButton.scss';
 
+/**
+ * Tooltip tag displayed over a child element
+ * @param {object} props Props object
+ * @returns {JSX.Element} A single tool tip tag element
+ */
 const TipButton = ({
   escapeOverflow = false,
   className = '',

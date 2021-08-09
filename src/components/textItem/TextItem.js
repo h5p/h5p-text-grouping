@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -26,6 +26,7 @@ export default function TextItem({
   textElement,
   shouldAnimate,
   isShowSolutionItem,
+  showSwapIcon,
   removeAnimations,
   setContainerHeight,
   mouseMoveHandler,
@@ -37,9 +38,10 @@ export default function TextItem({
     instance,
     l10n,
     showSelectedSolutions,
+    showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
-    setDragState
+    setDragState,
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
 
@@ -52,32 +54,44 @@ export default function TextItem({
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
+  const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
 
   // Sets focus to the button
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (focusedTextItem === textItemId) {
       buttonRef.current.focus();
       setFocusedTextItem(null);
     }
   }, [focusedTextItem]);
 
+  /**
+   * Opens the dropdown
+   */
   const handleDropdownSelectOpen = () => {
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
 
+  /**
+   * Move the text item to the selected category
+   * @param {number} categoryId The id of the category that has been chosen
+   */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      moveTextItems([
-        { textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }
-      ]);
-      setFocusedTextItem(textItemId);
+      moveTextItems(
+        [{ textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }],
+        true
+      );
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0);
     instance.trigger('resize');
   };
 
+  /**
+   * Inform the container of which height is needed to show the text item (with dropdown)
+   * @param {number} height The height needed for the dropdown
+   */
   const setHeight = (height) => {
     // If the dropdown can't fit in the textItem
     if (height > textItemRef.current.offsetHeight / 2) {
@@ -143,19 +157,23 @@ export default function TextItem({
       onAnimationEnd={removeAnimations}
       onMouseDown={(event) => mouseDownHandler(event)}
     >
-      <div className="text-item-border">
+      <div className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}>
         <div className="text-item">
-          <div dangerouslySetInnerHTML={{ __html: textElement }} />
+          <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowUnselectedSolution || !correctlyPlaced ? (
+              {shouldShowShowSwapIcon ? (
                 <TipButton tip={'Wrong category'}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>
               ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
-                {correctlyPlaced ? l10n.correctAnswer : l10n.wrongAnswer}
+                {isShowSolutionItem
+                  ? l10n.shouldHaveBeenPlacedInCategory
+                  : correctlyPlaced
+                    ? l10n.correctCategory
+                    : l10n.wrongCategory}
               </span>
             </>
           ) : (
@@ -197,10 +215,11 @@ TextItem.propTypes = {
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   isShowSolutionItem: PropTypes.bool.isRequired,
+  showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   mouseMoveHandler: PropTypes.func.isRequired,
   mouseUpHandler: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
-  narrowScreen: PropTypes.bool.isRequired
+  narrowScreen: PropTypes.bool.isRequired,
 };

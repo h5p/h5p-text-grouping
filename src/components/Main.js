@@ -40,6 +40,9 @@ export default function Main({ context }) {
     getRandomizedTextItems().slice()
   ]);
 
+  /**
+   * Shows the solutions of which text items where placed correctly or wrongly
+   */
   useEffect(() => {
     instance.on('xAPI', function (event) {
       if (event.getVerb() === 'answered') {
@@ -48,12 +51,18 @@ export default function Main({ context }) {
     });
   }, []);
 
+  /**
+   * Shows the solutions of where text items should have been placed
+   */
   useEffect(() => {
     instance.on('show-solution', function () {
       setShowUnselectedSolutions(true);
     });
   }, []);
 
+  /**
+   * Hides solutions and resets TextItem placement
+   */
   useEffect(() => {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
@@ -188,12 +197,13 @@ export default function Main({ context }) {
   };
 
   /**
-   * Moves n text items from their current category to new ones
-   * @param {String} textItemId Id of text item that should be moved
-   * @param {number} newCategoryId Id of category the text item should be moved to
-   * @param {number} prevCategoryId Id of category the text item currently belongs to, if available
+   * Moves n text items from their current category to a new one
+   * @param {String} textItems.textItemId Id of text item that should be moved
+   * @param {number} textItems.newCategoryId Id of category the text item should be moved to
+   * @param {number} textItems.prevCategoryId Id of category the text item currently belongs to, if available
+   * @param {boolean} shouldFocus Whether the text item should recieve focused after the move
    */
-  const moveTextItems = (textItems) => {
+  const moveTextItems = (textItems, shouldFocus) => {
     const newCategories = deepCopy(categoryAssignment);
     let textItem;
 
@@ -201,6 +211,8 @@ export default function Main({ context }) {
       // Reduce looping if the previous category is known
       let i = prevCategoryId === undefined ? 0 : prevCategoryId;
       const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
+      let prevCategory;
+      let prevPosition;
 
       // Remove from previous category
       for (i; i <= limit; i++) {
@@ -208,17 +220,30 @@ export default function Main({ context }) {
           if (item.id === textItemId) {
             textItem = item;
             textItem.shouldAnimate = true;
-            newCategories[i].splice(index, 1);
+            prevCategory = i;
+            prevPosition = index;
           }
         });
       }
 
       // Add to new category
       newCategories[newCategoryId].push(textItem);
+
+      if (shouldFocus) {
+        setFocusedTextItem(textItemId);
+
+        // Render the new textitem after enough time for the focus to be set
+        setTimeout(() => {
+          setCategoryAssignment(newCategories);
+        }, 10);
+      }
+
+      // Remove from previous category
+      newCategories[prevCategory].splice(prevPosition, 1);
     });
 
     setCategoryAssignment(newCategories);
-    triggerInteracted(categoryAssignment);
+    triggerInteracted(newCategories);
   };
 
   /**
@@ -235,6 +260,7 @@ export default function Main({ context }) {
     <H5PContext.Provider
       value={{
         ...context,
+        categoryAssignment,        
         showSelectedSolutions,
         showUnselectedSolutions,
         focusedTextItem,
@@ -254,7 +280,7 @@ export default function Main({ context }) {
         draggingStartedHandler={draggingStartedHandler}
         dropzoneVisible={dropzoneVisible}
       />
-      {showUnselectedSolutions ? null : (
+      {showUnselectedSolutions || categoryAssignment[uncategorizedId].length === 0 ? null : (
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}

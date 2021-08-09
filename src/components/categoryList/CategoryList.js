@@ -14,7 +14,7 @@ import './CategoryList.scss';
 export default function CategoryList({
   textGroups,
   moveTextItems,
-  allTextItems,  
+  allTextItems,
   categoryAssignment,
   removeAnimations,
   mouseMoveHandler,
@@ -25,6 +25,10 @@ export default function CategoryList({
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
 
+  /**
+   * Set the bottom margin if not enough space for the content
+   * @param {number} height The minimal height needed to display the content
+   */
   const setMargin = (height) => {
     const heightDifference = height - categoryListRef.current.offsetHeight;
     setMarginBottom(heightDifference > 0 ? heightDifference : null);

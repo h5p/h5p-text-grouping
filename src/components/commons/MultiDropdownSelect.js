@@ -17,6 +17,9 @@ export default function MultiDropdownSelect({
 }) {
   const dropdownRef = useRef(null);
 
+  /**
+   * Inform the parent of how much space is needed for the dropdown
+   */
   useEffect(() => {
     const dropdownHeight = dropdownRef.current.offsetHeight;
     if (dropdownHeight > 0) {
@@ -47,7 +50,7 @@ export default function MultiDropdownSelect({
           prevRemovedIds[optionId] = !prevRemovedIds[optionId];
           return prevRemovedIds;
         });
-      } 
+      }
       else {
         setAddedIds(prevAddedIds => {
           prevAddedIds[optionId] = !prevAddedIds[optionId];
@@ -61,11 +64,15 @@ export default function MultiDropdownSelect({
     }
   };
 
+  /**
+   * Close the dropdown
+   * @param {*} event
+   */
   const handleClose = event => {
     if (!event.button) { // Left click or keyboard
       setContainerHeight(0);
       onClose(
-        Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []), 
+        Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []),
         Object.entries(removedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, [])
       );
     }
