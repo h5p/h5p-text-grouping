@@ -178,8 +178,11 @@ export default function TextItem({
             </>
           ) : (
             <Button
-              iconName="icon-move-to-category"
               className="button-move-to-category"
+              iconName={getClassNames({
+                'icon-move-to-category': true,
+                'icon-move-to-category-expanded': dropdownSelectOpen
+              })}
               ariaLabel={l10n.ariaMoveToCategory}
               hoverText={l10n.hoverMoveToCategory}
               onClick={handleDropdownSelectOpen}
