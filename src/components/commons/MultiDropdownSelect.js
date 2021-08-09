@@ -69,8 +69,9 @@ export default function MultiDropdownSelect({
       });
     }
     setSelectedOptionDict(prevSelectedOptionDict => {
-      prevSelectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
-      return prevSelectedOptionDict;
+      const selectedOptionDict = Object.assign({}, prevSelectedOptionDict);
+      selectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
+      return selectedOptionDict;
     });
   };
 
