@@ -131,6 +131,14 @@
       border-style: solid;
     }
 
+    &.drag-over-category {
+      border-color: styles.$text-item-border-color;
+      box-shadow: 0 0 4px 1px styles.$action-icon-color;
+      .text-item {
+        background: styles.$text-item-background-dark;
+      }
+    }
+
     .dropdown-wrapper {
       top: calc(50% + 1.2em);
       position: absolute;

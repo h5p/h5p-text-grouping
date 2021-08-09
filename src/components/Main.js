@@ -97,10 +97,12 @@ export default function Main({ context }) {
 
       // If the mouse is inside the category and dropzone is not visible
       if (checkIfInsideCategory(i, mouseCoordinates)) {
+        dragState.textItemRef.current.children[0].classList.add('drag-over-category');
         setDropzoneVisible(i);
         return;
       }
       else {
+        dragState.textItemRef.current.children[0].classList.remove('drag-over-category');
         setDropzoneVisible(-1);
       }
     }
