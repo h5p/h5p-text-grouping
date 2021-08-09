@@ -139,6 +139,7 @@ export default function TextItem({
     textItemRef.current.style.position = 'fixed';
     textItemRef.current.style.width = `${itemWidth}px`;
     textItemRef.current.style.zIndex = 1;
+    textItemRef.current.children[0].classList.add('text-item-selected');
     draggingStartedHandler();
     event.preventDefault();
   };
@@ -156,7 +157,10 @@ export default function TextItem({
       onAnimationEnd={removeAnimations}
     >
       <div
-        className={`text-item-border ${showSelectedSolutions ? 'show-solution' : ''}`}
+        className={getClassNames({
+          'text-item-border': true,
+          'show-solution': showSelectedSolutions
+        })}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
         <div className="text-item">

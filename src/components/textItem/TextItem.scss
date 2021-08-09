@@ -108,7 +108,7 @@
     }
 
     &:hover {
-      &:not(.show-solution) {
+      &:not(.show-solution):not(.text-item-selected) {
         cursor: pointer;
         &:not(:focus-within) {
           border-style: dotted;
@@ -123,6 +123,12 @@
 
     &:focus-within {
       box-shadow: 0 0 4px 1px styles.$action-icon-color;
+    }
+
+    &.text-item-selected {
+      cursor: pointer;
+      border-color: styles.$text-item-border-color;
+      border-style: solid;
     }
 
     .dropdown-wrapper {

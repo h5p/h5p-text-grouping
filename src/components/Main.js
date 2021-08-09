@@ -124,6 +124,7 @@ export default function Main({ context }) {
     dragState.textItemRef.current.style.zIndex = '';
     dragState.textItemRef.current.style.left = '';
     dragState.textItemRef.current.style.top = '';
+    dragState.textItemRef.current.children[0].classList.remove('text-item-selected');
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
@@ -260,7 +261,7 @@ export default function Main({ context }) {
     <H5PContext.Provider
       value={{
         ...context,
-        categoryAssignment,        
+        categoryAssignment,
         showSelectedSolutions,
         showUnselectedSolutions,
         focusedTextItem,
