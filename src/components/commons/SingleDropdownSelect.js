@@ -17,7 +17,6 @@ export default function SingleDropdownSelect({
 }) {
   const [selectedOption, setSelectedOption] = useState(0);
   const dropdownRef = useRef(null);
-  const listBoxRef = useRef(null);
   const optionRefs = useRef([]);
 
   /**
@@ -92,7 +91,8 @@ export default function SingleDropdownSelect({
   // Create ref for all options
   if (optionRefs.current.length === 0) {
     optionRefs.current = Array(options.length)
-      .fill(createRef());
+      .fill()
+      .map(() => createRef());
   }
 
   return (
@@ -100,7 +100,6 @@ export default function SingleDropdownSelect({
       <div className="label">{label}</div>
       <hr />
       <ul
-        ref={listBoxRef}
         role="listbox"
         onKeyDown={(event) => handleKeyboardPressed(event)}
       >
