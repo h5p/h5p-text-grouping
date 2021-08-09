@@ -25,8 +25,6 @@ export default function Category({
   moveTextItems,
   allTextItems,
   setContainerHeight,
-  mouseMoveHandler,
-  mouseUpHandler,
   draggingStartedHandler,
   dropzoneVisible,
   textItems: { category, categories, removeAnimations }
@@ -126,8 +124,6 @@ export default function Category({
         showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
-        mouseMoveHandler={mouseMoveHandler}
-        mouseUpHandler={mouseUpHandler}
         draggingStartedHandler={draggingStartedHandler}
         narrowScreen={narrowScreen}
       />
@@ -226,8 +222,6 @@ Category.propTypes = {
     })
   ),
   setContainerHeight: PropTypes.func,
-  mouseMoveHandler: PropTypes.func.isRequired,
-  mouseUpHandler: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
   dropzoneVisible: PropTypes.bool.isRequired,
   textItems: PropTypes.exact({

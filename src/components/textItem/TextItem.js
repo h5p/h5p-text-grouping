@@ -29,8 +29,6 @@ export default function TextItem({
   showSwapIcon,
   removeAnimations,
   setContainerHeight,
-  mouseMoveHandler,
-  mouseUpHandler,
   draggingStartedHandler,
   narrowScreen
 }) {
@@ -123,17 +121,14 @@ export default function TextItem({
     let mousePos = { x: event.clientX, y: event.clientY };
     let currentPos = { x: mousePos.x - itemPos.x, y: mousePos.y - itemPos.y };
     let itemWidth = textItemRef.current.offsetWidth;
-    setDragState((prevDragState) => {
-      prevDragState.textItemId = textItemId;
-      prevDragState.categoryId = currentCategoryId;
-      prevDragState.textItemRef = textItemRef;
-      prevDragState.dragging = true;
-      prevDragState.rel = currentPos;
-      return prevDragState;
-    });
 
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
+    setDragState({
+      textItemId: textItemId,
+      categoryId: currentCategoryId,
+      textItemRef: textItemRef,
+      dragging: true,
+      rel: currentPos
+    });
 
     // Make text item visually draggable
     textItemRef.current.style.position = 'fixed';
@@ -222,8 +217,6 @@ TextItem.propTypes = {
   showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  mouseMoveHandler: PropTypes.func.isRequired,
-  mouseUpHandler: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
   narrowScreen: PropTypes.bool.isRequired
 };

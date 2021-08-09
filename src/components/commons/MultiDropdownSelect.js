@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import { H5PContext } from '../../context/H5PContext';
 import './DropdownSelect.scss';
 
 /**
@@ -15,6 +16,9 @@ export default function MultiDropdownSelect({
   options,
   currentlySelectedIds
 }) {
+  const {
+    dragState
+  } = useContext(H5PContext);
   const dropdownRef = useRef(null);
 
   /**
@@ -27,10 +31,19 @@ export default function MultiDropdownSelect({
     }
   }, []);
 
+  /**
+   * Close dropdown menu if text item is being dragged
+   */
   useEffect(() => {
-    window.addEventListener('mousedown', handleClose);
+    if (dragState.dragging) {
+      handleClose(null);
+    }
+  }, [dragState]);
+
+  useEffect(() => {
+    window.addEventListener('click', handleClose);
     return () => {
-      window.removeEventListener('mousedown', handleClose);
+      window.removeEventListener('click', handleClose);
     };
   }, []);
 
@@ -42,25 +55,23 @@ export default function MultiDropdownSelect({
   const [selectedOptionDict, setSelectedOptionDict] = useState(Object.assign({}, optionDict));
 
   const handleSelectItem = (event, optionId) => {
-    if (!event.button) { // Left click or keyboard
-      event.stopPropagation();
-      if (optionDict[optionId]) {
-        setRemovedIds(prevRemovedIds => {
-          prevRemovedIds[optionId] = !prevRemovedIds[optionId];
-          return prevRemovedIds;
-        });
-      }
-      else {
-        setAddedIds(prevAddedIds => {
-          prevAddedIds[optionId] = !prevAddedIds[optionId];
-          return prevAddedIds;
-        });
-      }
-      setSelectedOptionDict(prevSelectedOptionDict => {
-        prevSelectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
-        return prevSelectedOptionDict;
+    event.stopPropagation();
+    if (optionDict[optionId]) {
+      setRemovedIds(prevRemovedIds => {
+        prevRemovedIds[optionId] = !prevRemovedIds[optionId];
+        return prevRemovedIds;
       });
     }
+    else {
+      setAddedIds(prevAddedIds => {
+        prevAddedIds[optionId] = !prevAddedIds[optionId];
+        return prevAddedIds;
+      });
+    }
+    setSelectedOptionDict(prevSelectedOptionDict => {
+      prevSelectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
+      return prevSelectedOptionDict;
+    });
   };
 
   /**
@@ -68,7 +79,7 @@ export default function MultiDropdownSelect({
    * @param {*} event
    */
   const handleClose = event => {
-    if (!event.button) { // Left click or keyboard
+    if (event === null || !event.button) { // Left click or keyboard
       setContainerHeight(0);
       onClose(
         Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []),
@@ -103,7 +114,7 @@ export default function MultiDropdownSelect({
             <li
               key={`option-${id}`}
               className={selectedOptionDict[id] ? 'selected' : 'unselected'}
-              onMouseDown={(event) => handleSelectItem(event, id)}
+              onClick={(event) => handleSelectItem(event, id)}
               onKeyDown={(event) => handleKeyboardPressed(event, id)}
               tabIndex={0}
               role="option"

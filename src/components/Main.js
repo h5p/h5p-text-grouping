@@ -52,6 +52,16 @@ export default function Main({ context }) {
   }, []);
 
   /**
+   * If text item dragging has been started, add listeners to handle dragging
+   */
+  useEffect(() => {
+    if (dragState.dragging) {
+      document.addEventListener('mousemove', mouseMoveHandler);
+      document.addEventListener('mouseup', mouseUpHandler);
+    }
+  }, [dragState]);
+
+  /**
    * Shows the solutions of where text items should have been placed
    */
   useEffect(() => {
@@ -119,6 +129,7 @@ export default function Main({ context }) {
    */
   const mouseUpHandler = (event) => {
     // Reset style of dragged text item
+    if (!dragState.dragging) return;
     dragState.textItemRef.current.style.position = '';
     dragState.textItemRef.current.style.width = '';
     dragState.textItemRef.current.style.zIndex = '';
@@ -145,20 +156,25 @@ export default function Main({ context }) {
       ]);
     }
 
-    // Remove listeners, reset dragstate and dropzone
-    document.removeEventListener('mousemove', mouseMoveHandler);
-    document.removeEventListener('mouseup', mouseUpHandler);
-    setDragState((prevDragState) => {
-      prevDragState.textItemId = null;
-      prevDragState.categoryId = null;
-      prevDragState.textItemRef = null;
-      prevDragState.dragging = false;
-      prevDragState.rel = { x: 0, y: 0 };
-      return prevDragState;
-    });
-    setDropzoneVisible(-1);
+    resetDragState();
     event.stopPropagation();
     event.preventDefault();
+  };
+
+  /**
+   * Remove listeners, reset dragstate and reset dropindexone
+   */
+  const resetDragState = () => {
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+    setDragState({
+      textItemId: null,
+      categoryId: null,
+      textItemRef: null,
+      dragging: false,
+      rel: { x: 0, y: 0 }
+    });
+    setDropzoneVisible(-1);
   };
 
   /**
@@ -260,7 +276,7 @@ export default function Main({ context }) {
     <H5PContext.Provider
       value={{
         ...context,
-        categoryAssignment,        
+        categoryAssignment,
         showSelectedSolutions,
         showUnselectedSolutions,
         focusedTextItem,
@@ -275,8 +291,6 @@ export default function Main({ context }) {
         moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems().slice()}
         removeAnimations={removeAnimations}
-        mouseMoveHandler={mouseMoveHandler}
-        mouseUpHandler={mouseUpHandler}
         draggingStartedHandler={draggingStartedHandler}
         dropzoneVisible={dropzoneVisible}
       />
@@ -284,8 +298,6 @@ export default function Main({ context }) {
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
-          mouseMoveHandler={mouseMoveHandler}
-          mouseUpHandler={mouseUpHandler}
           draggingStartedHandler={draggingStartedHandler}
           dropzoneVisible={dropzoneVisible === uncategorizedId ? true : false}
           textItems={{

@@ -17,8 +17,6 @@ export default function CategoryList({
   allTextItems,
   categoryAssignment,
   removeAnimations,
-  mouseMoveHandler,
-  mouseUpHandler,
   draggingStartedHandler,
   dropzoneVisible
 }) {
@@ -50,8 +48,6 @@ export default function CategoryList({
             removeAnimations: removeAnimations
           }}
           setContainerHeight={setMargin}
-          mouseMoveHandler={mouseMoveHandler}
-          mouseUpHandler={mouseUpHandler}
           draggingStartedHandler={draggingStartedHandler}
         />
       );
@@ -93,8 +89,6 @@ CategoryList.propTypes = {
     )
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
-  mouseMoveHandler: PropTypes.func.isRequired,
-  mouseUpHandler: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
   dropzoneVisible: PropTypes.number.isRequired
 };

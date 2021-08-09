@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, createRef } from 'react';
+import React, { useContext, useState, useEffect, useRef, createRef } from 'react';
 import PropTypes from 'prop-types';
 
+import { H5PContext } from '../../context/H5PContext';
 import './DropdownSelect.scss';
 
 /**
@@ -15,6 +16,10 @@ export default function SingleDropdownSelect({
   options,
   currentlySelectedId
 }) {
+  const {
+    dragState
+  } = useContext(H5PContext);
+
   const [selectedOption, setSelectedOption] = useState(0);
   const dropdownRef = useRef(null);
   const listBoxRef = useRef(null);
@@ -29,6 +34,15 @@ export default function SingleDropdownSelect({
       setContainerHeight(dropdownHeight);
     }
   }, []);
+
+  /**
+   * Close dropdown menu if text item is being dragged
+   */
+  useEffect(() => {
+    if (dragState.dragging) {
+      handleSelectItem(null);
+    }
+  }, [dragState]);
 
   useEffect(() => {
     window.addEventListener('click', handleSelectItem);
