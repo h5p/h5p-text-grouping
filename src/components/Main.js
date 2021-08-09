@@ -157,6 +157,7 @@ export default function Main({ context }) {
           prevCategoryId: dragState.categoryId
         }
       ]);
+      instance.trigger('resize');
     }
 
     resetDragState();
