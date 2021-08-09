@@ -92,8 +92,7 @@ export default function SingleDropdownSelect({
   // Create ref for all options
   if (optionRefs.current.length === 0) {
     optionRefs.current = Array(options.length)
-      .fill()
-      .map(() => createRef());
+      .fill(createRef());
   }
 
   return (
@@ -103,7 +102,6 @@ export default function SingleDropdownSelect({
       <ul
         ref={listBoxRef}
         role="listbox"
-        tabIndex={0}
         onKeyDown={(event) => handleKeyboardPressed(event)}
       >
         {options.map(({ groupName }, id) => {
@@ -116,7 +114,7 @@ export default function SingleDropdownSelect({
               key={`option-${id}`}
               className={className}
               onClick={(event) => handleSelectItem(event, id)}
-              tabIndex={id === selectedOption ? -1 : 0}
+              tabIndex={id === selectedOption ? 0 : -1}
               role="option"
               aria-selected={false}
               aria-disabled={disabled}
