@@ -24,60 +24,6 @@
     }
   }
 
-  &.correct {
-    .text-item-border {
-      border-color: styles.$color-correct-dark;
-
-      .text-item {
-        color: styles.$color-correct-text;
-        background-color: styles.$color-correct-light;
-      }
-
-      .solution-icon:before {
-        @include styles.solution-icon('check_circle', styles.$color-correct-dark);
-      }
-    }
-  }
-
-  &.wrong {
-    .text-item-border {
-      border-color: styles.$color-wrong-dark;
-
-      .text-item {
-        color: styles.$color-wrong-dark;
-        background-color: styles.$color-wrong-light;
-      }
-
-      .swap-icon:before {
-        @include styles.swap-icon(styles.$color-wrong-dark);
-      }
-
-      .solution-icon:before {
-        @include styles.solution-icon('cancel', styles.$color-wrong-dark);
-      }
-    }
-  }
-
-  &.show-correct {
-    .text-item-border {
-      border-style: dotted;
-      border-color: styles.$color-show-correct-dark;
-
-      .text-item {
-        color: styles.$color-show-correct-dark;
-        background-color: styles.$color-show-correct-light;
-      }
-
-      .swap-icon:before {
-        @include styles.swap-icon(styles.$color-show-correct-dark);
-      }
-
-      .solution-icon:before {
-        @include styles.solution-icon('check_circle', styles.$color-show-correct-dark);
-      }
-    }
-  }
-
   .text-item-border {
     padding: 0.25em;
 
@@ -143,6 +89,60 @@
       top: calc(50% + 1.2em);
       position: absolute;
       width: calc(100% - 0.75em);
+    }
+  }
+
+  &.correct {
+    .text-item-border {
+      border-color: styles.$color-correct-dark;
+
+      .text-item {
+        color: styles.$color-correct-text;
+        background-color: styles.$color-correct-light;
+      }
+
+      .solution-icon:before {
+        @include styles.solution-icon('check_circle', styles.$color-correct-dark);
+      }
+    }
+  }
+
+  &.wrong {
+    .text-item-border {
+      border-color: styles.$color-wrong-dark;
+
+      .text-item {
+        color: styles.$color-wrong-dark;
+        background-color: styles.$color-wrong-light;
+      }
+
+      .swap-icon:before {
+        @include styles.swap-icon(styles.$color-wrong-dark);
+      }
+
+      .solution-icon:before {
+        @include styles.solution-icon('cancel', styles.$color-wrong-dark);
+      }
+    }
+  }
+
+  &.show-correct {
+    .text-item-border {
+      border-style: dotted;
+      border-color: styles.$color-show-correct-dark;
+
+      .text-item {
+        color: styles.$color-show-correct-dark;
+        background-color: styles.$color-show-correct-light;
+      }
+
+      .swap-icon:before {
+        @include styles.swap-icon(styles.$color-show-correct-dark);
+      }
+
+      .solution-icon:before {
+        @include styles.solution-icon('check_circle', styles.$color-show-correct-dark);
+      }
     }
   }
 }
