@@ -35,7 +35,6 @@ export default function MultiDropdownSelect({
   }, []);
 
   const optionDict = {};
-  options.forEach(option => optionDict[option.id] = false);
   currentlySelectedIds.forEach(id => optionDict[id] = true);
 
   const [addedIds, setAddedIds] = useState([]);
