@@ -39,7 +39,7 @@ export default function TextItem({
     showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
-    setDragState, 
+    setDragState,
     dragState
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -165,7 +165,7 @@ export default function TextItem({
           {showSelectedSolutions ? (
             <>
               {shouldShowShowSwapIcon ? (
-                <TipButton tip={'Wrong category'}>
+                <TipButton tip={l10n.wrongCategory}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>
               ) : null}
