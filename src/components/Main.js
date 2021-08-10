@@ -17,6 +17,7 @@ import deepCopy from '../helpers/deepCopy';
 export default function Main({ context }) {
   const {
     params: { textGroups },
+    l10n,
     instance,
     getRandomizedTextItems,
     triggerInteracted
@@ -39,7 +40,7 @@ export default function Main({ context }) {
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
-    getRandomizedTextItems().slice(),
+    getRandomizedTextItems(),
     ...textGroups.map(() => [])
   ]);
 
@@ -80,7 +81,7 @@ export default function Main({ context }) {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
       setShowUnselectedSolutions(false);
-      setCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
+      setCategoryAssignment([getRandomizedTextItems(), ...textGroups.map(() => [])]);
     });
   }, []);
 
@@ -232,9 +233,7 @@ export default function Main({ context }) {
       // Skip uncategorized category if it is empty
       if (i === 0 && categoryAssignment[0].length === 0) {
         setCategoryDimensions((prevCategoryDimensions) => {
-          const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-          categoryDimensions[0] = { x1: 0, x2: 0, y1: 0, y2: 0 };
-          return categoryDimensions;
+          return { ...prevCategoryDimensions, 0: { x1: 0, x2: 0, y1: 0, y2: 0 } };
         });
         continue;
       }
@@ -247,9 +246,7 @@ export default function Main({ context }) {
         y2: clientRect.y + clientRect.height
       };
       setCategoryDimensions((prevCategoryDimensions) => {
-        const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-        categoryDimensions[i] = coordinates;
-        return categoryDimensions;
+        return { ...prevCategoryDimensions, [i]: coordinates };
       });
     }
   };
@@ -329,9 +326,8 @@ export default function Main({ context }) {
       }}
     >
       <CategoryList
-        categoryAssignment={categoryAssignment}
         moveTextItems={moveTextItems}
-        allTextItems={getRandomizedTextItems().slice()}
+        allTextItems={getRandomizedTextItems()}
         removeAnimations={removeAnimations}
         draggingStartedHandler={draggingStartedHandler}
         draggedInfo={draggedInfo}
@@ -343,8 +339,7 @@ export default function Main({ context }) {
           draggingStartedHandler={draggingStartedHandler}
           draggedInfo={draggedInfo}
           textItems={{
-            category: categoryAssignment[0],
-            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            categories: [...textGroups, { groupName: l10n.uncategorizedLabel }],
             removeAnimations: removeAnimations
           }}
         />

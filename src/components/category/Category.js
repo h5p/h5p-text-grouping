@@ -28,7 +28,7 @@ export default function Category({
   setContainerHeight,
   draggingStartedHandler,
   draggedInfo,
-  textItems: { category, categories, removeAnimations }
+  textItems: { categories, removeAnimations }
 }) {
   const uncategorized = categoryId === 0;
 
@@ -38,7 +38,6 @@ export default function Category({
     categoryAssignment,
     showSelectedSolutions,
     showUnselectedSolutions,
-    dragState
   } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const mediumScreen = useMediumScreen();
@@ -46,6 +45,7 @@ export default function Category({
   const [minHeight, setMinHeight] = useState(null);
   const [maxHeight, setMaxHeight] = useState(null);
   const [previousHeight, setPreviousHeight] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [currentlyOpenTextItem, setCurrentlyOpenTextItem] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
@@ -61,11 +61,11 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const getCurrentlySelectedIds = () => category.map((textItem) => textItem.id);
+  const getCurrentlySelectedIds = () => categoryAssignment[categoryId].map((textItem) => textItem.id);
   const titleWithChildCount = `${
     uncategorized
       ? categories[categories.length - 1].groupName
-      : `${categories[categoryId - 1].groupName} (${category.length})`
+      : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`
   }`;
 
   /**
@@ -176,13 +176,12 @@ export default function Category({
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
         draggingStartedHandler={draggingStartedHandler}
-        narrowScreen={narrowScreen}
         draggedInfo={draggedInfo}
       />
     ));
 
   // Build the assigned text items for the category
-  let textItems = buildTextItems(category, false, false);
+  let textItems = buildTextItems(categoryAssignment[categoryId], false, false);
 
   if (showUnselectedSolutions) {
     // Build the show solution state text items to show which items should have been placed in the category
@@ -301,13 +300,6 @@ Category.propTypes = {
     dropzoneVisible: PropTypes.number.isRequired
   }).isRequired,
   textItems: PropTypes.exact({
-    category: PropTypes.arrayOf(
-      PropTypes.exact({
-        id: PropTypes.string,
-        content: PropTypes.string,
-        shouldAnimate: PropTypes.bool
-      })
-    ),
     categories: PropTypes.arrayOf(
       PropTypes.shape({
         groupName: PropTypes.string

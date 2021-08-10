@@ -15,7 +15,6 @@ import './CategoryList.scss';
 export default function CategoryList({
   moveTextItems,
   allTextItems,
-  categoryAssignment,
   removeAnimations,
   draggingStartedHandler,
   draggedInfo
@@ -23,7 +22,8 @@ export default function CategoryList({
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
   const {
-    params: { textGroups }
+    params: { textGroups },
+    categoryAssignment
   } = useContext(H5PContext);
 
   /**
@@ -35,7 +35,7 @@ export default function CategoryList({
     setMarginBottom(heightDifference > 0 ? heightDifference : null);
   };
 
-  const categoryElements = categoryAssignment.map((category, categoryId) => {
+  const categoryElements = categoryAssignment.map((_category, categoryId) => {
     if (categoryId !== 0) {
       return (
         <Category
@@ -43,10 +43,8 @@ export default function CategoryList({
           key={`category-${categoryId}`}
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
-          categoryAssignment={categoryAssignment}
           draggedInfo={draggedInfo}
           textItems={{
-            category: category,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
           }}
@@ -76,15 +74,6 @@ CategoryList.propTypes = {
       content: PropTypes.string,
       shouldAnimate: PropTypes.bool
     })
-  ).isRequired,
-  categoryAssignment: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        content: PropTypes.string,
-        shouldAnimate: PropTypes.bool
-      })
-    )
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
