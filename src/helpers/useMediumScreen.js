@@ -1,21 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { H5PContext } from '../context/H5PContext';
 
 /**
  * Utility hook for checking if device is tablet size, or lower.
  * @returns {boolean} true if screen is less than or equal to 768 pixels, false otherwise.
  */
 const useMediumScreen = () => {
+  const { instance } = useContext(H5PContext);
   const mediumScreenWidth = 768; // pixels
   const [screenIsMedium, setScreensMedium] = useState(false);
 
   function checkWindowSize() {
-    setScreensMedium(window.innerWidth <= mediumScreenWidth);
+    setScreensMedium(document.documentElement.clientWidth <= mediumScreenWidth);
   }
   useEffect(() => {
-    window.addEventListener('resize', checkWindowSize);
-    checkWindowSize();
+    instance.on('resize', function () {
+      checkWindowSize();
+    });
     return () => {
-      window.removeEventListener('resize', checkWindowSize);
+      instance.on('resize', function () {
+        checkWindowSize();
+      });
     };
   }, []);
 
