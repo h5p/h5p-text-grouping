@@ -178,7 +178,8 @@ export default function TextItem({
                     : l10n.wrongCategory}
               </span>
             </>
-          ) : (
+          ) : null}
+          {dragState.textItemId !== textItemId ? (
             <Button
               className="button-move-to-category"
               iconName={getClassNames({
@@ -190,7 +191,7 @@ export default function TextItem({
               onClick={handleDropdownSelectOpen}
               ref={buttonRef}
             />
-          )}
+          ) : null}
           {dropdownSelectOpen ? (
             <div className="dropdown-wrapper">
               <SingleDropdownSelect
