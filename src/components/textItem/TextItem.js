@@ -125,7 +125,6 @@ export default function TextItem({
     if (
       dropdownSelectOpen ||
       showSelectedSolutions ||
-      narrowScreen ||
       event.button !== 0 ||
       event.target === buttonRef.current
     ) {
