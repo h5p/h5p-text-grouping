@@ -129,7 +129,10 @@ export default function Category({
    */
   const resizeUncategorized = (height, textItemId, settingMinHeight) => {
     if (height === 0) {
-      // Makes sure the state is up to date
+      // Makes sure the state is up to date.
+      // If the state is accessed normally, it will be possible for one textItem to reset
+      // the size after another textItem has opened. This is because normal state variables
+      // are accessed at the start of a function, and not updated while the function is running
       let currentTextItem;
       setCurrentlyOpenTextItem((currentlyOpenTextItem) => {
         currentTextItem = currentlyOpenTextItem;
