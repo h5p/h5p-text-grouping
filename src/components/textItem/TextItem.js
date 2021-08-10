@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import belongsToCategory from '../../helpers/belongsToCategory';
+import getClassNames from '../../helpers/getClassNames';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
 import TipButton from '../commons/TipButton';
-import getClassNames from '../../helpers/getClassNames';
 
 import './TextItem.scss';
 
@@ -50,8 +50,8 @@ export default function TextItem({
   const buttonRef = useRef(null);
 
   // Booleans for displaying solution states
-  const isNotUncategorized = 0 !== currentCategoryId;
-  const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
+  const uncategorized = currentCategoryId === 0;
+  const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && !uncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
   const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
@@ -74,7 +74,7 @@ export default function TextItem({
     setOffsetTop(newOffsetTop);
 
     // Set uncategorized maxHeight
-    if (!isNotUncategorized) {
+    if (uncategorized) {
       setContainerHeight(newOffsetTop + textItemRef.current.offsetHeight, textItemId, false);
     }
 
@@ -220,9 +220,7 @@ export default function TextItem({
                 setContainerHeight={setHeight}
                 onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
-                currentlySelectedId={
-                  isNotUncategorized ? currentCategoryId - 1 : categories.length - 1
-                }
+                currentlySelectedId={uncategorized ? categories.length - 1 : currentCategoryId - 1}
               />
             </div>
           ) : null}
