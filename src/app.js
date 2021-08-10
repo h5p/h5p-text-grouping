@@ -107,7 +107,7 @@ H5P.TextGrouping = (() => {
      * Checks if any items has been assigned to a category
      * @returns {boolean} true if there are no assigned items, false otherwise
      */
-    this.hasNotChanged = () => {
+    this.hasNotAnswered = () => {
       const uncategorizedId = this.categoryState.length - 1; // always the same as the last index
       const currentlyUncategorizedItems = this.categoryState[uncategorizedId];
 
@@ -296,7 +296,7 @@ H5P.TextGrouping = (() => {
       this.hideButton('check-answer');
       this.hideButton('show-solution');
 
-      if (this.params.behaviour.showSolutionsRequiresInput && this.hasNotChanged()) {
+      if (this.params.behaviour.showSolutionsRequiresInput && this.hasNotAnswered()) {
         // Require answer before solution can be viewed
         this.updateFeedbackContent(this.params.l10n.noAnswer);
         this.read(this.params.l10n.noAnswer);
