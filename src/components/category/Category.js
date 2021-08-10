@@ -27,11 +27,12 @@ export default function Category({
   allTextItems,
   setContainerHeight,
   draggingStartedHandler,
-  textItems: { dropzoneVisible, category, categories, removeAnimations }
+  draggedInfo,
+  textItems: { category, categories, removeAnimations }
 }) {
   const uncategorized = categoryId === categories.length - 1;
 
-  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
+  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions, dragState } =
     useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const mediumScreen = useMediumScreen();
@@ -161,7 +162,6 @@ export default function Category({
         key={id}
         textItemId={id}
         currentCategoryId={categoryId}
-        dropzoneVisible={dropzoneVisible}
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
@@ -172,6 +172,7 @@ export default function Category({
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
         draggingStartedHandler={draggingStartedHandler}
         narrowScreen={narrowScreen}
+        draggedInfo={draggedInfo}
       />
     ));
 
@@ -264,7 +265,7 @@ export default function Category({
         >
           {textItems}
           <li>
-            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible === categoryId} />
+            <Dropzone key={`dropzone-${categoryId}`} visible={draggedInfo.dropzoneVisible === categoryId ? true : false} />
           </li>
         </ul>
       </div>
@@ -284,8 +285,12 @@ Category.propTypes = {
   ),
   setContainerHeight: PropTypes.func,
   draggingStartedHandler: PropTypes.func.isRequired,
+  draggedInfo: PropTypes.shape({
+    style: PropTypes.object.isRequired,
+    firstChildClassNames: PropTypes.object.isRequired,
+    dropzoneVisible: PropTypes.number.isRequired
+  }).isRequired,
   textItems: PropTypes.exact({
-    dropzoneVisible: PropTypes.number,
     category: PropTypes.arrayOf(
       PropTypes.exact({
         id: PropTypes.string,

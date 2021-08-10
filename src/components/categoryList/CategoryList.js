@@ -18,7 +18,7 @@ export default function CategoryList({
   categoryAssignment,
   removeAnimations,
   draggingStartedHandler,
-  dropzoneVisible
+  draggedInfo
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
@@ -41,8 +41,8 @@ export default function CategoryList({
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
           categoryAssignment={categoryAssignment}
+          draggedInfo={draggedInfo}
           textItems={{
-            dropzoneVisible: dropzoneVisible,
             category: category,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
@@ -90,5 +90,9 @@ CategoryList.propTypes = {
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
-  dropzoneVisible: PropTypes.number.isRequired
+  draggedInfo: PropTypes.shape({
+    style: PropTypes.object.isRequired,
+    firstChildClassNames: PropTypes.object.isRequired,
+    dropzoneVisible: PropTypes.number.isRequired
+  }).isRequired
 };

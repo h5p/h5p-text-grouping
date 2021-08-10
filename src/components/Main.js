@@ -25,11 +25,14 @@ export default function Main({ context }) {
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
   const [categoryDimensions, setCategoryDimensions] = useState({});
-  const [dropzoneVisible, setDropzoneVisible] = useState(-1);
+  const [draggedInfo, setDraggedInfo] = useState({
+    style: {},
+    firstChildClassNames: {},
+    dropzoneVisible: -1
+  });
   const [dragState, setDragState] = useState({
     textItemId: null,
     categoryId: null,
-    textItemRef: null,
     dragging: false,
     rel: { x: 0, y: 0 }
   });
@@ -88,9 +91,18 @@ export default function Main({ context }) {
    * @param {MouseEvent} event MouseMove event
    */
   const mouseMoveHandler = (event) => {
-    if (!dragState.dragging) return;
-    dragState.textItemRef.current.style.left = `${event.clientX - dragState.rel.x}px`;
-    dragState.textItemRef.current.style.top = `${event.clientY - dragState.rel.y}px`;
+    if (!dragState.dragging) {
+      return;
+    }
+    setDraggedInfo((prevDraggedInfo) => {
+      return {
+        ...prevDraggedInfo,
+        style: {
+          left: `${event.clientX - dragState.rel.x}px`,
+          top: `${event.clientY - dragState.rel.y}px`
+        }
+      };
+    });
     handleDraggableMoved({ x: event.clientX, y: event.clientY });
     event.stopPropagation();
     event.preventDefault();
@@ -103,15 +115,35 @@ export default function Main({ context }) {
   const handleDraggableMoved = (mouseCoordinates) => {
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
-      if (i === dragState.categoryId) continue;
+      if (i === dragState.categoryId) {
+        continue;
+      }
 
       // If the mouse is inside the category and dropzone is not visible
       if (checkIfInsideCategory(i, mouseCoordinates)) {
-        setDropzoneVisible(i);
+        setDraggedInfo((prevDraggedInfo) => {
+          return {
+            ...prevDraggedInfo,
+            firstChildClassNames: {
+              ...prevDraggedInfo.firstChildClassNames,
+              'drag-over-category': true
+            },
+            dropzoneVisible: i
+          };
+        });
         return;
       }
       else {
-        setDropzoneVisible(-1);
+        setDraggedInfo((prevDraggedInfo) => {
+          return {
+            ...prevDraggedInfo,
+            firstChildClassNames: {
+              ...prevDraggedInfo.firstChildClassNames,
+              'drag-over-category': false
+            },
+            dropzoneVisible: -1
+          };
+        });
       }
     }
   };
@@ -129,13 +161,9 @@ export default function Main({ context }) {
    */
   const mouseUpHandler = (event) => {
     // Reset style of dragged text item
-    if (!dragState.dragging) return;
-    dragState.textItemRef.current.style.position = '';
-    dragState.textItemRef.current.style.width = '';
-    dragState.textItemRef.current.style.zIndex = '';
-    dragState.textItemRef.current.style.left = '';
-    dragState.textItemRef.current.style.top = '';
-    dragState.textItemRef.current.children[0].classList.remove('text-item-selected');
+    if (!dragState.dragging) {
+      return;
+    }
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
@@ -172,11 +200,14 @@ export default function Main({ context }) {
     setDragState({
       textItemId: null,
       categoryId: null,
-      textItemRef: null,
       dragging: false,
       rel: { x: 0, y: 0 }
     });
-    setDropzoneVisible(-1);
+    setDraggedInfo({
+      style: {},
+      firstChildClassNames: {},
+      dropzoneVisible: -1
+    });
   };
 
   /**
@@ -306,15 +337,15 @@ export default function Main({ context }) {
         allTextItems={getRandomizedTextItems().slice()}
         removeAnimations={removeAnimations}
         draggingStartedHandler={draggingStartedHandler}
-        dropzoneVisible={dropzoneVisible}
+        draggedInfo={draggedInfo}
       />
       {!showUnselectedSolutions && categoryAssignment[uncategorizedId].length !== 0 ? (
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
           draggingStartedHandler={draggingStartedHandler}
+          draggedInfo={draggedInfo}
           textItems={{
-            dropzoneVisible: dropzoneVisible,
             category: categoryAssignment[uncategorizedId],
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
