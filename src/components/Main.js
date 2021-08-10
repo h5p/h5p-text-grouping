@@ -332,7 +332,6 @@ export default function Main({ context }) {
     >
       <CategoryList
         categoryAssignment={categoryAssignment}
-        textGroups={textGroups}
         moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems().slice()}
         removeAnimations={removeAnimations}

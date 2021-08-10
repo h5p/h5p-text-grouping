@@ -137,13 +137,11 @@ export default function Category({
       }
     }
     else if (height > 0) {
-      switch (settingMinHeight) {
-        case true:
-          setMinHeight(height + categoryHeaderRef.current.offsetHeight);
-          break;
-        case false:
-          setMaxHeight(previousHeight);
-          break;
+      if (settingMinHeight) {
+        setMinHeight(height + categoryHeaderRef.current.offsetHeight);
+      }
+      else {
+        setMaxHeight(previousHeight);
       }
       setCurrentlyOpenTextItem(textItemId);
     }

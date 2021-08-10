@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { H5PContext } from '../../context/H5PContext';
 
 import Category from '../category/Category';
 
@@ -12,7 +13,6 @@ import './CategoryList.scss';
  * @returns {JSX.Element} The CategoryList element
  */
 export default function CategoryList({
-  textGroups,
   moveTextItems,
   allTextItems,
   categoryAssignment,
@@ -22,6 +22,7 @@ export default function CategoryList({
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
+  const {params: {textGroups}} = useContext(H5PContext);
 
   /**
    * Set the bottom margin if not enough space for the content
@@ -66,11 +67,6 @@ export default function CategoryList({
 }
 
 CategoryList.propTypes = {
-  textGroups: PropTypes.arrayOf(
-    PropTypes.shape({
-      groupName: PropTypes.string.isRequired
-    })
-  ).isRequired,
   moveTextItems: PropTypes.func.isRequired,
   allTextItems: PropTypes.arrayOf(
     PropTypes.shape({
