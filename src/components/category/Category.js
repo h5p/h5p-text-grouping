@@ -61,6 +61,15 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
+  /**
+   * Sets the height of the category on resize
+   */
+  useEffect(() => {
+    instance.on('resize', () => {
+      setPreviousHeight(getComputedStyle(categoryContentRef.current).height);
+    });
+  }, []);
+
   const getCurrentlySelectedIds = () => categoryAssignment[categoryId].map((textItem) => textItem.id);
   const titleWithChildCount =
     uncategorized
