@@ -89,6 +89,12 @@
     .header {
       padding-left: 0em;
     }
+
+    &.category-dropzone {
+      border: dotted 2px styles.$dropzone-border-color;
+      border-radius: 5px;
+      background-color: styles.$dropzone-background-neutral;
+    }
   }
 }
 

@@ -213,7 +213,7 @@ export default function Category({
   return (
     <div
       id={`category ${categoryId}`}
-      className={`category${uncategorized ? ' uncategorized' : ''}`}
+      className={`category${uncategorized ? ' uncategorized' : ''} ${draggedInfo.dropzoneVisible === categoryId ? 'category-dropzone' : ''}`}
       style={uncategorized ? { minHeight: minHeight } : {}}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
