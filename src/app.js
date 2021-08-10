@@ -16,7 +16,6 @@ H5P.TextGrouping = (() => {
     this.contentId = contentId;
     this.params = params;
     this.extras = extras || {};
-    this.showSelectedSolutions = false;
 
     // Builder for a textItem object
     const createTextItem = (id, content, shouldAnimate) => ({
@@ -248,6 +247,8 @@ H5P.TextGrouping = (() => {
      * if the maximum score is achieved.
      */
     this.checkAnswer = () => {
+      this.hideButton('check-answer');
+
       const score = this.getScore();
       const maxScore = this.getMaxScore();
       const textScore = H5P.Question.determineOverallFeedback(
@@ -256,6 +257,7 @@ H5P.TextGrouping = (() => {
       );
 
       this.setFeedback(textScore, score, maxScore, this.params.l10n.result);
+      triggerAnswered(score, maxScore);
 
       if (this.params.behaviour.enableSolutionsButton && score !== maxScore) {
         this.showButton('show-solution');
@@ -265,12 +267,7 @@ H5P.TextGrouping = (() => {
         this.showButton('try-again');
       }
 
-      this.hideButton('check-answer');
-
-      this.showSelectedSolutions = true;
       this.trigger('resize');
-
-      triggerAnswered(score, maxScore);
     };
 
     /**
