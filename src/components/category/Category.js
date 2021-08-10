@@ -87,7 +87,11 @@ export default function Category({
         prevCategoryId: categoryId
       }))
     ]);
-    assignItemsButtonRef.current.focus();
+
+    if (assignItemsButtonRef.current) {
+      assignItemsButtonRef.current.focus();
+    }
+
     setDropdownSelectOpen(false);
     instance.trigger('resize');
   };
