@@ -202,6 +202,16 @@ export default function Main({ context }) {
    */
   const updateCategoryDimensions = () => {
     for (let i = 0; i < categoryAssignment.length; i++) {
+      // Skip uncategorized category if it is empty
+      if (i === uncategorizedId && categoryAssignment[uncategorizedId].length === 0) {
+        setCategoryDimensions((prevCategoryDimensions) => {
+          const categoryDimensions = Object.assign({}, prevCategoryDimensions);
+          categoryDimensions[uncategorizedId] = {x1: 0, x2: 0, y1: 0, y2: 0};
+          return categoryDimensions;
+        })
+        continue;
+      }
+
       const clientRect = document.getElementById(`category ${i}`).getBoundingClientRect();
       const coordinates = {
         x1: clientRect.x,
@@ -210,8 +220,9 @@ export default function Main({ context }) {
         y2: clientRect.y + clientRect.height
       };
       setCategoryDimensions((prevCategoryDimensions) => {
-        prevCategoryDimensions[i] = coordinates;
-        return prevCategoryDimensions;
+        const categoryDimensions = Object.assign({}, prevCategoryDimensions);
+        categoryDimensions[i] = coordinates;
+        return categoryDimensions;
       });
     }
   };
