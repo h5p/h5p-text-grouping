@@ -243,7 +243,9 @@ H5P.TextGrouping = (() => {
     );
 
     /**
-     * Check answer.
+     * Check answer and show appropriate feedback.
+     * Changes the visible buttons according to editor settings and
+     * if the maximum score is achieved.
      */
     this.checkAnswer = () => {
       const score = this.getScore();
@@ -273,6 +275,8 @@ H5P.TextGrouping = (() => {
 
     /**
      * Show solutions.
+     * If show solution requires an answer and none has been given
+     * a "no answer given" text will be shown instead.
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-4}
      */
     this.showSolutions = () => {
@@ -292,8 +296,8 @@ H5P.TextGrouping = (() => {
     };
 
     /**
-     * Resets buttons, solutions and positions of the text items
-     *
+     * Resets buttons, solutions, scrambles the initial order of the
+     * text items and puts them in uncategorized.
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
      */
     this.resetTask = () => {
@@ -317,6 +321,7 @@ H5P.TextGrouping = (() => {
     this.setContent(ReactDOM.render(main, wrapper));
   }
 
+  // Inheritance & instantiation
   TextGrouping.prototype = Object.create(H5P.Question.prototype);
   TextGrouping.prototype.constructor = TextGrouping;
 
