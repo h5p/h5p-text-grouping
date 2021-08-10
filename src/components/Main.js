@@ -40,7 +40,7 @@ export default function Main({ context }) {
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
-    getRandomizedTextItems().slice(),
+    getRandomizedTextItems(),
     ...textGroups.map(() => [])
   ]);
 
@@ -81,7 +81,7 @@ export default function Main({ context }) {
     instance.on('reset-task', () => {
       setShowSelectedSolutions(false);
       setShowUnselectedSolutions(false);
-      setCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
+      setCategoryAssignment([getRandomizedTextItems(), ...textGroups.map(() => [])]);
     });
   }, []);
 
@@ -246,7 +246,7 @@ export default function Main({ context }) {
         y2: clientRect.y + clientRect.height
       };
       setCategoryDimensions((prevCategoryDimensions) => {
-        return { ...prevCategoryDimensions, [i]: coordinates};
+        return { ...prevCategoryDimensions, [i]: coordinates };
       });
     }
   };
@@ -327,7 +327,7 @@ export default function Main({ context }) {
     >
       <CategoryList
         moveTextItems={moveTextItems}
-        allTextItems={getRandomizedTextItems().slice()}
+        allTextItems={getRandomizedTextItems()}
         removeAnimations={removeAnimations}
         draggingStartedHandler={draggingStartedHandler}
         draggedInfo={draggedInfo}
@@ -339,7 +339,7 @@ export default function Main({ context }) {
           draggingStartedHandler={draggingStartedHandler}
           draggedInfo={draggedInfo}
           textItems={{
-            categories: [...textGroups, { groupName: l10n.uncategorizedLabel}],
+            categories: [...textGroups, { groupName: l10n.uncategorizedLabel }],
             removeAnimations: removeAnimations
           }}
         />

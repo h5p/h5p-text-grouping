@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from './components/Main';
+
+import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
 import belongsToCategory from './helpers/belongsToCategory';
 import randomizeArray from './helpers/randomizeArray';
-import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
+import Main from './components/Main';
 
 // Load library
 H5P = H5P || {};
@@ -27,7 +28,7 @@ H5P.TextGrouping = (() => {
     // Construct text item elements for categorized words
     this.randomizedTextItems = randomizeArray(
       params.textGroups.flatMap((category, i) =>
-        category.textElements.map((element, j) => createTextItem(`${i+1}${j}`, element, false))
+        category.textElements.map((element, j) => createTextItem(`${i + 1}${j}`, element, false))
       )
     );
 
@@ -69,7 +70,7 @@ H5P.TextGrouping = (() => {
       l10n: params.l10n,
       instance: this,
       contentId: contentId,
-      getRandomizedTextItems: () => this.randomizedTextItems,
+      getRandomizedTextItems: () => [...this.randomizedTextItems],
       triggerInteracted: triggerInteracted
     };
 
@@ -297,7 +298,7 @@ H5P.TextGrouping = (() => {
      */
     this.resetTask = () => {
       this.randomizedTextItems = randomizeArray(this.randomizedTextItems);
-      this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
+      this.categoryState = [[...this.randomizedTextItems], ...this.params.textGroups.map(() => [])];
       this.trigger('reset-task');
 
       this.showButton('check-answer');
