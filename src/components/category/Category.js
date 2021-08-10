@@ -231,14 +231,15 @@ export default function Category({
       className={getClassNames({
         category: true,
         uncategorized: uncategorized,
-        'category-dropzone': draggedInfo.dropzoneVisible === categoryId
+        'category-dropzone': draggedInfo.dropzoneVisible === categoryId,
+        'expanded-state': accordionOpen
       })}
       style={uncategorized ? { minHeight: minHeight } : {}}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
         {uncategorized ? null : (
           <Button
-            iconName={accordionOpen ? 'expanded-state' : 'collapsed-state'}
+            iconName={accordionOpen ? 'expanded-state-icon' : 'collapsed-state-icon'}
             className="expand-collapse-button"
             ariaLabel={accordionOpen ? l10n.ariaCollapse : l10n.ariaExpand}
             hoverText={accordionOpen ? l10n.hoverCollapse : l10n.hoverExpand}

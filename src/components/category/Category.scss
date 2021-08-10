@@ -81,6 +81,12 @@
     .header {
       padding-left: 0em;
     }
+
+    &.category-dropzone:not(.expanded-state) {
+      border: dotted 2px styles.$dropzone-border-color;
+      border-radius: 5px;
+      background-color: styles.$dropzone-background-neutral;
+    }
   }
 
   @media screen and (max-width: styles.$small-screen-size) {
@@ -90,7 +96,7 @@
       padding-left: 0em;
     }
 
-    &.category-dropzone {
+    &.category-dropzone:not(.expanded-state) {
       border: dotted 2px styles.$dropzone-border-color;
       border-radius: 5px;
       background-color: styles.$dropzone-background-neutral;
@@ -154,7 +160,7 @@
     background: none;
   }
 
-  .expanded-state {
+  .expanded-state-icon {
     &:before {
       font-family: 'Material Icons';
       font-size: 2em;
@@ -163,7 +169,7 @@
     }
   }
 
-  .collapsed-state {
+  .collapsed-state-icon {
     transform: rotate(-90deg);
     &:before {
       font-family: 'Material Icons';
