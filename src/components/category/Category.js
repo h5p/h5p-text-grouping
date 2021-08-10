@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
-import useNarrowScreen from '../../helpers/useNarrowScreen';
-import useMediumScreen from '../../helpers/useMediumScreen';
+import useScreenType from '../../helpers/useScreenType';
 import belongsToCategory from '../../helpers/belongsToCategory';
 import getClassNames from '../../helpers/getClassNames';
 
@@ -34,8 +33,8 @@ export default function Category({
 
   const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
     useContext(H5PContext);
-  const narrowScreen = useNarrowScreen();
-  const mediumScreen = useMediumScreen();
+  const narrowScreen = useScreenType('narrow');
+  const mediumScreen = useScreenType('medium');
 
   const [minHeight, setMinHeight] = useState(null);
   const [maxHeight, setMaxHeight] = useState(null);
