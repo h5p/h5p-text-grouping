@@ -170,7 +170,6 @@ export default function Category({
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
         draggingStartedHandler={draggingStartedHandler}
-        narrowScreen={narrowScreen}
         draggedInfo={draggedInfo}
       />
     ));

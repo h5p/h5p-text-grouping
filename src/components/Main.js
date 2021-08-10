@@ -232,9 +232,7 @@ export default function Main({ context }) {
       // Skip uncategorized category if it is empty
       if (i === 0 && categoryAssignment[0].length === 0) {
         setCategoryDimensions((prevCategoryDimensions) => {
-          const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-          categoryDimensions[0] = { x1: 0, x2: 0, y1: 0, y2: 0 };
-          return categoryDimensions;
+          return { ...prevCategoryDimensions, 0: { x1: 0, x2: 0, y1: 0, y2: 0 } };
         });
         continue;
       }
@@ -247,9 +245,7 @@ export default function Main({ context }) {
         y2: clientRect.y + clientRect.height
       };
       setCategoryDimensions((prevCategoryDimensions) => {
-        const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-        categoryDimensions[i] = coordinates;
-        return categoryDimensions;
+        return { ...prevCategoryDimensions, [i]: coordinates};
       });
     }
   };

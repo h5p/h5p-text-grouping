@@ -30,7 +30,6 @@ export default function TextItem({
   removeAnimations,
   setContainerHeight,
   draggingStartedHandler,
-  narrowScreen,
   draggedInfo
 }) {
   const {
@@ -243,7 +242,6 @@ TextItem.propTypes = {
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
-  narrowScreen: PropTypes.bool.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,
