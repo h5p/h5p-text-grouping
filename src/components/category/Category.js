@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
 import useNarrowScreen from '../../helpers/useNarrowScreen';
+import useMediumScreen from '../../helpers/useMediumScreen';
 import belongsToCategory from '../../helpers/belongsToCategory';
 import getClassNames from '../../helpers/getClassNames';
 
@@ -34,12 +35,17 @@ export default function Category({
   const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
     useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
+  const mediumScreen = useMediumScreen();
 
   const [minHeight, setMinHeight] = useState(null);
+  const [maxHeight, setMaxHeight] = useState(null);
+  const [previousHeight, setPreviousHeight] = useState(null);
+  const [currentlyOpenTextItem, setCurrentlyOpenTextItem] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
 
   const categoryHeaderRef = useRef(null);
+  const categoryContentRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
 
   /**
@@ -104,6 +110,42 @@ export default function Category({
   };
 
   /**
+   * Set the maxHeight an minHeight of Uncategorized to make sure the textItems aren't shifted
+   * by the new dropdown, and that there is enough room for a dropdown
+   * @param {number} height The max height needed
+   * @param {string} textItemId The id of the textItem calling the function
+   * @param {bool} settingMinHeight True if minHeight should be set, false if maxHeight should be set
+   */
+  const resizeUncategorized = (height, textItemId, settingMinHeight) => {
+    if (height === 0) {
+      // Makes sure the state is up to date
+      let currentTextItem;
+      setCurrentlyOpenTextItem((currentlyOpenTextItem) => {
+        currentTextItem = currentlyOpenTextItem;
+        return currentlyOpenTextItem;
+      });
+
+      // Reset height restrictions if the closing textItem was the last to open
+      if (textItemId === currentTextItem) {
+        setMaxHeight(null);
+        setMinHeight(null);
+        setCurrentlyOpenTextItem(null);
+      }
+    }
+    else if (height > 0) {
+      switch (settingMinHeight) {
+        case true:
+          setMinHeight(height + categoryHeaderRef.current.offsetHeight);
+          break;
+        case false:
+          setMaxHeight(previousHeight);
+          break;
+      }
+      setCurrentlyOpenTextItem(textItemId);
+    }
+  };
+
+  /**
    * Builder for creating different text items
    * @param {object[]} textItems list of text item objects to build elements from
    * @param {boolean} isShowSolutionItem if the text item is used to show the correct solution
@@ -123,7 +165,7 @@ export default function Category({
         isShowSolutionItem={isShowSolutionItem}
         showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
-        setContainerHeight={uncategorized ? setMinHeight : setContainerHeight}
+        setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
         draggingStartedHandler={draggingStartedHandler}
         narrowScreen={narrowScreen}
       />
@@ -154,10 +196,21 @@ export default function Category({
     textItems.push(buildTextItems(uncategorized, true, false));
   }
 
+  /**
+   * Sets the height of the category without a dropdown being open
+   */
+  useEffect(
+    () => {
+      setPreviousHeight(getComputedStyle(categoryContentRef.current).height);
+    },
+    textItems ? [textItems.length] : []
+  );
+
   return (
     <div
       id={`category ${categoryId}`}
       className={`category${uncategorized ? ' uncategorized' : ''}`}
+      style={uncategorized ? { minHeight: minHeight } : {}}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
         {uncategorized ? null : (
@@ -200,7 +253,11 @@ export default function Category({
       ) : null}
       <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
         {uncategorized ? null : <hr />}
-        <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'category-content'}>
+        <ul
+          ref={categoryContentRef}
+          style={uncategorized && !mediumScreen ? { maxHeight: maxHeight } : {}}
+          className={'category-content'}
+        >
           {textItems}
           <li>
             <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />

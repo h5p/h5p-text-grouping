@@ -39,10 +39,11 @@ export default function TextItem({
     showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
-    setDragState, 
+    setDragState,
     dragState
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
+  const [offsetTop, setOffsetTop] = useState(null);
 
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
@@ -68,6 +69,15 @@ export default function TextItem({
    */
   const handleDropdownSelectOpen = () => {
     textItemRef.current.style.zIndex = 1; // To make sure the dropdown isn't below other textItems
+
+    const newOffsetTop = textItemRef.current.offsetTop;
+    setOffsetTop(newOffsetTop);
+
+    // Set uncategorized maxHeight
+    if (currentCategoryId === uncategorizedId) {
+      setContainerHeight(newOffsetTop + textItemRef.current.offsetHeight, textItemId, false);
+    }
+
     setDropdownSelectOpen(true);
     instance.trigger('resize');
   };
@@ -85,7 +95,7 @@ export default function TextItem({
     }
     setDropdownSelectOpen(false);
     textItemRef.current.style.zIndex = 0;
-    setContainerHeight(0);
+    setContainerHeight(0, textItemId);
     instance.trigger('resize');
   };
 
@@ -96,11 +106,12 @@ export default function TextItem({
   const setHeight = (height) => {
     // If the dropdown can't fit in the textItem
     if (height > textItemRef.current.offsetHeight / 2) {
+      // Set container minHeight
       const offset =
-        textItemRef.current.offsetTop +
+        offsetTop +
         textItemRef.current.offsetHeight +
         (height - textItemRef.current.offsetHeight / 2);
-      setContainerHeight(offset);
+      setContainerHeight(offset, textItemId, true);
     }
   };
 
