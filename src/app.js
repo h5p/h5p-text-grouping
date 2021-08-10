@@ -32,6 +32,8 @@ H5P.TextGrouping = (() => {
       )
     );
 
+    this.maxScore = this.randomizedTextItems.length;
+
     this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
 
     /**
@@ -102,7 +104,6 @@ H5P.TextGrouping = (() => {
       this.setIntroduction(this.introduction);
     }
 
-
     /**
      * Checks if any items has been assigned to a category
      * @returns {boolean} true if there are no assigned items, false otherwise
@@ -124,25 +125,7 @@ H5P.TextGrouping = (() => {
     };
 
     /**
-     * Calculates the maximum possible score,
-     * but does not take into account the singlePoint setting
-     * @returns {number} max score possible without singlePoint
-     */
-    this.calculateMaxScore = () => {
-      // Cache the computation since the answer never changes
-      if (this.maxScore) {
-        return this.maxScore;
-      }
-
-      this.maxScore = 0;
-      this.params.textGroups.forEach((category) => {
-        this.maxScore += category.textElements.length;
-      });
-      return this.maxScore;
-    };
-
-    /**
-     * Get latest score
+     * Get latest score unnecessary
      *
      * Text items in the correct category are worth 1 point.
      * Text items Uncategorized are not counted.
@@ -170,7 +153,7 @@ H5P.TextGrouping = (() => {
       });
 
       if (this.params.behaviour.singlePoint) {
-        return this.isPassed(score, this.calculateMaxScore()) ? 1 : 0;
+        return this.isPassed(score, this.maxScore) ? 1 : 0;
       }
 
       return score;
@@ -184,7 +167,7 @@ H5P.TextGrouping = (() => {
      * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-3}
      */
     this.getMaxScore = () => {
-      return this.params.behaviour.singlePoint ? 1 : this.calculateMaxScore();
+      return this.params.behaviour.singlePoint ? 1 : this.maxScore;
     };
 
     /**
