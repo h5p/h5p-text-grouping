@@ -272,7 +272,7 @@ export default function Category({
           />
         </div>
       ) : null}
-      <div className={accordionOpen || uncategorized ? undefined : 'collapsed'}>
+      <div className={accordionOpen || uncategorized ? null : 'collapsed'}>
         {uncategorized ? null : <hr />}
         <ul
           ref={categoryContentRef}
