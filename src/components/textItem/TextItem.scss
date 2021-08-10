@@ -56,13 +56,11 @@
     &:hover {
       &:not(.show-solution):not(.text-item-selected) {
         cursor: pointer;
-        &:not(:focus-within) {
-          border-style: dotted;
-          border-color: styles.$text-item-border-color !important;
+        border-style: dotted;
+        border-color: styles.$text-item-border-color !important;
 
-          .text-item {
-            background: styles.$text-item-background-dark;
-          }
+        .text-item {
+          background: styles.$text-item-background-dark;
         }
       }
     }
