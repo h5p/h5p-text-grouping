@@ -72,6 +72,21 @@ export default function Category({
     });
   }, []);
 
+  /**
+   * Sets the height of the category without a dropdown being open
+   */
+  useEffect(
+    () => {
+      if (uncategorized) {
+        // A slight timeout is added to make sure the changes have time to take effect
+        setTimeout(() => {
+          setPreviousHeight(categoryContentRef.current.offsetHeight);
+        }, 10);
+      }
+    },
+    [categoryAssignment[categoryId].length]
+  );
+
   const getCurrentlySelectedIds = () => categoryAssignment[categoryId].map((textItem) => textItem.id);
   const titleWithChildCount =
     uncategorized
@@ -217,21 +232,6 @@ export default function Category({
     // Uncategorized items does not get a swap icon
     textItems.push(buildTextItems(uncategorized, true, false));
   }
-
-  /**
-   * Sets the height of the category without a dropdown being open
-   */
-  useEffect(
-    () => {
-      if (uncategorized) {
-        // A slight timeout is added to make sure the changes have time to take effect
-        setTimeout(() => {
-          setPreviousHeight(categoryContentRef.current.offsetHeight);
-        }, 10);
-      }
-    },
-    [categoryAssignment[categoryId].length]
-  );
 
   return (
     <div
