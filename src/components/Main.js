@@ -326,7 +326,6 @@ export default function Main({ context }) {
       }}
     >
       <CategoryList
-        categoryAssignment={categoryAssignment}
         moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems().slice()}
         removeAnimations={removeAnimations}
@@ -340,7 +339,6 @@ export default function Main({ context }) {
           draggingStartedHandler={draggingStartedHandler}
           draggedInfo={draggedInfo}
           textItems={{
-            category: categoryAssignment[0],
             categories: [...textGroups, { groupName: l10n.uncategorizedLabel}],
             removeAnimations: removeAnimations
           }}
