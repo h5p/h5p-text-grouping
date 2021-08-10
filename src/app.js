@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { getXAPIData, getCurrentState, getAnsweredXAPIEvent } from './helpers/xAPI';
+import createPlaceholdersIfMissing from './helpers/createPlaceholdersIfMissing';
 import belongsToCategory from './helpers/belongsToCategory';
 import randomizeArray from './helpers/randomizeArray';
 import Main from './components/Main';
@@ -17,6 +18,7 @@ H5P.TextGrouping = (() => {
     this.contentId = contentId;
     this.params = params;
     this.extras = extras || {};
+    this.params.textGroups = createPlaceholdersIfMissing(this.params.textGroups);
 
     // Builder for a textItem object
     const createTextItem = (id, content, shouldAnimate) => ({
@@ -27,7 +29,7 @@ H5P.TextGrouping = (() => {
 
     // Construct text item elements for categorized words
     this.randomizedTextItems = randomizeArray(
-      params.textGroups.flatMap((category, i) =>
+      this.params.textGroups.flatMap((category, i) =>
         category.textElements.map((element, j) => createTextItem(`${i + 1}${j}`, element, false))
       )
     );
