@@ -191,7 +191,7 @@ export default function Main({ context }) {
   };
 
   /**
-   * Remove listeners, reset dragstate and reset dropindexone
+   * Remove listeners, reset dragstate and reset dropzoneIndex
    */
   const resetDragState = () => {
     document.removeEventListener('mousemove', mouseMoveHandler);
@@ -288,7 +288,7 @@ export default function Main({ context }) {
       if (shouldFocus) {
         setFocusedTextItem(textItemId);
 
-        // Render the new textitem after enough time for the focus to be set
+        // Render the new textItem after enough time for the focus to be set
         setTimeout(() => {
           setCategoryAssignment(newCategories);
         }, 10);

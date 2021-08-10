@@ -25,7 +25,7 @@ export default function createPlaceholdersIfMissing(textGroups) {
     return [buildPlaceholderCategory(1, 0), buildPlaceholderCategory(2, 2)];
   }
 
-  // Fills categories with groupName and/or elements if missing
+  // Fills categories with groupName and/or textElements if missing
   let newTextGroups = [];
   textGroups.forEach((textGroup, index) => {
     const id = index + 1;
