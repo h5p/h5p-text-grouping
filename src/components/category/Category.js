@@ -66,7 +66,9 @@ export default function Category({
    */
   useEffect(() => {
     instance.on('resize', () => {
-      setPreviousHeight(getComputedStyle(categoryContentRef.current).height);
+      if (uncategorized && currentlyOpenTextItem === null) {
+        setPreviousHeight(categoryContentRef.current.offsetHeight);
+      }
     });
   }, []);
 
@@ -221,9 +223,14 @@ export default function Category({
    */
   useEffect(
     () => {
-      setPreviousHeight(getComputedStyle(categoryContentRef.current).height);
+      if (uncategorized) {
+        // A slight timeout is added to make sure the changes have time to take effect
+        setTimeout(() => {
+          setPreviousHeight(categoryContentRef.current.offsetHeight);
+        }, 10);
+      }
     },
-    textItems ? [textItems.length] : []
+    [categoryAssignment[categoryId].length]
   );
 
   return (
