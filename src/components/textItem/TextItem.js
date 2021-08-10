@@ -21,7 +21,6 @@ import './TextItem.scss';
 export default function TextItem({
   textItemId,
   currentCategoryId,
-  dropzoneVisible,
   categories,
   moveTextItems,
   textElement,
@@ -31,7 +30,8 @@ export default function TextItem({
   removeAnimations,
   setContainerHeight,
   draggingStartedHandler,
-  narrowScreen
+  narrowScreen,
+  draggedInfo
 }) {
   const {
     instance,
@@ -125,7 +125,6 @@ export default function TextItem({
     if (
       dropdownSelectOpen ||
       showSelectedSolutions ||
-      narrowScreen ||
       event.button !== 0 ||
       event.target === buttonRef.current
     ) {
@@ -141,7 +140,6 @@ export default function TextItem({
     setDragState({
       textItemId: textItemId,
       categoryId: currentCategoryId,
-      textItemRef: textItemRef,
       dragging: true,
       rel: currentPos,
       style: { position: 'fixed', width: `${itemWidth}px`, zIndex: 1 }
@@ -163,16 +161,21 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={isDragged ? dragState.style : {}}
+      style={
+        isDragged ? { ...dragState.style, ...draggedInfo.style } : {}
+      }
     >
       <div
-        className={getClassNames({
-          'text-item-border': true,
-          'show-solution': showSelectedSolutions,
-          'text-item-selected': isDragged,
-          'drag-over-category':
-            isDragged && dropzoneVisible !== currentCategoryId && dropzoneVisible !== -1
-        })}
+        className={getClassNames(
+          Object.assign(
+            {
+              'text-item-border': true,
+              'show-solution': showSelectedSolutions,
+              'text-item-selected': isDragged
+            },
+            isDragged ? draggedInfo.firstChildClassNames : {}
+          )
+        )}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
         <div className="text-item">
@@ -227,7 +230,6 @@ export default function TextItem({
 TextItem.propTypes = {
   textItemId: PropTypes.string.isRequired,
   currentCategoryId: PropTypes.number.isRequired,
-  dropzoneVisible: PropTypes.number,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
@@ -241,5 +243,10 @@ TextItem.propTypes = {
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,
-  narrowScreen: PropTypes.bool.isRequired
+  narrowScreen: PropTypes.bool.isRequired,
+  draggedInfo: PropTypes.shape({
+    style: PropTypes.object.isRequired,
+    firstChildClassNames: PropTypes.object.isRequired,
+    dropzoneVisible: PropTypes.number.isRequired
+  }).isRequired
 };
