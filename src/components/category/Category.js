@@ -150,18 +150,15 @@ export default function Category({
       // If the state is accessed normally, it will be possible for one textItem to reset
       // the size after another textItem has opened. This is because normal state variables
       // are accessed at the start of a function, and not updated while the function is running
-      let currentTextItem;
       setCurrentlyOpenTextItem((currentlyOpenTextItem) => {
-        currentTextItem = currentlyOpenTextItem;
+        // Reset height restrictions if the closing textItem was the last to open
+        if (textItemId === currentlyOpenTextItem) {
+          setMaxHeight(null);
+          setMinHeight(null);
+          setCurrentlyOpenTextItem(null);
+        }
         return currentlyOpenTextItem;
       });
-
-      // Reset height restrictions if the closing textItem was the last to open
-      if (textItemId === currentTextItem) {
-        setMaxHeight(null);
-        setMinHeight(null);
-        setCurrentlyOpenTextItem(null);
-      }
     }
     else if (height > 0) {
       if (settingMinHeight) {
