@@ -21,6 +21,7 @@ import './TextItem.scss';
 export default function TextItem({
   textItemId,
   currentCategoryId,
+  dropzoneVisible,
   categories,
   moveTextItems,
   textElement,
@@ -44,6 +45,7 @@ export default function TextItem({
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
 
+  const isDragged = dragState.textItemId === textItemId;
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -150,13 +152,15 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={dragState.textItemId === textItemId ? dragState.style : {}}
+      style={isDragged ? dragState.style : {}}
     >
       <div
         className={getClassNames({
           'text-item-border': true,
           'show-solution': showSelectedSolutions,
-          'text-item-selected': dragState.textItemId === textItemId
+          'text-item-selected': isDragged,
+          'drag-over-category':
+            isDragged && dropzoneVisible !== currentCategoryId && dropzoneVisible !== -1
         })}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
@@ -212,6 +216,7 @@ export default function TextItem({
 TextItem.propTypes = {
   textItemId: PropTypes.string.isRequired,
   currentCategoryId: PropTypes.number.isRequired,
+  dropzoneVisible: PropTypes.number,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired

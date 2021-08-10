@@ -41,8 +41,8 @@ export default function CategoryList({
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
           categoryAssignment={categoryAssignment}
-          dropzoneVisible={dropzoneVisible === categoryId ? true : false}
           textItems={{
+            dropzoneVisible: dropzoneVisible,
             category: category,
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations

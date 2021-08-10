@@ -26,8 +26,7 @@ export default function Category({
   allTextItems,
   setContainerHeight,
   draggingStartedHandler,
-  dropzoneVisible,
-  textItems: { category, categories, removeAnimations }
+  textItems: { dropzoneVisible, category, categories, removeAnimations }
 }) {
   const uncategorized = categoryId === categories.length - 1;
 
@@ -116,6 +115,7 @@ export default function Category({
         key={id}
         textItemId={id}
         currentCategoryId={categoryId}
+        dropzoneVisible={dropzoneVisible}
         categories={categories}
         moveTextItems={moveTextItems}
         textElement={content}
@@ -203,7 +203,7 @@ export default function Category({
         <ul style={uncategorized ? { minHeight: minHeight } : {}} className={'category-content'}>
           {textItems}
           <li>
-            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible} />
+            <Dropzone key={`dropzone-${categoryId}`} visible={dropzoneVisible === categoryId} />
           </li>
         </ul>
       </div>
@@ -223,8 +223,8 @@ Category.propTypes = {
   ),
   setContainerHeight: PropTypes.func,
   draggingStartedHandler: PropTypes.func.isRequired,
-  dropzoneVisible: PropTypes.bool.isRequired,
   textItems: PropTypes.exact({
+    dropzoneVisible: PropTypes.number,
     category: PropTypes.arrayOf(
       PropTypes.exact({
         id: PropTypes.string,

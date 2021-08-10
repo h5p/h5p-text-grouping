@@ -107,12 +107,10 @@ export default function Main({ context }) {
 
       // If the mouse is inside the category and dropzone is not visible
       if (checkIfInsideCategory(i, mouseCoordinates)) {
-        dragState.textItemRef.current.children[0].classList.add('drag-over-category');
         setDropzoneVisible(i);
         return;
       }
       else {
-        dragState.textItemRef.current.children[0].classList.remove('drag-over-category');
         setDropzoneVisible(-1);
       }
     }
@@ -206,9 +204,9 @@ export default function Main({ context }) {
       if (i === uncategorizedId && categoryAssignment[uncategorizedId].length === 0) {
         setCategoryDimensions((prevCategoryDimensions) => {
           const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-          categoryDimensions[uncategorizedId] = {x1: 0, x2: 0, y1: 0, y2: 0};
+          categoryDimensions[uncategorizedId] = { x1: 0, x2: 0, y1: 0, y2: 0 };
           return categoryDimensions;
-        })
+        });
         continue;
       }
 
@@ -315,8 +313,8 @@ export default function Main({ context }) {
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
           draggingStartedHandler={draggingStartedHandler}
-          dropzoneVisible={dropzoneVisible === uncategorizedId ? true : false}
           textItems={{
+            dropzoneVisible: dropzoneVisible,
             category: categoryAssignment[uncategorizedId],
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
