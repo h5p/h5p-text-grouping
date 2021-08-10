@@ -3,7 +3,6 @@
 .dropdown-select {
   position: absolute;
   margin: 0;
-  padding: 0.5em;
   box-sizing: border-box;
   top: 50%;
   right: 0;
@@ -23,28 +22,31 @@
   backface-visibility: hidden;
 
   .label {
-    padding: 0em 0.5em;
+    padding: 0.5em 0.5em 0.5em 1em;
     font-weight: bold;
     font-style: italic;
+    line-height: 2em;
   }
 
   hr {
     color: #ffffff00;
+    border: 0;
     border-top: 1px solid styles.$border-color-neutral;
-    border-radius: 5px;
-    border-bottom: 0px;
-    margin-bottom: 0.125em;
+    margin: 1em 0;
+    padding: 0;
+    margin: 0em 0.5em 0.125em 0.5em;
   }
 
   ul {
     margin: 0;
     padding: 0;
+    padding-top: 0.5em;
   }
 
   li {
     display: flex;
     align-items: center;
-    padding: 0.5em 0.5em;
+    padding: 0.5em 1em;
     position: relative;
     line-height: 1.8em;
 

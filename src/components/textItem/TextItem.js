@@ -21,6 +21,7 @@ import './TextItem.scss';
 export default function TextItem({
   textItemId,
   currentCategoryId,
+  dropzoneVisible,
   categories,
   moveTextItems,
   textElement,
@@ -45,6 +46,7 @@ export default function TextItem({
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [offsetTop, setOffsetTop] = useState(null);
 
+  const isDragged = dragState.textItemId === textItemId;
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -161,13 +163,15 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={dragState.textItemId === textItemId ? dragState.style : {}}
+      style={isDragged ? dragState.style : {}}
     >
       <div
         className={getClassNames({
           'text-item-border': true,
           'show-solution': showSelectedSolutions,
-          'text-item-selected': dragState.textItemId === textItemId
+          'text-item-selected': isDragged,
+          'drag-over-category':
+            isDragged && dropzoneVisible !== currentCategoryId && dropzoneVisible !== -1
         })}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
@@ -176,7 +180,7 @@ export default function TextItem({
           {showSelectedSolutions ? (
             <>
               {shouldShowShowSwapIcon ? (
-                <TipButton tip={'Wrong category'}>
+                <TipButton tip={l10n.wrongCategory}>
                   <div aria-hidden="true" className="swap-icon" />
                 </TipButton>
               ) : null}
@@ -189,7 +193,8 @@ export default function TextItem({
                     : l10n.wrongCategory}
               </span>
             </>
-          ) : (
+          ) : null}
+          {!showSelectedSolutions && !isDragged ? (
             <Button
               className="button-move-to-category"
               iconName={getClassNames({
@@ -201,7 +206,7 @@ export default function TextItem({
               onClick={handleDropdownSelectOpen}
               ref={buttonRef}
             />
-          )}
+          ) : null}
           {dropdownSelectOpen ? (
             <div className="dropdown-wrapper">
               <SingleDropdownSelect
@@ -222,6 +227,7 @@ export default function TextItem({
 TextItem.propTypes = {
   textItemId: PropTypes.string.isRequired,
   currentCategoryId: PropTypes.number.isRequired,
+  dropzoneVisible: PropTypes.number,
   categories: PropTypes.arrayOf(
     PropTypes.shape({
       groupName: PropTypes.string.isRequired
