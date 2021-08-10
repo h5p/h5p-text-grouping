@@ -17,6 +17,7 @@ import deepCopy from '../helpers/deepCopy';
 export default function Main({ context }) {
   const {
     params: { textGroups },
+    l10n,
     instance,
     getRandomizedTextItems,
     triggerInteracted
@@ -340,7 +341,7 @@ export default function Main({ context }) {
           draggedInfo={draggedInfo}
           textItems={{
             category: categoryAssignment[0],
-            categories: [...textGroups, { groupName: 'Uncategorized' }],
+            categories: [...textGroups, { groupName: l10n.uncategorizedLabel}],
             removeAnimations: removeAnimations
           }}
         />
