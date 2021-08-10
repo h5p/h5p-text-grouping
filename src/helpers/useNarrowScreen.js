@@ -14,6 +14,8 @@ const useNarrowScreen = () => {
     setScreensNarrow(document.documentElement.clientWidth <= narrowScreenWidth);
   }
   useEffect(() => {
+    checkWindowSize();
+
     instance.on('resize', function () {
       checkWindowSize();
     });
