@@ -32,13 +32,8 @@ export default function Category({
 }) {
   const uncategorized = categoryId === 0;
 
-  const {
-    instance,
-    l10n,
-    categoryAssignment,
-    showSelectedSolutions,
-    showUnselectedSolutions,
-  } = useContext(H5PContext);
+  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
+    useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const mediumScreen = useMediumScreen();
 
@@ -75,23 +70,20 @@ export default function Category({
   /**
    * Sets the height of the category without a dropdown being open
    */
-  useEffect(
-    () => {
-      if (uncategorized) {
-        // A slight timeout is added to make sure the changes have time to take effect
-        setTimeout(() => {
-          setPreviousHeight(categoryContentRef.current.offsetHeight);
-        }, 10);
-      }
-    },
-    [categoryAssignment[categoryId].length]
-  );
+  useEffect(() => {
+    if (uncategorized) {
+      // A slight timeout is added to make sure the changes have time to take effect
+      setTimeout(() => {
+        setPreviousHeight(categoryContentRef.current.offsetHeight);
+      }, 10);
+    }
+  }, [categoryAssignment[categoryId].length]);
 
-  const getCurrentlySelectedIds = () => categoryAssignment[categoryId].map((textItem) => textItem.id);
-  const titleWithChildCount =
-    uncategorized
-      ? categories[categories.length - 1].groupName
-      : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`;
+  const getCurrentlySelectedIds = () =>
+    categoryAssignment[categoryId].map((textItem) => textItem.id);
+  const titleWithChildCount = uncategorized
+    ? categories[categories.length - 1].groupName
+    : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`;
 
   /**
    * Finds the unselected textItems belonging to this category
@@ -236,9 +228,11 @@ export default function Category({
   return (
     <div
       id={`category ${categoryId}`}
-      className={`category${uncategorized ? ' uncategorized' : ''} ${
-        draggedInfo.dropzoneVisible === categoryId ? 'category-dropzone' : ''
-      }`}
+      className={getClassNames({
+        category: true,
+        uncategorized: uncategorized,
+        'category-dropzone': draggedInfo.dropzoneVisible === categoryId
+      })}
       style={uncategorized ? { minHeight: minHeight } : {}}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
