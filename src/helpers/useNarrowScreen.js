@@ -1,23 +1,21 @@
-import { useState, useEffect, useContext } from 'react';
-import { H5PContext } from '../context/H5PContext';
+import { useState, useEffect } from 'react';
 
 /**
  * Utility hook for checking if device is mobile or not.
- * @returns {boolean} true if screen is less than or equal to 640 pixels, false otherwise.
+ * @returns {boolean}true if screen is less than or equal to 640 pixels, false otherwise.
  */
 const useNarrowScreen = () => {
-  const { instance } = useContext(H5PContext);
   const narrowScreenWidth = 640; // pixels
   const [screenIsNarrow, setScreensNarrow] = useState(false);
 
   function checkWindowSize() {
-    setScreensNarrow(document.documentElement.clientWidth <= narrowScreenWidth);
+    setScreensNarrow(window.innerWidth <= narrowScreenWidth);
   }
   useEffect(() => {
-    instance.document.addEventListener('resize', checkWindowSize);
+    window.addEventListener('resize', checkWindowSize);
     checkWindowSize();
     return () => {
-      instance.document.removeEventListener('resize', checkWindowSize);
+      window.removeEventListener('resize', checkWindowSize);
     };
   }, []);
 
