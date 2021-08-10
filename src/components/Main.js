@@ -36,8 +36,8 @@ export default function Main({ context }) {
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
-    ...textGroups.map(() => []),
-    getRandomizedTextItems().slice()
+    getRandomizedTextItems().slice(),
+    ...textGroups.map(() => [])
   ]);
 
   /**
@@ -80,8 +80,6 @@ export default function Main({ context }) {
       setCategoryAssignment([...textGroups.map(() => []), getRandomizedTextItems().slice()]);
     });
   }, []);
-
-  const uncategorizedId = textGroups.length;
 
   /**
    * Handle mouse moved when item is being dragged
@@ -200,10 +198,10 @@ export default function Main({ context }) {
   const updateCategoryDimensions = () => {
     for (let i = 0; i < categoryAssignment.length; i++) {
       // Skip uncategorized category if it is empty
-      if (i === uncategorizedId && categoryAssignment[uncategorizedId].length === 0) {
+      if (i === 0 && categoryAssignment[0].length === 0) {
         setCategoryDimensions((prevCategoryDimensions) => {
           const categoryDimensions = Object.assign({}, prevCategoryDimensions);
-          categoryDimensions[uncategorizedId] = { x1: 0, x2: 0, y1: 0, y2: 0 };
+          categoryDimensions[0] = { x1: 0, x2: 0, y1: 0, y2: 0 };
           return categoryDimensions;
         });
         continue;
@@ -306,14 +304,14 @@ export default function Main({ context }) {
         draggingStartedHandler={draggingStartedHandler}
         dropzoneVisible={dropzoneVisible}
       />
-      {!showUnselectedSolutions && categoryAssignment[uncategorizedId].length !== 0 ? (
+      {!showUnselectedSolutions && categoryAssignment[0].length !== 0 ? (
         <Category
-          categoryId={uncategorizedId}
+          categoryId={0}
           moveTextItems={moveTextItems}
           draggingStartedHandler={draggingStartedHandler}
           textItems={{
             dropzoneVisible: dropzoneVisible,
-            category: categoryAssignment[uncategorizedId],
+            category: categoryAssignment[0],
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
           }}

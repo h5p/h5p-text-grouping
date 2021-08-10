@@ -34,7 +34,7 @@ export default function CategoryList({
   };
 
   const categoryElements = categoryAssignment.map((category, categoryId) => {
-    if (categoryId < textGroups.length) {
+    if (categoryId !== 0) {
       return (
         <Category
           categoryId={categoryId}

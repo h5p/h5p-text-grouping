@@ -51,8 +51,7 @@ export default function TextItem({
   const buttonRef = useRef(null);
 
   // Booleans for displaying solution states
-  const uncategorizedId = categories.length - 1;
-  const isNotUncategorized = uncategorizedId !== currentCategoryId;
+  const isNotUncategorized = 0 !== currentCategoryId;
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && isNotUncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
@@ -76,7 +75,7 @@ export default function TextItem({
     setOffsetTop(newOffsetTop);
 
     // Set uncategorized maxHeight
-    if (currentCategoryId === uncategorizedId) {
+    if (!isNotUncategorized) {
       setContainerHeight(newOffsetTop + textItemRef.current.offsetHeight, textItemId, false);
     }
 
@@ -90,8 +89,9 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
+      const newCategoryId = (categoryId !== categories.length - 1) ? categoryId + 1 : 0;
       moveTextItems(
-        [{ textItemId: textItemId, newCategoryId: categoryId, prevCategoryId: currentCategoryId }],
+        [{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: currentCategoryId }],
         true
       );
     }
@@ -214,7 +214,7 @@ export default function TextItem({
                 setContainerHeight={setHeight}
                 onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
-                currentlySelectedId={currentCategoryId}
+                currentlySelectedId={isNotUncategorized ? currentCategoryId - 1 : categories.length - 1}
               />
             </div>
           ) : null}

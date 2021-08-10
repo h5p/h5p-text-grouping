@@ -27,13 +27,13 @@ H5P.TextGrouping = (() => {
     // Construct text item elements for categorized words
     this.randomizedTextItems = randomizeArray(
       params.textGroups.flatMap((category, i) =>
-        category.textElements.map((element, j) => createTextItem(`${i}${j}`, element, false))
+        category.textElements.map((element, j) => createTextItem(`${i+1}${j}`, element, false))
       )
     );
 
     this.maxScore = this.randomizedTextItems.length;
 
-    this.categoryState = [...this.params.textGroups.map(() => []), [...this.randomizedTextItems]];
+    this.categoryState = [[...this.randomizedTextItems], ...this.params.textGroups.map(() => [])];
 
     /**
      * Updates the state and triggers xAPI interacted event
@@ -108,8 +108,7 @@ H5P.TextGrouping = (() => {
      * @returns {boolean} true if there are no assigned items, false otherwise
      */
     this.hasNotAnswered = () => {
-      const uncategorizedId = this.categoryState.length - 1; // always the same as the last index
-      const currentlyUncategorizedItems = this.categoryState[uncategorizedId];
+      const currentlyUncategorizedItems = this.categoryState[0];
 
       // If all items are uncategorized, then there has been no change
       return this.randomizedTextItems.length === currentlyUncategorizedItems.length;
@@ -138,11 +137,10 @@ H5P.TextGrouping = (() => {
      */
     this.getScore = () => {
       let score = 0;
-      const uncategorizedId = this.categoryState.length - 1; // always the same as the last index
 
       this.categoryState.forEach((category, categoryId) => {
         // Words in uncategorized should not be counted
-        if (categoryId !== uncategorizedId) {
+        if (categoryId !== 0) {
           category.forEach((textItem) => {
             if (belongsToCategory(textItem.id, categoryId)) {
               score++;

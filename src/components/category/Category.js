@@ -29,7 +29,7 @@ export default function Category({
   draggingStartedHandler,
   textItems: { dropzoneVisible, category, categories, removeAnimations }
 }) {
-  const uncategorized = categoryId === categories.length - 1;
+  const uncategorized = categoryId === 0;
 
   const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
     useContext(H5PContext);
@@ -54,10 +54,11 @@ export default function Category({
     setAccordionOpen(!narrowScreen);
   }, [narrowScreen]);
 
-  const uncategorizedId = categories.length - 1;
   const getCurrentlySelectedIds = () => category.map((textItem) => textItem.id);
-  const titleWithChildCount = `${categories[categoryId].groupName} ${
-    uncategorized ? '' : `(${category.length})`
+  const titleWithChildCount = `${
+    uncategorized
+      ? categories[categories.length - 1].groupName
+      : `${categories[categoryId - 1].groupName} (${category.length})`
   }`;
 
   /**
@@ -89,7 +90,7 @@ export default function Category({
       ...addedIds.map((id) => ({ textItemId: id, newCategoryId: categoryId })),
       ...removedIds.map((id) => ({
         textItemId: id,
-        newCategoryId: uncategorizedId,
+        newCategoryId: 0,
         prevCategoryId: categoryId
       }))
     ]);
@@ -184,7 +185,7 @@ export default function Category({
 
     // Partition the missing text items into already categorized and uncategorized
     unselectedSolutions.forEach((textItem) => {
-      if (categoryAssignment[uncategorizedId].find(({ id }) => id === textItem.id)) {
+      if (categoryAssignment[0].find(({ id }) => id === textItem.id)) {
         uncategorized.push(textItem);
       }
       else {
