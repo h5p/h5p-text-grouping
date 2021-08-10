@@ -183,7 +183,7 @@ export default function TextItem({
               </span>
             </>
           ) : null}
-          {dragState.textItemId !== textItemId ? (
+          {!showSelectedSolutions && !isDragged ? (
             <Button
               className="button-move-to-category"
               iconName={getClassNames({
