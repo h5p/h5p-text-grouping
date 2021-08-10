@@ -308,7 +308,7 @@ export default function Main({ context }) {
         draggingStartedHandler={draggingStartedHandler}
         dropzoneVisible={dropzoneVisible}
       />
-      {showUnselectedSolutions || categoryAssignment[uncategorizedId].length === 0 ? null : (
+      {!showUnselectedSolutions && categoryAssignment[uncategorizedId].length !== 0 ? (
         <Category
           categoryId={uncategorizedId}
           moveTextItems={moveTextItems}
@@ -320,7 +320,7 @@ export default function Main({ context }) {
             removeAnimations: removeAnimations
           }}
         />
-      )}
+      ) : null}
     </H5PContext.Provider>
   );
 }
