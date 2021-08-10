@@ -40,6 +40,7 @@ export default function Category({
   const [minHeight, setMinHeight] = useState(null);
   const [maxHeight, setMaxHeight] = useState(null);
   const [previousHeight, setPreviousHeight] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [currentlyOpenTextItem, setCurrentlyOpenTextItem] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
