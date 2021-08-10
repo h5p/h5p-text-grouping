@@ -27,7 +27,7 @@ H5P.TextGrouping = (() => {
     // Construct text item elements for categorized words
     this.randomizedTextItems = randomizeArray(
       params.textGroups.flatMap((category, i) =>
-        category.textElements.map((element, j) => createTextItem(`${i+1}${j}`, element, false))
+        category.textElements.map((element, j) => createTextItem(`${i + 1}${j}`, element, false))
       )
     );
 

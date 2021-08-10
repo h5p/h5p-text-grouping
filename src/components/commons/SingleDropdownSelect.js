@@ -16,9 +16,7 @@ export default function SingleDropdownSelect({
   options,
   currentlySelectedId
 }) {
-  const {
-    dragState
-  } = useContext(H5PContext);
+  const { dragState } = useContext(H5PContext);
 
   const [selectedOption, setSelectedOption] = useState(0);
   const dropdownRef = useRef(null);
@@ -113,10 +111,7 @@ export default function SingleDropdownSelect({
     <div className="dropdown-select" ref={dropdownRef}>
       <div className="label">{label}</div>
       <hr />
-      <ul
-        role="listbox"
-        onKeyDown={(event) => handleKeyboardPressed(event)}
-      >
+      <ul role="listbox" onKeyDown={(event) => handleKeyboardPressed(event)}>
         {options.map(({ groupName }, id) => {
           const disabled = id === currentlySelectedId;
           let className = id === selectedOption ? 'radioSelected ' : '';

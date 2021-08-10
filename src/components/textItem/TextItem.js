@@ -89,9 +89,15 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      const newCategoryId = (categoryId !== categories.length - 1) ? categoryId + 1 : 0;
+      const newCategoryId = categoryId !== categories.length - 1 ? categoryId + 1 : 0;
       moveTextItems(
-        [{ textItemId: textItemId, newCategoryId: newCategoryId, prevCategoryId: currentCategoryId }],
+        [
+          {
+            textItemId: textItemId,
+            newCategoryId: newCategoryId,
+            prevCategoryId: currentCategoryId
+          }
+        ],
         true
       );
     }
@@ -161,9 +167,7 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={
-        isDragged ? { ...dragState.style, ...draggedInfo.style } : {}
-      }
+      style={isDragged ? { ...dragState.style, ...draggedInfo.style } : {}}
     >
       <div
         className={getClassNames(
@@ -217,7 +221,9 @@ export default function TextItem({
                 setContainerHeight={setHeight}
                 onChange={(categoryId) => handleDropdownSelectAction(categoryId)}
                 options={categories}
-                currentlySelectedId={isNotUncategorized ? currentCategoryId - 1 : categories.length - 1}
+                currentlySelectedId={
+                  isNotUncategorized ? currentCategoryId - 1 : categories.length - 1
+                }
               />
             </div>
           ) : null}

@@ -32,8 +32,14 @@ export default function Category({
 }) {
   const uncategorized = categoryId === 0;
 
-  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions, dragState } =
-    useContext(H5PContext);
+  const {
+    instance,
+    l10n,
+    categoryAssignment,
+    showSelectedSolutions,
+    showUnselectedSolutions,
+    dragState
+  } = useContext(H5PContext);
   const narrowScreen = useNarrowScreen();
   const mediumScreen = useMediumScreen();
 
@@ -213,7 +219,9 @@ export default function Category({
   return (
     <div
       id={`category ${categoryId}`}
-      className={`category${uncategorized ? ' uncategorized' : ''} ${draggedInfo.dropzoneVisible === categoryId ? 'category-dropzone' : ''}`}
+      className={`category${uncategorized ? ' uncategorized' : ''} ${
+        draggedInfo.dropzoneVisible === categoryId ? 'category-dropzone' : ''
+      }`}
       style={uncategorized ? { minHeight: minHeight } : {}}
     >
       <div className={uncategorized ? 'uncategorized-heading' : 'header'} ref={categoryHeaderRef}>
@@ -264,7 +272,10 @@ export default function Category({
         >
           {textItems}
           <li>
-            <Dropzone key={`dropzone-${categoryId}`} visible={draggedInfo.dropzoneVisible === categoryId ? true : false} />
+            <Dropzone
+              key={`dropzone-${categoryId}`}
+              visible={draggedInfo.dropzoneVisible === categoryId}
+            />
           </li>
         </ul>
       </div>

@@ -16,9 +16,7 @@ export default function MultiDropdownSelect({
   options,
   currentlySelectedIds
 }) {
-  const {
-    dragState
-  } = useContext(H5PContext);
+  const { dragState } = useContext(H5PContext);
   const dropdownRef = useRef(null);
 
   /**
@@ -48,7 +46,7 @@ export default function MultiDropdownSelect({
   }, []);
 
   const optionDict = {};
-  currentlySelectedIds.forEach(id => optionDict[id] = true);
+  currentlySelectedIds.forEach((id) => (optionDict[id] = true));
 
   const [addedIds, setAddedIds] = useState([]);
   const [removedIds, setRemovedIds] = useState([]);
@@ -57,18 +55,18 @@ export default function MultiDropdownSelect({
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
     if (optionDict[optionId]) {
-      setRemovedIds(prevRemovedIds => {
+      setRemovedIds((prevRemovedIds) => {
         prevRemovedIds[optionId] = !prevRemovedIds[optionId];
         return prevRemovedIds;
       });
     }
     else {
-      setAddedIds(prevAddedIds => {
+      setAddedIds((prevAddedIds) => {
         prevAddedIds[optionId] = !prevAddedIds[optionId];
         return prevAddedIds;
       });
     }
-    setSelectedOptionDict(prevSelectedOptionDict => {
+    setSelectedOptionDict((prevSelectedOptionDict) => {
       const selectedOptionDict = Object.assign({}, prevSelectedOptionDict);
       selectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
       return selectedOptionDict;
@@ -79,12 +77,13 @@ export default function MultiDropdownSelect({
    * Close the dropdown
    * @param {*} event
    */
-  const handleClose = event => {
-    if (event === null || !event.button) { // Left click or keyboard
+  const handleClose = (event) => {
+    if (event === null || !event.button) {
+      // Left click or keyboard
       setContainerHeight(0);
       onClose(
-        Object.entries(addedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, []),
-        Object.entries(removedIds).reduce((acc, item) => item[1] ? [...acc, item[0]] : acc, [])
+        Object.entries(addedIds).reduce((acc, item) => (item[1] ? [...acc, item[0]] : acc), []),
+        Object.entries(removedIds).reduce((acc, item) => (item[1] ? [...acc, item[0]] : acc), [])
       );
     }
   };

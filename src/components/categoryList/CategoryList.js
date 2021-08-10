@@ -22,7 +22,9 @@ export default function CategoryList({
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
-  const {params: {textGroups}} = useContext(H5PContext);
+  const {
+    params: { textGroups }
+  } = useContext(H5PContext);
 
   /**
    * Set the bottom margin if not enough space for the content
