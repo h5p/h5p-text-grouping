@@ -62,11 +62,10 @@ export default function Category({
   }, [narrowScreen]);
 
   const getCurrentlySelectedIds = () => categoryAssignment[categoryId].map((textItem) => textItem.id);
-  const titleWithChildCount = `${
+  const titleWithChildCount =
     uncategorized
       ? categories[categories.length - 1].groupName
-      : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`
-  }`;
+      : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`;
 
   /**
    * Finds the unselected textItems belonging to this category
