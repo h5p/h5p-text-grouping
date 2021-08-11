@@ -1,6 +1,7 @@
 /**
- * Randomizes an array
- * @return {any[]} A randomized array
+ * Randomizes / shuffles an array
+ * @param {any[]} array to be randomized
+ * @return {any[]} A randomized copy of the array
  */
 const randomizeArray = (array) => {
   const randomizedArray = [...array];
