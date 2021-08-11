@@ -155,7 +155,7 @@ export default function Category({
    * @param {bool} settingMinHeight True if minHeight should be set, false if maxHeight should be set
    */
   const resizeUncategorized = (height, textItemId, settingMinHeight) => {
-    if (categoryContentRef.current !== null) return;
+    if (categoryContentRef.current === null) return;
 
     if (height === 0) {
       // Makes sure the state is up to date.
