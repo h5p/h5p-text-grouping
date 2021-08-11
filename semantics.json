@@ -10,7 +10,10 @@
         "type": "library",
         "label": "Type",
         "importance": "medium",
-        "options": ["H5P.Image 1.1", "H5P.Video 1.5"],
+        "options": [
+          "H5P.Image 1.1",
+          "H5P.Video 1.5"
+        ],
         "optional": true,
         "description": "Optional media to display above the question."
       },
@@ -40,7 +43,16 @@
     "widget": "html",
     "label": "Question",
     "enterMode": "p",
-    "tags": ["strong", "em", "sub", "sup", "h2", "h3", "pre", "code"]
+    "tags": [
+      "strong",
+      "em",
+      "sub",
+      "sup",
+      "h2",
+      "h3",
+      "pre",
+      "code"
+    ]
   },
   {
     "name": "textGroups",
@@ -78,7 +90,13 @@
             "importance": "medium",
             "widget": "html",
             "label": "Word/paragraph",
-            "tags": ["strong", "em", "sub", "sup", "code"]
+            "tags": [
+              "strong",
+              "em",
+              "sub",
+              "sup",
+              "code"
+            ]
           }
         }
       ]
@@ -396,7 +414,13 @@
             "default": "Are you sure you want to finish?",
             "widget": "html",
             "enterMode": "p",
-            "tags": ["strong", "em", "del", "u", "code"]
+            "tags": [
+              "strong",
+              "em",
+              "del",
+              "u",
+              "code"
+            ]
           },
           {
             "label": "Cancel button label",
@@ -436,7 +460,13 @@
             "default": "Are you sure you wish to retry?",
             "widget": "html",
             "enterMode": "p",
-            "tags": ["strong", "em", "del", "u", "code"]
+            "tags": [
+              "strong",
+              "em",
+              "del",
+              "u",
+              "code"
+            ]
           },
           {
             "label": "Cancel button label",
