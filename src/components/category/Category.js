@@ -58,22 +58,35 @@ export default function Category({
    * Sets the height of the category on resize
    */
   useEffect(() => {
-    instance.on('resize', () => {
-      if (uncategorized && currentlyOpenTextItem === null) {
+    const updatePreviousHeight = () => {
+      if (uncategorized && categoryContentRef.current !== null && currentlyOpenTextItem === null) {
         setPreviousHeight(categoryContentRef.current.offsetHeight);
       }
-    });
+    };
+
+    instance.on('resize', updatePreviousHeight);
+
+    return () => instance.off('resize', updatePreviousHeight);
   }, []);
+
+  /**
+   * Trigger resize when the dropdown or accordion opens or closes
+   */
+  useEffect(() => {
+    instance.trigger('resize');
+  }, [dropdownSelectOpen, accordionOpen]);
 
   /**
    * Sets the height of the category without a dropdown being open
    */
   useEffect(() => {
-    if (uncategorized) {
+    if (uncategorized && categoryContentRef.current !== null) {
       // A slight timeout is added to make sure the changes have time to take effect
-      setTimeout(() => {
+      let timerId = setTimeout(() => {
         setPreviousHeight(categoryContentRef.current.offsetHeight);
+        timerId = null;
       }, 10);
+      return () => clearTimeout(timerId);
     }
   }, [categoryAssignment[categoryId].length]);
 
@@ -99,7 +112,6 @@ export default function Category({
    */
   const handleAccordionToggle = () => {
     setAccordionOpen((accordionOpen) => !accordionOpen);
-    instance.trigger('resize');
   };
 
   /**
@@ -122,7 +134,6 @@ export default function Category({
     }
 
     setDropdownSelectOpen(false);
-    instance.trigger('resize');
   };
 
   /**
@@ -143,6 +154,8 @@ export default function Category({
    * @param {bool} settingMinHeight True if minHeight should be set, false if maxHeight should be set
    */
   const resizeUncategorized = (height, textItemId, settingMinHeight) => {
+    if (categoryContentRef.current === null) return;
+
     if (height === 0) {
       // Makes sure the state is up to date.
       // If the state is accessed normally, it will be possible for one textItem to reset
@@ -173,10 +186,9 @@ export default function Category({
    * Builder for creating different text items
    * @param {object[]} textItems list of text item objects to build elements from
    * @param {boolean} isShowSolutionItem if the text item is used to show the correct solution
-   * @param {boolean} showSwapIcon if the text item should show that it should have been in another category
    * @returns {Element[]} list of textItem elements
    */
-  const buildTextItems = (textItems, isShowSolutionItem, showSwapIcon) =>
+  const buildTextItems = (textItems, isShowSolutionItem) =>
     textItems.map(({ id, content, shouldAnimate }) => (
       <TextItem
         key={id}
@@ -187,7 +199,6 @@ export default function Category({
         textElement={content}
         shouldAnimate={shouldAnimate}
         isShowSolutionItem={isShowSolutionItem}
-        showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
         draggedInfo={draggedInfo}
@@ -200,23 +211,7 @@ export default function Category({
   if (showUnselectedSolutions) {
     // Build the show solution state text items to show which items should have been placed in the category
     const unselectedSolutions = getUnselectedSolutions();
-    const categorized = [];
-    const uncategorized = [];
-
-    // Partition the missing text items into already categorized and uncategorized
-    unselectedSolutions.forEach((textItem) => {
-      if (categoryAssignment[0].find(({ id }) => id === textItem.id)) {
-        uncategorized.push(textItem);
-      }
-      else {
-        categorized.push(textItem);
-      }
-    });
-
-    // Categorized items gets a swap icon
-    textItems.push(buildTextItems(categorized, true, true));
-    // Uncategorized items does not get a swap icon
-    textItems.push(buildTextItems(uncategorized, true, false));
+    textItems.push(buildTextItems(unselectedSolutions, true));
   }
 
   return (

@@ -6,7 +6,6 @@ import belongsToCategory from '../../helpers/belongsToCategory';
 import getClassNames from '../../helpers/getClassNames';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
-import TipButton from '../commons/TipButton';
 
 import './TextItem.scss';
 
@@ -26,7 +25,6 @@ export default function TextItem({
   textElement,
   shouldAnimate,
   isShowSolutionItem,
-  showSwapIcon,
   removeAnimations,
   setContainerHeight,
   draggedInfo
@@ -35,7 +33,6 @@ export default function TextItem({
     instance,
     l10n,
     showSelectedSolutions,
-    showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
     setDragState,
@@ -53,7 +50,6 @@ export default function TextItem({
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && !uncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
-  const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
 
   // Set focus to the button
   useLayoutEffect(() => {
@@ -89,7 +85,7 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      // Converts the recieved categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
+      // Converts the received categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
       // (Dropdown displays Uncategorized at the bottom, while Uncategorized is at index 0 everywhere else)
       const newCategoryId = categoryId !== categories.length - 1 ? categoryId + 1 : 0;
 
@@ -163,11 +159,15 @@ export default function TextItem({
         animate: shouldAnimate,
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
-        'show-correct': shouldShowUnselectedSolution
+        'show-correct': shouldShowUnselectedSolution,
+        'dropDownOpen': dropdownSelectOpen
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={isDragged ? { ...dragState.style, ...draggedInfo.style } : {zIndex: dropdownSelectOpen ? 1 : 0}}
+      style={
+        isDragged
+          ? { ...dragState.style, ...draggedInfo.style } : {}
+      }
     >
       <div
         className={getClassNames(
@@ -186,11 +186,6 @@ export default function TextItem({
           <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowShowSwapIcon ? (
-                <TipButton tip={l10n.wrongCategory}>
-                  <div aria-hidden="true" className="swap-icon" />
-                </TipButton>
-              ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
                 {isShowSolutionItem
@@ -243,7 +238,6 @@ TextItem.propTypes = {
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   isShowSolutionItem: PropTypes.bool.isRequired,
-  showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({

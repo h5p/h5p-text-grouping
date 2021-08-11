@@ -24,6 +24,7 @@ export default function Main({ context }) {
   } = context;
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
+  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
   const [draggedInfo, setDraggedInfo] = useState({
     style: {},
@@ -36,7 +37,6 @@ export default function Main({ context }) {
     dragging: false,
     rel: { x: 0, y: 0 }
   });
-  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
     getRandomizedTextItems(),
@@ -47,11 +47,14 @@ export default function Main({ context }) {
    * Shows the solutions of which text items where placed correctly or wrongly
    */
   useEffect(() => {
-    instance.on('xAPI', function (event) {
+    const handleAnswered = (event) => {
       if (event.getVerb() === 'answered') {
         setShowSelectedSolutions(true);
       }
-    });
+    };
+
+    instance.on('xAPI', handleAnswered);
+    return () => instance.off('xAPI', handleAnswered);
   }, []);
 
   /**
@@ -62,6 +65,11 @@ export default function Main({ context }) {
       document.addEventListener('mousemove', mouseMoveHandler);
       document.addEventListener('mouseup', mouseUpHandler);
     }
+
+    return () => {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
   }, [dragState]);
 
   /**
@@ -71,17 +79,22 @@ export default function Main({ context }) {
     instance.on('show-solution', function () {
       setShowUnselectedSolutions(true);
     });
+
+    return () => instance.off('show-solution', () => setShowUnselectedSolutions(true));
   }, []);
 
   /**
    * Hides solutions and resets TextItem placement
    */
   useEffect(() => {
-    instance.on('reset-task', () => {
+    const resetTask = () => {
       setShowSelectedSolutions(false);
       setShowUnselectedSolutions(false);
       setCategoryAssignment([getRandomizedTextItems(), ...textGroups.map(() => [])]);
-    });
+    };
+
+    instance.on('reset-task', resetTask);
+    return () => instance.off('reset-task', resetTask);
   }, []);
 
   /**
