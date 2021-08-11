@@ -161,14 +161,14 @@ export default function TextItem({
         animate: shouldAnimate,
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
-        'show-correct': shouldShowUnselectedSolution
+        'show-correct': shouldShowUnselectedSolution,
+        'dropDownOpen': dropdownSelectOpen
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       style={
         isDragged
-          ? { ...dragState.style, ...draggedInfo.style }
-          : { zIndex: dropdownSelectOpen ? 1 : 0 }
+          ? { ...dragState.style, ...draggedInfo.style } : {}
       }
     >
       <div
