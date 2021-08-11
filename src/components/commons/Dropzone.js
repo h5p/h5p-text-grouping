@@ -8,7 +8,6 @@ import './Dropzone.scss';
 export default function Dropzone({
   visible
 }) {
-  // TODO: Dummy return statement
   return (<div className={`dropzone${visible ? '' : ' hidden'}`}/>);
 }
 
