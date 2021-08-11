@@ -86,7 +86,7 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
-      // Converts the recieved categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
+      // Converts the received categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
       // (Dropdown displays Uncategorized at the bottom, while Uncategorized is at index 0 everywhere else)
       const newCategoryId = categoryId !== categories.length - 1 ? categoryId + 1 : 0;
 
@@ -165,7 +165,11 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={isDragged ? { ...dragState.style, ...draggedInfo.style } : {zIndex: dropdownSelectOpen ? 1 : 0}}
+      style={
+        isDragged
+          ? { ...dragState.style, ...draggedInfo.style }
+          : { zIndex: dropdownSelectOpen ? 1 : 0 }
+      }
     >
       <div
         className={getClassNames(
