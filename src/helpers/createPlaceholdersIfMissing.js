@@ -22,7 +22,7 @@ const buildPlaceholderCategory = (id) => ({
 export default function createPlaceholdersIfMissing(textGroups) {
   // No categories: add two placeholder categories
   if (!textGroups) {
-    return [buildPlaceholderCategory(1, 0), buildPlaceholderCategory(2, 2)];
+    return [buildPlaceholderCategory(1), buildPlaceholderCategory(2)];
   }
 
   // Fills categories with groupName and/or textElements if missing
