@@ -51,7 +51,6 @@
               {
                 "label": "Score Range"
               },
-              {},
               {
                 "label": "Feedback for defined score range",
                 "placeholder": "Fill in the feedback"
@@ -180,6 +179,16 @@
           "label": "Your result",
           "description": ":num and :total are variables and will be replaced by their respective values.",
           "default": "You got :num out of :total points"
+        },
+        {
+          "label": "Placeholder",
+          "description": "Placeholder text for categories without words in them",
+          "default": "Placeholder"
+        },
+        {
+          "label": "Category",
+          "description": "Placeholder text for categories without names",
+          "default": "Category"
         },
         {
           "label": "Check confirmation dialog",
