@@ -162,7 +162,7 @@ export default function Category({
   };
 
   /**
-   * Set the maxHeight an minHeight of Uncategorized to make sure the textItems aren't shifted
+   * Set the maxHeight and minHeight of Uncategorized to make sure the textItems aren't shifted
    * by the new dropdown, and that there is enough room for a dropdown
    * @param {number} height The max height needed
    * @param {string} textItemId The id of the textItem calling the function
