@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
+import addToLinkedList from '../../helpers/addToLinkedList.js';
+import removeFromLinkedList from '../../helpers/removeFromLinkedList';
+import convertLinkedListToArray from '../../helpers/convertLinkedListToArray';
 import './DropdownSelect.scss';
 
 /**
@@ -48,28 +51,46 @@ export default function MultiDropdownSelect({
   const optionDict = {};
   currentlySelectedIds.forEach((id) => (optionDict[id] = true));
 
-  const [addedIds, setAddedIds] = useState([]);
-  const [removedIds, setRemovedIds] = useState([]);
-  const [selectedOptionDict, setSelectedOptionDict] = useState(Object.assign({}, optionDict));
+  /*
+   * Linked lists for added and removed ids. Every item links to the previous and next item
+   * Added ids are ids of text items that are to be added to this category
+   * Removed ids are ids of the text items that are to be removed from this category 
+   */
+  const [addedIds, setAddedIds] = useState({ first: [null, 'last'], last: ['first', null] });
+  const [removedIds, setRemovedIds] = useState({ first: [null, 'last'], last: ['first', null] });
+  const [selectedOptionDict, setSelectedOptionDict] = useState({ ...optionDict });
 
   const handleSelectItem = (event, optionId) => {
     event.stopPropagation();
+    // If text item is currently in this category
     if (optionDict[optionId]) {
       setRemovedIds((prevRemovedIds) => {
-        prevRemovedIds[optionId] = !prevRemovedIds[optionId];
-        return prevRemovedIds;
+        // If the text item is currently selected
+        if (prevRemovedIds[optionId] === undefined) {
+          return addToLinkedList(prevRemovedIds, optionId, 'last');
+        }
+        // If the text item is currently not selected
+        else {
+          return removeFromLinkedList(prevRemovedIds, optionId);
+        }
       });
     }
+    // If text item is in another category
     else {
       setAddedIds((prevAddedIds) => {
-        prevAddedIds[optionId] = !prevAddedIds[optionId];
-        return prevAddedIds;
+        // If the text item is currently not selected
+        if (prevAddedIds[optionId] === undefined) {
+          return addToLinkedList(prevAddedIds, optionId, 'last');
+        }
+        // If the text item is currently selected
+        else {
+          return removeFromLinkedList(prevAddedIds, optionId);
+        }
       });
     }
+    // Update the currently selected options in the dropdown list
     setSelectedOptionDict((prevSelectedOptionDict) => {
-      const selectedOptionDict = Object.assign({}, prevSelectedOptionDict);
-      selectedOptionDict[optionId] = !prevSelectedOptionDict[optionId];
-      return selectedOptionDict;
+      return { ...prevSelectedOptionDict, [optionId]: !prevSelectedOptionDict[optionId] };
     });
   };
 
@@ -78,13 +99,9 @@ export default function MultiDropdownSelect({
    * @param {*} event
    */
   const handleClose = (event) => {
-    if (event === null || !event.button) {
-      // Left click or keyboard
+    if (event === null || !event.button) { // Left click or keyboard
       setContainerHeight(0);
-      onClose(
-        Object.entries(addedIds).reduce((acc, item) => (item[1] ? [...acc, item[0]] : acc), []),
-        Object.entries(removedIds).reduce((acc, item) => (item[1] ? [...acc, item[0]] : acc), [])
-      );
+      onClose(convertLinkedListToArray(addedIds, 'first', 'last'), convertLinkedListToArray(removedIds, 'first', 'last'));
     }
   };
 
