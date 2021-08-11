@@ -1,18 +1,18 @@
 // Creates two placeholder text items at a time with an increasing serial number
 let placeholderOffset = 0;
-const buildPlaceholders = () => {
+const buildPlaceholders = (l10n) => {
   const placeholders = [
-    `<div>Placeholder ${placeholderOffset + 1}</div>\n`,
-    `<div>Placeholder ${placeholderOffset + 2}</div>\n`
+    `<div>${l10n.placeholderWord} ${placeholderOffset + 1}</div>\n`,
+    `<div>${l10n.placeholderWord} ${placeholderOffset + 2}</div>\n`
   ];
   placeholderOffset += 2;
   return placeholders;
 };
 
 // Builds a placeholder category with two placeholder text items
-const buildPlaceholderCategory = (id) => ({
-  groupName: `Category ${id}`,
-  textElements: buildPlaceholders()
+const buildPlaceholderCategory = (id, l10n) => ({
+  groupName: `${l10n.placeholderCategory} ${id}`,
+  textElements: buildPlaceholders(l10n)
 });
 
 /**
@@ -21,10 +21,10 @@ const buildPlaceholderCategory = (id) => ({
  * @param {object[]} textGroups which may or may not contain missing values
  * @returns {object[]} textGroups with all missing values replaced
  */
-export default function createPlaceholdersIfMissing(textGroups) {
+export default function createPlaceholdersIfMissing(textGroups, l10n) {
   // No categories: add two placeholder categories
   if (!textGroups) {
-    return [buildPlaceholderCategory(1), buildPlaceholderCategory(2)];
+    return [buildPlaceholderCategory(1, l10n), buildPlaceholderCategory(2, l10n)];
   }
 
   // Fills categories with groupName and/or textElements if missing
@@ -32,14 +32,14 @@ export default function createPlaceholdersIfMissing(textGroups) {
   textGroups.forEach((textGroup, index) => {
     const id = index + 1;
     newTextGroups[index] = {
-      groupName: textGroup.groupName || `Category ${id}`,
-      textElements: textGroup.textElements || buildPlaceholders()
+      groupName: textGroup.groupName || `${l10n.placeholderCategory} ${id}`,
+      textElements: textGroup.textElements || buildPlaceholders(l10n)
     };
   });
 
   // Only one category: add one placeholder category
   if (textGroups.length === 1) {
-    newTextGroups[1] = buildPlaceholderCategory(2);
+    newTextGroups[1] = buildPlaceholderCategory(2, l10n);
   }
 
   return newTextGroups;

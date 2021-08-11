@@ -21,8 +21,24 @@ export function getCurrentState(currentCategoryAssignment) {
  * @param {number} maxScore Maximum possible score that can be achieved for the question
  * @param {boolean} success True if the task was passed according to passPercentage
  */
-export function getXAPIData(app, question, textGroups, score, maxScore, success) {
-  const xAPIEvent = getAnsweredXAPIEvent(app, question, textGroups, score, maxScore, success);
+export function getXAPIData(
+  app,
+  question,
+  textGroups,
+  score,
+  maxScore,
+  success,
+  currentCategoryAssignment
+) {
+  const xAPIEvent = getAnsweredXAPIEvent(
+    app,
+    question,
+    textGroups,
+    score,
+    maxScore,
+    success,
+    currentCategoryAssignment);
+
   return { statement: xAPIEvent.data.statement };
 }
 
