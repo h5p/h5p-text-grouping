@@ -1,3 +1,4 @@
+// Creates two placeholder text items at a time with an increasing serial number
 let placeholderOffset = 0;
 const buildPlaceholders = () => {
   const placeholders = [
@@ -8,6 +9,7 @@ const buildPlaceholders = () => {
   return placeholders;
 };
 
+// Builds a placeholder category with two placeholder text items
 const buildPlaceholderCategory = (id) => ({
   groupName: `Category ${id}`,
   textElements: buildPlaceholders()
@@ -16,8 +18,8 @@ const buildPlaceholderCategory = (id) => ({
 /**
  * Creates placeholder categories and/or text items with
  * the same shape as a category from the editor if missing.
- * @param {object[]} textGroups
- * @returns {object[]} textGroups with the missing values replaced
+ * @param {object[]} textGroups which may or may not contain missing values
+ * @returns {object[]} textGroups with all missing values replaced
  */
 export default function createPlaceholdersIfMissing(textGroups) {
   // No categories: add two placeholder categories
