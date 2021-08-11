@@ -75,7 +75,7 @@ export default function MultiDropdownSelect({
 
   /**
    * Close the dropdown
-   * @param {*} event
+   * @param {object} event KeyboardEvent or MouseEvent
    */
   const handleClose = (event) => {
     if (event === null || !event.button) {

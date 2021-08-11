@@ -55,7 +55,7 @@ export default function SingleDropdownSelect({
 
   /**
    * Call the given function when an option has been selected
-   * @param {MouseEvent} event
+   * @param {object} event KeyboardEvent or MouseEvent
    * @param {number} optionId Which option was selected
    */
   const handleSelectItem = (event, optionId = null) => {
@@ -70,7 +70,7 @@ export default function SingleDropdownSelect({
 
   /**
    * Handle navigation within the dropdown
-   * @param {MouseEvent} event
+   * @param {object} event KeyboardEvent
    */
   const handleKeyboardPressed = (event) => {
     switch (event.key) {
