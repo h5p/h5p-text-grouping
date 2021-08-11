@@ -2,10 +2,9 @@
 let placeholderOffset = 0;
 const buildPlaceholders = (l10n) => {
   const placeholders = [
-    `<div>${l10n.placeholderWord} ${placeholderOffset + 1}</div>\n`,
-    `<div>${l10n.placeholderWord} ${placeholderOffset + 2}</div>\n`
+    `<div>${l10n.placeholderWord} ${++placeholderOffset}</div>\n`,
+    `<div>${l10n.placeholderWord} ${++placeholderOffset}</div>\n`
   ];
-  placeholderOffset += 2;
   return placeholders;
 };
 
@@ -19,6 +18,7 @@ const buildPlaceholderCategory = (id, l10n) => ({
  * Creates placeholder categories and/or text items with
  * the same shape as a category from the editor if missing.
  * @param {object[]} textGroups which may or may not contain missing values
+ * @param {object} l10n translations object
  * @returns {object[]} textGroups with all missing values replaced
  */
 export default function createPlaceholdersIfMissing(textGroups, l10n) {
