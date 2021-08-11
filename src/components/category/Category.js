@@ -220,7 +220,7 @@ export default function Category({
       className={getClassNames({
         category: true,
         uncategorized: uncategorized,
-        'category-dropzone': draggedInfo.dropzoneVisible === categoryId,
+        'category-dropzone': draggedInfo.itemOverCategory === categoryId,
         'expanded-state': accordionOpen
       })}
       style={uncategorized ? { minHeight: minHeight } : {}}
@@ -275,7 +275,7 @@ export default function Category({
           <li>
             <Dropzone
               key={`dropzone-${categoryId}`}
-              visible={draggedInfo.dropzoneVisible === categoryId}
+              visible={draggedInfo.itemOverCategory === categoryId}
             />
           </li>
         </ul>
@@ -297,8 +297,7 @@ Category.propTypes = {
   setContainerHeight: PropTypes.func,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
-    firstChildClassNames: PropTypes.object.isRequired,
-    dropzoneVisible: PropTypes.number.isRequired
+    itemOverCategory: PropTypes.number.isRequired
   }).isRequired,
   textItems: PropTypes.exact({
     categories: PropTypes.arrayOf(

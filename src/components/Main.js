@@ -30,14 +30,13 @@ export default function Main({ context }) {
   const [focusedTextItem, setFocusedTextItem] = useState(null);
   const [draggedInfo, setDraggedInfo] = useState({
     style: {},
-    firstChildClassNames: {},
-    dropzoneVisible: -1
+    itemOverCategory: -1
   });
   const [dragState, setDragState] = useState({
     textItemId: null,
     categoryId: null,
     dragging: false,
-    rel: { x: 0, y: 0 }
+    offset: { x: 0, y: 0 }
   });
 
   const [categoryAssignment, setCategoryAssignment] = useState([
@@ -107,57 +106,25 @@ export default function Main({ context }) {
     if (!dragState.dragging) {
       return;
     }
-    setDraggedInfo((prevDraggedInfo) => {
-      return {
-        ...prevDraggedInfo,
-        style: {
-          left: `${event.clientX - dragState.rel.x}px`,
-          top: `${event.clientY - dragState.rel.y}px`
-        }
-      };
-    });
-    handleDraggableMoved({ x: event.clientX, y: event.clientY });
-    event.preventDefault();
-  };
-
-  /**
-   * Make dropzone visible when text item hovers over category
-   * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
-   */
-  const handleDraggableMoved = (mouseCoordinates) => {
     const categoryEdges = getCategoryEdges(categoryAssignment.length);
+    let itemOverCategory = -1;
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
       if (i === dragState.categoryId) {
         continue;
       }
-      // If the mouse is inside the category and dropzone is not visible
-      if (checkIfInsideCategory(i, mouseCoordinates, categoryEdges)) {
-        setDraggedInfo((prevDraggedInfo) => {
-          return {
-            ...prevDraggedInfo,
-            firstChildClassNames: {
-              ...prevDraggedInfo.firstChildClassNames,
-              'drag-over-category': true
-            },
-            dropzoneVisible: i
-          };
-        });
-        return;
-      }
-      else {
-        setDraggedInfo((prevDraggedInfo) => {
-          return {
-            ...prevDraggedInfo,
-            firstChildClassNames: {
-              ...prevDraggedInfo.firstChildClassNames,
-              'drag-over-category': false
-            },
-            dropzoneVisible: -1
-          };
-        });
+      else if (checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }, categoryEdges)) {
+        itemOverCategory = i;
       }
     }
+    setDraggedInfo({
+      style: {
+        left: `${event.clientX - dragState.offset.x}px`,
+        top: `${event.clientY - dragState.offset.y}px`
+      },
+      itemOverCategory: itemOverCategory
+    });
+    event.preventDefault();
   };
 
   /**
@@ -206,12 +173,11 @@ export default function Main({ context }) {
       textItemId: null,
       categoryId: null,
       dragging: false,
-      rel: { x: 0, y: 0 }
+      offset: { x: 0, y: 0 }
     });
     setDraggedInfo({
       style: {},
-      firstChildClassNames: {},
-      dropzoneVisible: -1
+      itemOverCategory: -1
     });
   };
 

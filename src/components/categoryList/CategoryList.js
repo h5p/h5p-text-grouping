@@ -76,7 +76,6 @@ CategoryList.propTypes = {
   removeAnimations: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
-    firstChildClassNames: PropTypes.object.isRequired,
-    dropzoneVisible: PropTypes.number.isRequired
+    itemOverCategory: PropTypes.number.isRequired
   }).isRequired
 };

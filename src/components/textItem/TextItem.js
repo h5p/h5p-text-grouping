@@ -145,8 +145,8 @@ export default function TextItem({
       categoryId: currentCategoryId,
       mouseHasBeenMoved: false,
       dragging: true,
-      rel: currentPos,
-      style: { position: 'fixed', width: `${itemWidth}px`, zIndex: 1 }
+      offset: currentPos,
+      width: `${itemWidth}px`
     });
 
     event.preventDefault();
@@ -160,13 +160,14 @@ export default function TextItem({
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
         'show-correct': shouldShowUnselectedSolution,
-        'dropDownOpen': dropdownSelectOpen
+        'dropDownOpen': dropdownSelectOpen,
+        'dragged': isDragged
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       style={
         isDragged
-          ? { ...dragState.style, ...draggedInfo.style } : {}
+          ? { width: dragState.width, ...draggedInfo.style } : {}
       }
     >
       <div
@@ -175,9 +176,9 @@ export default function TextItem({
             {
               'text-item-border': true,
               'show-solution': showSelectedSolutions,
-              'text-item-selected': isDragged
-            },
-            isDragged ? draggedInfo.firstChildClassNames : {}
+              'text-item-selected': isDragged,
+              'drag-over-category': isDragged && draggedInfo.itemOverCategory !== -1
+            }
           )
         )}
         onMouseDown={(event) => mouseDownHandler(event)}
@@ -242,7 +243,6 @@ TextItem.propTypes = {
   setContainerHeight: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
-    firstChildClassNames: PropTypes.object.isRequired,
-    dropzoneVisible: PropTypes.number.isRequired
+    itemOverCategory: PropTypes.number.isRequired
   }).isRequired
 };
