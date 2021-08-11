@@ -7,6 +7,8 @@ import CategoryList from './categoryList/CategoryList';
 
 import './Main.scss';
 import deepCopy from '../helpers/deepCopy';
+import getCategoryEdges from '../helpers/getCategoryEdges';
+import checkIfInsideCategory from '../helpers/checkIfInsideCategory';
 
 /**
  * A component that defines the top-level layout and
@@ -123,7 +125,7 @@ export default function Main({ context }) {
    * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
    */
   const handleDraggableMoved = (mouseCoordinates) => {
-    const categoryEdges = getCategoryEdges();
+    const categoryEdges = getCategoryEdges(categoryAssignment.length);
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
       if (i === dragState.categoryId) {
@@ -170,7 +172,7 @@ export default function Main({ context }) {
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
-    const categoryEdges = getCategoryEdges();
+    const categoryEdges = getCategoryEdges(categoryAssignment.length);
     for (let i = 0; i < categoryAssignment.length; i++) {
       if (
         checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }, categoryEdges) &&
@@ -211,47 +213,6 @@ export default function Main({ context }) {
       firstChildClassNames: {},
       dropzoneVisible: -1
     });
-  };
-
-  /**
-   * Checks if mouse is inside a category
-   * @param {number} categoryId Index of the category checked
-   * @param {object} mouseCoordinates Coordinates of the mouse in the format {x, y}
-   * @param {number[]} categoryEdges Coordinates of edges of category
-   * @returns {boolean} true if mouse is inside a category, false otherwise
-   */
-  const checkIfInsideCategory = (categoryId, mouseCoordinates, categoryEdges) => {
-    const { x1, x2, y1, y2 } = categoryEdges[categoryId];
-    return (
-      x1 <= mouseCoordinates.x &&
-      mouseCoordinates.x <= x2 &&
-      y1 <= mouseCoordinates.y &&
-      mouseCoordinates.y <= y2
-    );
-  };
-
-  /**
-   * Update dimensions of each category
-   */
-  const getCategoryEdges = () => {
-    const categoryEdges = {};
-    for (let i = 0; i < categoryAssignment.length; i++) {
-
-      // Set all edges to 0 if category does not exist
-      if (document.getElementById(`category ${i}`) === undefined) {
-        categoryEdges[i] = { x1: 0, x2: 0, y1: 0, y2: 0 };
-        continue;
-      }
-
-      const clientRect = document.getElementById(`category ${i}`).getBoundingClientRect();
-      categoryEdges[i] = {
-        x1: clientRect.x,
-        x2: clientRect.x + clientRect.width,
-        y1: clientRect.y,
-        y2: clientRect.y + clientRect.height
-      };
-    }
-    return categoryEdges;
   };
 
   /**
