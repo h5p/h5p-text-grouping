@@ -30,7 +30,7 @@
     }
 
     &.dragged {
-      position: fixed; 
+      position: fixed;
       z-index: 1;
     }
 
@@ -67,7 +67,7 @@
         &:not(.show-solution):not(.text-item-selected) {
           cursor: pointer;
           border-style: dotted;
-          border-color: styles.$text-item-border-color !important;
+          border-color: styles.$text-item-border-color !important; // Ensures value is not overwritten by animation
 
           .text-item {
             background: styles.$text-item-background-dark;
@@ -102,7 +102,7 @@
 
     &.correct {
       .text-item-border {
-        border-color: styles.$color-correct-dark;
+        border-color: styles.$color-correct-dark !important; // Ensures value is not overwritten by animation
 
         .text-item {
           color: styles.$color-correct-text;
@@ -117,7 +117,7 @@
 
     &.wrong {
       .text-item-border {
-        border-color: styles.$color-wrong-dark;
+        border-color: styles.$color-wrong-dark !important; // Ensures value is not overwritten by animation
 
         .text-item {
           color: styles.$color-wrong-dark;
@@ -133,7 +133,7 @@
     &.show-correct {
       .text-item-border {
         border-style: dotted;
-        border-color: styles.$color-show-correct-dark;
+        border-color: styles.$color-show-correct-dark !important; // Ensures value is not overwritten by animation
 
         .text-item {
           color: styles.$color-show-correct-dark;
