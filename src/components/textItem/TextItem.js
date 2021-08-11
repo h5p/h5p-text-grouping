@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useLayoutEffect } from 'react';
+import React, { useState, useContext, useRef, useLayoutEffect, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../../context/H5PContext';
@@ -56,13 +56,18 @@ export default function TextItem({
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
   const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
 
-  // Sets focus to the button
+  // Set focus to the button
   useLayoutEffect(() => {
     if (focusedTextItem === textItemId) {
       buttonRef.current.focus();
       setFocusedTextItem(null);
     }
   }, [focusedTextItem]);
+
+  // Trigger resize when the dropdown opens or closes
+  useEffect(() => {
+    instance.trigger('resize');
+  }, [dropdownSelectOpen]);
 
   /**
    * Opens the dropdown
@@ -77,7 +82,6 @@ export default function TextItem({
     }
 
     setDropdownSelectOpen(true);
-    instance.trigger('resize');
   };
 
   /**
@@ -103,7 +107,6 @@ export default function TextItem({
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0, textItemId);
-    instance.trigger('resize');
   };
 
   /**
