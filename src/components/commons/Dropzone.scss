@@ -1,29 +1,31 @@
 @use '../../styles/' as styles;
 
-.dropzone {
-  border: dotted 2px styles.$dropzone-border-color;
-  border-radius: 5px;
-  height: styles.$text-item-height;
-  margin-top: 0.375em;
-  padding: 0.25em;
-  background-color: styles.$dropzone-background-neutral;
+.h5p-text-grouping {
+  .dropzone {
+    border: dotted 2px styles.$dropzone-border-color;
+    border-radius: 5px;
+    height: styles.$text-item-height;
+    margin-top: 0.375em;
+    padding: 0.25em;
+    background-color: styles.$dropzone-background-neutral;
 
-  &:before {
-    font-family: 'Material Icons';
-    font-size: 2em;
-    content: 'add';
-    color: styles.$action-icon-color;
-    height: 100%;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
+    &:before {
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: 'add';
+      color: styles.$action-icon-color;
+      height: 100%;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
 
-  &.hidden {
-    visibility: hidden;
-  }
+    &.hidden {
+      visibility: hidden;
+    }
 
-  @media screen and (max-width: styles.$small-screen-size) {
-    display: none;
+    @media screen and (max-width: styles.$small-screen-size) {
+      display: none;
+    }
   }
 }

@@ -1,21 +1,23 @@
 @use '../../styles/' as styles;
 
-.categoryList {
-  display: grid;
-  grid-gap: 1em;
-  grid-template-columns: repeat(2, 1fr);
-  margin-bottom: 1em;
+.h5p-text-grouping {
+  .categoryList {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 1em;
 
-  &.singleCategory {
-    grid-template-columns: 1fr;
-  }
+    &.singleCategory {
+      grid-template-columns: 1fr;
+    }
 
-  @media only screen and (max-width: styles.$medium-screen-size) {
-    grid-template-columns: 1fr;
-  }
+    @media only screen and (max-width: styles.$medium-screen-size) {
+      grid-template-columns: 1fr;
+    }
 
-  @media only screen and (max-width: styles.$small-screen-size) {
-    grid-gap: 0;
-    padding: 1px 0 1px 0;
+    @media only screen and (max-width: styles.$small-screen-size) {
+      grid-gap: 0;
+      padding: 1px 0 1px 0;
+    }
   }
 }

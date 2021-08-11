@@ -1,7 +1,9 @@
-.h5p-text-grouping-button {
-  padding: 0;
-  
-  &:before{
-    vertical-align: middle;
+.h5p-text-grouping {
+  .h5p-text-grouping-button {
+    padding: 0;
+
+    &:before {
+      vertical-align: middle;
+    }
   }
 }

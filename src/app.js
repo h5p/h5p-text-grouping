@@ -13,7 +13,7 @@ H5P.TextGrouping = (() => {
   function TextGrouping(params, contentId, extras) {
     // Initialize event inheritance
     H5P.EventDispatcher.call(this);
-    H5P.Question.call(this, 'textgrouping');
+    H5P.Question.call(this, 'text-grouping');
 
     this.contentId = contentId;
     this.params = params;
