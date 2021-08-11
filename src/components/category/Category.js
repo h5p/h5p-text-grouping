@@ -92,9 +92,15 @@ export default function Category({
 
   const getCurrentlySelectedIds = () =>
     categoryAssignment[categoryId].map((textItem) => textItem.id);
-  const titleWithChildCount = uncategorized
+
+  let titleWithTextItemCount = uncategorized
     ? categories[categories.length - 1].groupName
-    : `${categories[categoryId - 1].groupName} (${categoryAssignment[categoryId].length})`;
+    : categories[categoryId - 1].groupName;
+
+  if (!showUnselectedSolutions) {
+    // Only add text item count when not in show solution state
+    titleWithTextItemCount += ` (${categoryAssignment[categoryId].length})`;
+  }
 
   /**
    * Finds the unselected textItems belonging to this category
@@ -236,7 +242,7 @@ export default function Category({
             aria-expanded={accordionOpen}
           />
         )}
-        <div className="title">{titleWithChildCount}</div>
+        <div className="title">{titleWithTextItemCount}</div>
         {showSelectedSolutions || uncategorized ? null : (
           <Button
             ref={assignItemsButtonRef}
