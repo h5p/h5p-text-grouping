@@ -22,14 +22,8 @@ const useScreenType = (screenType) => {
   useEffect(() => {
     checkWindowSize();
 
-    instance.on('resize', function () {
-      checkWindowSize();
-    });
-    return () => {
-      instance.on('resize', function () {
-        checkWindowSize();
-      });
-    };
+    instance.on('resize', checkWindowSize);
+    return () => instance.off('resize', checkWindowSize);
   }, []);
 
   return screenIsNarrow;

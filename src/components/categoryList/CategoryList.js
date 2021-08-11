@@ -16,7 +16,6 @@ export default function CategoryList({
   moveTextItems,
   allTextItems,
   removeAnimations,
-  draggingStartedHandler,
   draggedInfo
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
@@ -49,7 +48,6 @@ export default function CategoryList({
             removeAnimations: removeAnimations
           }}
           setContainerHeight={setMargin}
-          draggingStartedHandler={draggingStartedHandler}
         />
       );
     }
@@ -76,7 +74,6 @@ CategoryList.propTypes = {
     })
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
-  draggingStartedHandler: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,

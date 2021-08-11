@@ -25,6 +25,10 @@
       }
     }
 
+    &.dropDownOpen {
+      z-index: 1;
+    }
+
     .text-item-border {
       padding: 0.25em;
 

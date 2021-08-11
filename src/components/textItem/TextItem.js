@@ -27,7 +27,6 @@ export default function TextItem({
   isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
-  draggingStartedHandler,
   draggedInfo
 }) {
   const {
@@ -144,13 +143,12 @@ export default function TextItem({
     setDragState({
       textItemId: textItemId,
       categoryId: currentCategoryId,
+      mouseHasBeenMoved: false,
       dragging: true,
       rel: currentPos,
       style: { position: 'fixed', width: `${itemWidth}px`, zIndex: 1 }
     });
 
-    // Make text item visually draggable
-    draggingStartedHandler();
     event.preventDefault();
   };
 
@@ -161,14 +159,14 @@ export default function TextItem({
         animate: shouldAnimate,
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
-        'show-correct': shouldShowUnselectedSolution
+        'show-correct': shouldShowUnselectedSolution,
+        'dropDownOpen': dropdownSelectOpen
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       style={
         isDragged
-          ? { ...dragState.style, ...draggedInfo.style }
-          : { zIndex: dropdownSelectOpen ? 1 : 0 }
+          ? { ...dragState.style, ...draggedInfo.style } : {}
       }
     >
       <div
@@ -242,7 +240,6 @@ TextItem.propTypes = {
   isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  draggingStartedHandler: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,

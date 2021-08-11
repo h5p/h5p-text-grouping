@@ -25,7 +25,6 @@ export default function Category({
   moveTextItems,
   allTextItems,
   setContainerHeight,
-  draggingStartedHandler,
   draggedInfo,
   textItems: { categories, removeAnimations }
 }) {
@@ -59,22 +58,35 @@ export default function Category({
    * Sets the height of the category on resize
    */
   useEffect(() => {
-    instance.on('resize', () => {
-      if (uncategorized && currentlyOpenTextItem === null) {
+    const updatePreviousHeight = () => {
+      if (uncategorized && categoryContentRef.current !== null && currentlyOpenTextItem === null) {
         setPreviousHeight(categoryContentRef.current.offsetHeight);
       }
-    });
+    };
+
+    instance.on('resize', updatePreviousHeight);
+
+    return () => instance.off('resize', updatePreviousHeight);
   }, []);
+
+  /**
+   * Trigger resize when the dropdown or accordion opens or closes
+   */
+  useEffect(() => {
+    instance.trigger('resize');
+  }, [dropdownSelectOpen, accordionOpen]);
 
   /**
    * Sets the height of the category without a dropdown being open
    */
   useEffect(() => {
-    if (uncategorized) {
+    if (uncategorized && categoryContentRef.current !== null) {
       // A slight timeout is added to make sure the changes have time to take effect
-      setTimeout(() => {
+      let timerId = setTimeout(() => {
         setPreviousHeight(categoryContentRef.current.offsetHeight);
+        timerId = null;
       }, 10);
+      return () => clearTimeout(timerId);
     }
   }, [categoryAssignment[categoryId].length]);
 
@@ -100,7 +112,6 @@ export default function Category({
    */
   const handleAccordionToggle = () => {
     setAccordionOpen((accordionOpen) => !accordionOpen);
-    instance.trigger('resize');
   };
 
   /**
@@ -123,7 +134,6 @@ export default function Category({
     }
 
     setDropdownSelectOpen(false);
-    instance.trigger('resize');
   };
 
   /**
@@ -144,6 +154,8 @@ export default function Category({
    * @param {bool} settingMinHeight True if minHeight should be set, false if maxHeight should be set
    */
   const resizeUncategorized = (height, textItemId, settingMinHeight) => {
+    if (categoryContentRef.current === null) return;
+
     if (height === 0) {
       // Makes sure the state is up to date.
       // If the state is accessed normally, it will be possible for one textItem to reset
@@ -189,7 +201,6 @@ export default function Category({
         isShowSolutionItem={isShowSolutionItem}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
-        draggingStartedHandler={draggingStartedHandler}
         draggedInfo={draggedInfo}
       />
     ));
@@ -284,7 +295,6 @@ Category.propTypes = {
     })
   ),
   setContainerHeight: PropTypes.func,
-  draggingStartedHandler: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,
