@@ -393,6 +393,22 @@
         "default": "You got :num out of :total points"
       },
       {
+        "name": "placeholderWord",
+        "type": "text",
+        "label": "Placeholder",
+        "description": "Placeholder text for categories without words in them",
+        "importance": "low",
+        "default": "Placeholder"
+      },
+      {
+        "name": "placeholderCategory",
+        "type": "text",
+        "label": "Category",
+        "description": "Placeholder text for categories without names",
+        "importance": "low",
+        "default": "Category"
+      },
+      {
         "label": "Check confirmation dialog",
         "importance": "low",
         "name": "confirmCheck",
