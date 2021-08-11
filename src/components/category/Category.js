@@ -90,6 +90,15 @@ export default function Category({
     }
   }, [categoryAssignment[categoryId].length]);
 
+  /**
+   * Expand the category if Check or Show Solution has been clicked
+   */
+  useEffect(() => {
+    if (showSelectedSolutions || showUnselectedSolutions) {
+      setAccordionOpen(true);
+    }
+  }, [showSelectedSolutions, showUnselectedSolutions]);
+
   const getCurrentlySelectedIds = () =>
     categoryAssignment[categoryId].map((textItem) => textItem.id);
 
