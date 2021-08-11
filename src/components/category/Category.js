@@ -25,7 +25,6 @@ export default function Category({
   moveTextItems,
   allTextItems,
   setContainerHeight,
-  draggingStartedHandler,
   draggedInfo,
   textItems: { categories, removeAnimations }
 }) {
@@ -191,7 +190,6 @@ export default function Category({
         showSwapIcon={showSwapIcon}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
-        draggingStartedHandler={draggingStartedHandler}
         draggedInfo={draggedInfo}
       />
     ));
@@ -302,7 +300,6 @@ Category.propTypes = {
     })
   ),
   setContainerHeight: PropTypes.func,
-  draggingStartedHandler: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,

@@ -29,7 +29,6 @@ export default function TextItem({
   showSwapIcon,
   removeAnimations,
   setContainerHeight,
-  draggingStartedHandler,
   draggedInfo
 }) {
   const {
@@ -148,13 +147,12 @@ export default function TextItem({
     setDragState({
       textItemId: textItemId,
       categoryId: currentCategoryId,
+      mouseHasBeenMoved: false,
       dragging: true,
       rel: currentPos,
       style: { position: 'fixed', width: `${itemWidth}px`, zIndex: 1 }
     });
 
-    // Make text item visually draggable
-    draggingStartedHandler();
     event.preventDefault();
   };
 
@@ -248,7 +246,6 @@ TextItem.propTypes = {
   showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
-  draggingStartedHandler: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     firstChildClassNames: PropTypes.object.isRequired,

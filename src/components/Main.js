@@ -25,7 +25,6 @@ export default function Main({ context }) {
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
-  const [categoryDimensions, setCategoryDimensions] = useState({});
   const [draggedInfo, setDraggedInfo] = useState({
     style: {},
     firstChildClassNames: {},
@@ -103,7 +102,6 @@ export default function Main({ context }) {
       };
     });
     handleDraggableMoved({ x: event.clientX, y: event.clientY });
-    event.stopPropagation();
     event.preventDefault();
   };
 
@@ -112,14 +110,14 @@ export default function Main({ context }) {
    * @param {Object} mouseCoordinates Coordinates of the mouse in the format {x, y}
    */
   const handleDraggableMoved = (mouseCoordinates) => {
+    const categoryEdges = getCategoryEdges();
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
       if (i === dragState.categoryId) {
         continue;
       }
-
       // If the mouse is inside the category and dropzone is not visible
-      if (checkIfInsideCategory(i, mouseCoordinates)) {
+      if (checkIfInsideCategory(i, mouseCoordinates, categoryEdges)) {
         setDraggedInfo((prevDraggedInfo) => {
           return {
             ...prevDraggedInfo,
@@ -148,13 +146,6 @@ export default function Main({ context }) {
   };
 
   /**
-   * Update dimensions of categories when dragging a text item is started
-   */
-  const draggingStartedHandler = () => {
-    updateCategoryDimensions();
-  };
-
-  /**
    * Handle text item being dropped
    * @param {MouseEvent} event MouseUp event
    */
@@ -166,9 +157,10 @@ export default function Main({ context }) {
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
+    const categoryEdges = getCategoryEdges();
     for (let i = 0; i < categoryAssignment.length; i++) {
       if (
-        checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }) &&
+        checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }, categoryEdges) &&
         i !== dragState.categoryId
       ) {
         insideCategoryIndex = i;
@@ -186,7 +178,6 @@ export default function Main({ context }) {
     }
 
     resetDragState();
-    event.stopPropagation();
     event.preventDefault();
   };
 
@@ -213,10 +204,11 @@ export default function Main({ context }) {
    * Checks if mouse is inside a category
    * @param {number} categoryId Index of the category checked
    * @param {object} mouseCoordinates Coordinates of the mouse in the format {x, y}
+   * @param {number[]} categoryEdges Coordinates of edges of category
    * @returns {boolean} true if mouse is inside a category, false otherwise
    */
-  const checkIfInsideCategory = (categoryId, mouseCoordinates) => {
-    const { x1, x2, y1, y2 } = categoryDimensions[categoryId];
+  const checkIfInsideCategory = (categoryId, mouseCoordinates, categoryEdges) => {
+    const { x1, x2, y1, y2 } = categoryEdges[categoryId];
     return (
       x1 <= mouseCoordinates.x &&
       mouseCoordinates.x <= x2 &&
@@ -228,27 +220,25 @@ export default function Main({ context }) {
   /**
    * Update dimensions of each category
    */
-  const updateCategoryDimensions = () => {
+  const getCategoryEdges = () => {
+    const categoryEdges = {};
     for (let i = 0; i < categoryAssignment.length; i++) {
-      // Skip uncategorized category if it is empty
-      if (i === 0 && categoryAssignment[0].length === 0) {
-        setCategoryDimensions((prevCategoryDimensions) => {
-          return { ...prevCategoryDimensions, 0: { x1: 0, x2: 0, y1: 0, y2: 0 } };
-        });
+
+      // Set all edges to 0 if category does not exist
+      if (document.getElementById(`category ${i}`) === undefined) {
+        categoryEdges[i] = { x1: 0, x2: 0, y1: 0, y2: 0 };
         continue;
       }
 
       const clientRect = document.getElementById(`category ${i}`).getBoundingClientRect();
-      const coordinates = {
+      categoryEdges[i] = {
         x1: clientRect.x,
         x2: clientRect.x + clientRect.width,
         y1: clientRect.y,
         y2: clientRect.y + clientRect.height
       };
-      setCategoryDimensions((prevCategoryDimensions) => {
-        return { ...prevCategoryDimensions, [i]: coordinates };
-      });
     }
+    return categoryEdges;
   };
 
   /**
@@ -329,14 +319,12 @@ export default function Main({ context }) {
         moveTextItems={moveTextItems}
         allTextItems={getRandomizedTextItems()}
         removeAnimations={removeAnimations}
-        draggingStartedHandler={draggingStartedHandler}
         draggedInfo={draggedInfo}
       />
       {!showUnselectedSolutions && categoryAssignment[0].length !== 0 ? (
         <Category
           categoryId={0}
           moveTextItems={moveTextItems}
-          draggingStartedHandler={draggingStartedHandler}
           draggedInfo={draggedInfo}
           textItems={{
             categories: [...textGroups, { groupName: l10n.uncategorizedLabel }],
