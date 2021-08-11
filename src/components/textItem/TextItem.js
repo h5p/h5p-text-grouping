@@ -68,8 +68,6 @@ export default function TextItem({
    * Opens the dropdown
    */
   const handleDropdownSelectOpen = () => {
-    textItemRef.current.style.zIndex = 1; // To make sure the dropdown isn't below other textItems
-
     const newOffsetTop = textItemRef.current.offsetTop;
     setOffsetTop(newOffsetTop);
 
@@ -101,7 +99,6 @@ export default function TextItem({
       );
     }
     setDropdownSelectOpen(false);
-    textItemRef.current.style.zIndex = 0;
     setContainerHeight(0, textItemId);
     instance.trigger('resize');
   };
@@ -166,7 +163,7 @@ export default function TextItem({
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={isDragged ? { ...dragState.style, ...draggedInfo.style } : {}}
+      style={isDragged ? { ...dragState.style, ...draggedInfo.style } : {zIndex: dropdownSelectOpen ? 1 : 0}}
     >
       <div
         className={getClassNames(
