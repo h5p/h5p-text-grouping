@@ -67,6 +67,13 @@ export default function Category({
   }, []);
 
   /**
+   * Trigger resize when the dropdown or accordion opens or closes
+   */
+  useEffect(() => {
+    instance.trigger('resize');
+  }, [dropdownSelectOpen, accordionOpen]);
+
+  /**
    * Sets the height of the category without a dropdown being open
    */
   useEffect(() => {
@@ -100,7 +107,6 @@ export default function Category({
    */
   const handleAccordionToggle = () => {
     setAccordionOpen((accordionOpen) => !accordionOpen);
-    instance.trigger('resize');
   };
 
   /**
