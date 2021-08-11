@@ -6,7 +6,6 @@ import belongsToCategory from '../../helpers/belongsToCategory';
 import getClassNames from '../../helpers/getClassNames';
 import Button from '../commons/Button';
 import SingleDropdownSelect from '../commons/SingleDropdownSelect';
-import TipButton from '../commons/TipButton';
 
 import './TextItem.scss';
 
@@ -26,7 +25,6 @@ export default function TextItem({
   textElement,
   shouldAnimate,
   isShowSolutionItem,
-  showSwapIcon,
   removeAnimations,
   setContainerHeight,
   draggingStartedHandler,
@@ -36,7 +34,6 @@ export default function TextItem({
     instance,
     l10n,
     showSelectedSolutions,
-    showUnselectedSolutions,
     focusedTextItem,
     setFocusedTextItem,
     setDragState,
@@ -54,7 +51,6 @@ export default function TextItem({
   const shouldShowSolution = showSelectedSolutions && !isShowSolutionItem && !uncategorized; // Always show unless when in uncategorized
   const correctlyPlaced = belongsToCategory(textItemId, currentCategoryId);
   const shouldShowUnselectedSolution = showSelectedSolutions && isShowSolutionItem;
-  const shouldShowShowSwapIcon = showUnselectedSolutions && (!correctlyPlaced || showSwapIcon); // Wrong answers as well as uncategorized showSolutionItems gets the swap icon
 
   // Set focus to the button
   useLayoutEffect(() => {
@@ -188,11 +184,6 @@ export default function TextItem({
           <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
           {showSelectedSolutions ? (
             <>
-              {shouldShowShowSwapIcon ? (
-                <TipButton tip={l10n.wrongCategory}>
-                  <div aria-hidden="true" className="swap-icon" />
-                </TipButton>
-              ) : null}
               <div aria-hidden="true" className="solution-icon" />
               <span className="offscreen">
                 {isShowSolutionItem
@@ -245,7 +236,6 @@ TextItem.propTypes = {
   textElement: PropTypes.string.isRequired,
   shouldAnimate: PropTypes.bool.isRequired,
   isShowSolutionItem: PropTypes.bool.isRequired,
-  showSwapIcon: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
   draggingStartedHandler: PropTypes.func.isRequired,

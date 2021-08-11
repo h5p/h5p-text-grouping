@@ -17,18 +17,6 @@
   z-index: 1;
 }
 
-@mixin swap-icon($color) {
-  padding: 0em 0.25em;
-  display: block;
-  font-family: 'Material Icons';
-  font-size: 2em;
-  content: 'swap_horiz';
-  color: $color;
-
-  line-height: 1em;
-  z-index: 1;
-}
-
 @mixin move-item-icon($color, $background: inherit) {
   position: relative;
   font-family: 'Material Icons';

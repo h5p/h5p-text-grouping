@@ -24,6 +24,7 @@ export default function Main({ context }) {
   } = context;
 
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
+  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
   const [categoryDimensions, setCategoryDimensions] = useState({});
   const [draggedInfo, setDraggedInfo] = useState({
@@ -37,7 +38,6 @@ export default function Main({ context }) {
     dragging: false,
     rel: { x: 0, y: 0 }
   });
-  const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
 
   const [categoryAssignment, setCategoryAssignment] = useState([
     getRandomizedTextItems(),

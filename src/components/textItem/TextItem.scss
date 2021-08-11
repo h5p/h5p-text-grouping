@@ -115,10 +115,6 @@
           background-color: styles.$color-wrong-light;
         }
 
-        .swap-icon:before {
-          @include styles.swap-icon(styles.$color-wrong-dark);
-        }
-
         .solution-icon:before {
           @include styles.solution-icon('cancel', styles.$color-wrong-dark);
         }
@@ -133,10 +129,6 @@
         .text-item {
           color: styles.$color-show-correct-dark;
           background-color: styles.$color-show-correct-light;
-        }
-
-        .swap-icon:before {
-          @include styles.swap-icon(styles.$color-show-correct-dark);
         }
 
         .solution-icon:before {
