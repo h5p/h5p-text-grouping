@@ -86,7 +86,10 @@ export default function TextItem({
    */
   const handleDropdownSelectAction = (categoryId = null) => {
     if (categoryId !== null) {
+      // Converts the recieved categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
+      // (Dropdown displays Uncategorized at the bottom, while Uncategorized is at index 0 everywhere else)
       const newCategoryId = categoryId !== categories.length - 1 ? categoryId + 1 : 0;
+
       moveTextItems(
         [
           {
