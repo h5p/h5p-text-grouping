@@ -156,9 +156,14 @@ export default function Category({
    * @param {number} height The height of the dropdown
    */
   const setHeight = (height) => {
-    setContainerHeight(
-      categoryHeaderRef.current.offsetTop + height - categoryHeaderRef.current.offsetHeight
-    );
+    if (height === 0) {
+      setContainerHeight(0);
+    }
+    else {
+      setContainerHeight(
+        categoryHeaderRef.current.offsetTop + height - categoryHeaderRef.current.offsetHeight
+      );
+    }
   };
 
   /**
