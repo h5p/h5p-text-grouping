@@ -54,7 +54,7 @@ export default function MultiDropdownSelect({
   /*
    * Linked lists for added and removed ids. Every item links to the previous and next item
    * Added ids are ids of text items that are to be added to this category
-   * Removed ids are ids of the text items that are to be removed from this category 
+   * Removed ids are ids of the text items that are to be removed from this category
    */
   const [addedIds, setAddedIds] = useState({ first: [null, 'last'], last: ['first', null] });
   const [removedIds, setRemovedIds] = useState({ first: [null, 'last'], last: ['first', null] });
@@ -64,33 +64,33 @@ export default function MultiDropdownSelect({
     event.stopPropagation();
     // If text item is currently in this category
     if (optionDict[optionId]) {
-      setRemovedIds((prevRemovedIds) => {
+      setRemovedIds((previousRemovedIds) => {
         // If the text item is currently selected
-        if (prevRemovedIds[optionId] === undefined) {
-          return addToLinkedList(prevRemovedIds, optionId, 'last');
+        if (previousRemovedIds[optionId] === undefined) {
+          return addToLinkedList(previousRemovedIds, optionId, 'last');
         }
         // If the text item is currently not selected
         else {
-          return removeFromLinkedList(prevRemovedIds, optionId);
+          return removeFromLinkedList(previousRemovedIds, optionId);
         }
       });
     }
     // If text item is in another category
     else {
-      setAddedIds((prevAddedIds) => {
+      setAddedIds((previousAddedIds) => {
         // If the text item is currently not selected
-        if (prevAddedIds[optionId] === undefined) {
-          return addToLinkedList(prevAddedIds, optionId, 'last');
+        if (previousAddedIds[optionId] === undefined) {
+          return addToLinkedList(previousAddedIds, optionId, 'last');
         }
         // If the text item is currently selected
         else {
-          return removeFromLinkedList(prevAddedIds, optionId);
+          return removeFromLinkedList(previousAddedIds, optionId);
         }
       });
     }
     // Update the currently selected options in the dropdown list
-    setSelectedOptionDict((prevSelectedOptionDict) => {
-      return { ...prevSelectedOptionDict, [optionId]: !prevSelectedOptionDict[optionId] };
+    setSelectedOptionDict((previousSelectedOptionDict) => {
+      return { ...previousSelectedOptionDict, [optionId]: !previousSelectedOptionDict[optionId] };
     });
   };
 
@@ -101,7 +101,10 @@ export default function MultiDropdownSelect({
   const handleClose = (event) => {
     if (event === null || !event.button) { // Left click or keyboard
       setContainerHeight(0);
-      onClose(convertLinkedListToArray(addedIds, 'first', 'last'), convertLinkedListToArray(removedIds, 'first', 'last'));
+      onClose(
+        convertLinkedListToArray(addedIds, 'first', 'last'),
+        convertLinkedListToArray(removedIds, 'first', 'last')
+      );
     }
   };
 

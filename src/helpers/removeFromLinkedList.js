@@ -1,8 +1,8 @@
 /**
  * Removes item from linked list
- * @param {Object} linkedList Linked list
- * @param {} item Item to be removed from the list
- * @returns {Object} Updated linked list
+ * @param {object} linkedList Linked list
+ * @param {any} item Item to be removed from the list
+ * @returns {object} Updated linked list
  */
 export default function removeFromLinkedList(linkedList, item) {
   const [before, after] = linkedList[item];
