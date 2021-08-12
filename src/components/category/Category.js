@@ -293,19 +293,21 @@ export default function Category({
         </div>
       ) : null}
       <div className={accordionOpen || uncategorized ? null : 'collapsed'}>
-        {uncategorized ? null : <hr />}
+        {uncategorized || (showSelectedSolutions && textItems.length === 0) ? null : <hr />}
         <ul
           ref={categoryContentRef}
           style={uncategorized && !mediumScreen ? { maxHeight: maxHeight } : {}}
           className={'category-content'}
         >
           {textItems}
-          <li>
-            <Dropzone
-              key={`dropzone-${categoryId}`}
-              visible={draggedInfo.itemOverCategory === categoryId}
-            />
-          </li>
+          {!showSelectedSolutions ? (
+            <li>
+              <Dropzone
+                key={`dropzone-${categoryId}`}
+                visible={draggedInfo.itemOverCategory === categoryId}
+              />
+            </li>
+          ) : null}
         </ul>
       </div>
     </div>
