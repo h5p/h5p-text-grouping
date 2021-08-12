@@ -37,7 +37,6 @@ export default function Category({
 
   const [minHeight, setMinHeight] = useState(null);
   const [maxHeight, setMaxHeight] = useState(null);
-  const [previousHeight, setPreviousHeight] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [currentlyOpenTextItem, setCurrentlyOpenTextItem] = useState(null);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
@@ -62,40 +61,11 @@ export default function Category({
   }, [narrowScreen]);
 
   /**
-   * Sets the height of the category on resize
-   */
-  useEffect(() => {
-    const updatePreviousHeight = () => {
-      if (uncategorized && categoryContentRef.current !== null && currentlyOpenTextItem === null) {
-        setPreviousHeight(categoryContentRef.current.offsetHeight);
-      }
-    };
-
-    instance.on('resize', updatePreviousHeight);
-
-    return () => instance.off('resize', updatePreviousHeight);
-  }, []);
-
-  /**
    * Trigger resize when the dropdown or accordion opens or closes
    */
   useEffect(() => {
     instance.trigger('resize');
   }, [dropdownSelectOpen, accordionOpen]);
-
-  /**
-   * Sets the height of the category without a dropdown being open
-   */
-  useEffect(() => {
-    if (uncategorized && categoryContentRef.current !== null) {
-      // A slight timeout is added to make sure the changes have time to take effect
-      let timerId = setTimeout(() => {
-        setPreviousHeight(categoryContentRef.current.offsetHeight);
-        timerId = null;
-      }, 10);
-      return () => clearTimeout(timerId);
-    }
-  }, [categoryAssignment[categoryId].length]);
 
   /**
    * Expand the category if Check or Show Solution has been clicked
@@ -203,7 +173,7 @@ export default function Category({
         setMinHeight(height + categoryHeaderRef.current.offsetHeight);
       }
       else {
-        setMaxHeight(previousHeight);
+        setMaxHeight(categoryContentRef.current.offsetHeight);
       }
       setCurrentlyOpenTextItem(textItemId);
     }
