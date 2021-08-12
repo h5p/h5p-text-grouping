@@ -152,6 +152,12 @@ export default function TextItem({
     event.preventDefault();
   };
 
+  const handleTouch = (event) => {
+    if (event.target === event.currentTarget) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <li
       className={getClassNames({
@@ -160,15 +166,12 @@ export default function TextItem({
         correct: shouldShowSolution && correctlyPlaced,
         wrong: shouldShowSolution && !correctlyPlaced,
         'show-correct': shouldShowUnselectedSolution,
-        'dropDownOpen': dropdownSelectOpen,
-        'dragged': isDragged
+        dropDownOpen: dropdownSelectOpen,
+        dragged: isDragged
       })}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
-      style={
-        isDragged
-          ? { width: dragState.width, ...draggedInfo.style } : {}
-      }
+      style={isDragged ? { width: dragState.width, ...draggedInfo.style } : {}}
     >
       <div
         className={getClassNames({
@@ -178,11 +181,15 @@ export default function TextItem({
           'drag-over-category': isDragged && draggedInfo.itemOverCategory !== -1
         })}
         // Prevent dragging when touching the display
-        onTouchEnd={event => event.preventDefault()}
+        onTouchEnd={(event) => handleTouch(event)}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
-        <div className="text-item">
-          <div className="text-item-content" dangerouslySetInnerHTML={{ __html: textElement }} />
+        <div className="text-item" onTouchEnd={(event) => handleTouch(event)}>
+          <div
+            className="text-item-content"
+            dangerouslySetInnerHTML={{ __html: textElement }}
+            onTouchEnd={(event) => event.preventDefault()}
+          />
           {showSelectedSolutions ? (
             <>
               <div aria-hidden="true" className="solution-icon" />
