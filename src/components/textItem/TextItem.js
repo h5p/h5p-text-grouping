@@ -151,7 +151,12 @@ export default function TextItem({
 
     event.preventDefault();
   };
-
+  /**
+   * Prevent MouseEvents from firing on touch
+   * Does not cancel the event if swiping has been initiated
+   * @param {event} event touchend-event
+   * @param {boolean} applyToChildren True if method should prevent mouseevents for children element as well as this element 
+   */
   const handleTouch = (event, applyToChildren) => {
     if ((event.target === event.currentTarget || applyToChildren) && event.nativeEvent.cancelable) {
       event.preventDefault();
