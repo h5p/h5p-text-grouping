@@ -25,7 +25,7 @@ export default function Main({ context }) {
     triggerInteracted
   } = context;
 
-  const [openDropdownCategoryId, setOpenDropdownCategoryId] = useState(-1);
+  const [openDropdown, setOpenDropdown] = useState({categoryId: -1, nextCategoryId: -1});
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
@@ -188,46 +188,48 @@ export default function Main({ context }) {
    * @param {boolean} shouldFocus Whether the text item should receive focused after the move
    */
   const moveTextItems = (textItems, shouldFocus) => {
-    const newCategories = deepCopy(categoryAssignment);
-    let textItem;
+    setCategoryAssignment(previousCategoryAssignment => {
+      const newCategories = deepCopy(previousCategoryAssignment);
+      let textItem;
+  
+      textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {
+        // Reduce looping if the previous category is known
+        let i = prevCategoryId === undefined ? 0 : prevCategoryId;
+        const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
+        let prevCategory;
+        let prevPosition;
+  
+        // Remove from previous category
+        for (i; i <= limit; i++) {
+          newCategories[i].forEach((item, index) => {
+            if (item.id === textItemId) {
+              textItem = item;
+              textItem.shouldAnimate = true;
+              prevCategory = i;
+              prevPosition = index;
+            }
+          });
+        }
+  
+        // Add to new category
+        newCategories[newCategoryId].push(textItem);
+  
+        if (shouldFocus) {
+          setFocusedTextItem(textItemId);
+  
+          // Render the new textItem after enough time for the focus to be set
+          setTimeout(() => {
+            setCategoryAssignment(newCategories);
+          }, 10);
+        }
+  
+        // Remove from previous category
+        newCategories[prevCategory].splice(prevPosition, 1);
+      });
 
-    textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {
-      // Reduce looping if the previous category is known
-      let i = prevCategoryId === undefined ? 0 : prevCategoryId;
-      const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
-      let prevCategory;
-      let prevPosition;
-
-      // Remove from previous category
-      for (i; i <= limit; i++) {
-        newCategories[i].forEach((item, index) => {
-          if (item.id === textItemId) {
-            textItem = item;
-            textItem.shouldAnimate = true;
-            prevCategory = i;
-            prevPosition = index;
-          }
-        });
-      }
-
-      // Add to new category
-      newCategories[newCategoryId].push(textItem);
-
-      if (shouldFocus) {
-        setFocusedTextItem(textItemId);
-
-        // Render the new textItem after enough time for the focus to be set
-        setTimeout(() => {
-          setCategoryAssignment(newCategories);
-        }, 10);
-      }
-
-      // Remove from previous category
-      newCategories[prevCategory].splice(prevPosition, 1);
+      triggerInteracted(newCategories);
+      return (newCategories);
     });
-
-    setCategoryAssignment(newCategories);
-    triggerInteracted(newCategories);
   };
 
   /**
@@ -252,8 +254,8 @@ export default function Main({ context }) {
         dragState,
         setDragState,
         setCategoryRefs,
-        openDropdownCategoryId,
-        setOpenDropdownCategoryId 
+        openDropdown: openDropdown,
+        setOpenDropdown: setOpenDropdown 
       }}
     >
       <CategoryList

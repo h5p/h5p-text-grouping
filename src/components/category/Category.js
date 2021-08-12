@@ -37,8 +37,8 @@ export default function Category({
     showSelectedSolutions,
     showUnselectedSolutions,
     setCategoryRefs,
-    openDropdownCategoryId: openDropdownCategoryId,
-    setOpenDropdownCategoryId: setOpenDropdownCategoryId
+    openDropdown,
+    setOpenDropdown
   } = useContext(H5PContext);
   const narrowScreen = useScreenType('narrow');
   const mediumScreen = useScreenType('medium');
@@ -55,10 +55,23 @@ export default function Category({
   const categoryRef = useRef(null);
 
   useEffect(() => {
-    setCategoryRefs(previousCategoryRefs => {
-      return {...previousCategoryRefs, [categoryId]: categoryRef};
+    setCategoryRefs((previousCategoryRefs) => {
+      return { ...previousCategoryRefs, [categoryId]: categoryRef };
     });
   }, [categoryRef]);
+
+  /**
+   * Opens assign items dropdown if the assign items button was clicked while another dropdown was open
+   */
+  useEffect(() => {
+    if (openDropdown.nextCategoryId === categoryId && openDropdown.categoryId === -1) {
+      setOpenDropdown({ categoryId: categoryId, nextCategoryId: -1 });
+      // Set focus to this assign items button
+      if (assignItemsButtonRef.current) {
+        assignItemsButtonRef.current.focus();
+      }
+    }
+  });
 
   /**
    * Collapse or expand the category based on how wide the screen is
@@ -72,7 +85,7 @@ export default function Category({
    */
   useEffect(() => {
     instance.trigger('resize');
-  }, [openDropdownCategoryId, accordionOpen]);
+  }, [openDropdown, accordionOpen]);
 
   /**
    * Expand the category if Check or Show Solution has been clicked
@@ -132,7 +145,29 @@ export default function Category({
       assignItemsButtonRef.current.focus();
     }
 
-    setOpenDropdownCategoryId(-1);
+    setOpenDropdown((previousOpenDropdown) => {
+      return { ...previousOpenDropdown, categoryId: -1 };
+    });
+  };
+
+  /**
+   * Handles the different scenarios when the assign items button is clicked
+   */
+  const handleAssignItemsButtonClicked = () => {
+    // This dropdown is open. Closes this dropdown
+    if (openDropdown.categoryId === categoryId) {
+      return;
+    }
+    // No dropdown is open. Opens this dropdown
+    else if (openDropdown.categoryId === -1) {
+      setOpenDropdown({ categoryId: categoryId, nextCategoryId: -1 });
+    }
+    // Another dropdown is already open. Sets this dropdown to be opened on reload
+    else {
+      setOpenDropdown((previousOpenDropdown) => {
+        return { ...previousOpenDropdown, nextCategoryId: categoryId };
+      });
+    }
   };
 
   /**
@@ -248,22 +283,17 @@ export default function Category({
             className="icon-assign-items"
             iconName={getClassNames({
               'button-assign-items ': true,
-              'icon-assign-items-expanded-state': openDropdownCategoryId === categoryId,
-              disabled: openDropdownCategoryId !== -1
+              'icon-assign-items-expanded-state': openDropdown.categoryId === categoryId
             })}
             ariaLabel={l10n.assignItemsHelpText}
             ariaHasPopup="listbox"
-            ariaExpanded={openDropdownCategoryId === categoryId}
+            ariaExpanded={openDropdown.categoryId === categoryId}
             hoverText={l10n.assignItemsHelpText}
-            onClick={() => {
-              if (openDropdownCategoryId === -1) {
-                setOpenDropdownCategoryId(categoryId);
-              }
-            }}
+            onClick={() => handleAssignItemsButtonClicked()}
           />
         )}
       </div>
-      {openDropdownCategoryId === categoryId ? (
+      {openDropdown.categoryId === categoryId ? (
         <div className="dropdown-wrapper">
           <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
