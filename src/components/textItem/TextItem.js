@@ -152,8 +152,8 @@ export default function TextItem({
     event.preventDefault();
   };
 
-  const handleTouch = (event) => {
-    if (event.target === event.currentTarget) {
+  const handleTouch = (event, applyToChildren) => {
+    if ((event.target === event.currentTarget || applyToChildren) && event.nativeEvent.cancelable) {
       event.preventDefault();
     }
   };
@@ -181,14 +181,14 @@ export default function TextItem({
           'drag-over-category': isDragged && draggedInfo.itemOverCategory !== -1
         })}
         // Prevent dragging when touching the display
-        onTouchEnd={(event) => handleTouch(event)}
+        onTouchEnd={(event) => handleTouch(event, false)}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
-        <div className="text-item" onTouchEnd={(event) => handleTouch(event)}>
+        <div className="text-item" onTouchEnd={(event) => handleTouch(event, false)}>
           <div
             className="text-item-content"
             dangerouslySetInnerHTML={{ __html: textElement }}
-            onTouchEnd={(event) => event.preventDefault()}
+            onTouchEnd={(event) => handleTouch(event, true)}
           />
           {showSelectedSolutions ? (
             <>
