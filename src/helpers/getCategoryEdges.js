@@ -1,17 +1,19 @@
 /**
- * Return position of edges for each category
- * @param 
+ * Calculates and returns coordinates of all the edges for each category
+ * @param {number} numberOfCategories Total number of categories
+ * @param {object} categoryRefs Refs to all categories
+ * @returns {object} Object containing coordinates of all edges of all categories
  */
-export default function getCategoryEdges(numberOfCategories) {
+export default function getCategoryEdges(numberOfCategories, categoryRefs) {
   const categoryEdges = {};
   for (let i = 0; i < numberOfCategories; i++) {
     // Set all edges to 0 if category does not exist
-    if (document.getElementById(`category ${i}`) === null) {
+    if (categoryRefs[i].current === null) {
       categoryEdges[i] = { x1: 0, x2: 0, y1: 0, y2: 0 };
       continue;
     }
 
-    const clientRect = document.getElementById(`category ${i}`).getBoundingClientRect();
+    const clientRect = categoryRefs[i].current.getBoundingClientRect();
     categoryEdges[i] = {
       x1: clientRect.x,
       x2: clientRect.x + clientRect.width,

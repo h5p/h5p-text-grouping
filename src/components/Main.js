@@ -28,17 +28,14 @@ export default function Main({ context }) {
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
-  const [draggedInfo, setDraggedInfo] = useState({
-    style: {},
-    itemOverCategory: -1
-  });
+  const [draggedInfo, setDraggedInfo] = useState({ style: {}, itemOverCategory: -1 });
   const [dragState, setDragState] = useState({
     textItemId: null,
     categoryId: null,
     dragging: false,
     offset: { x: 0, y: 0 }
   });
-
+  const [categoryRefs, setCategoryRefs] = useState({ 0: null });
   const [categoryAssignment, setCategoryAssignment] = useState([
     getRandomizedTextItems(),
     ...textGroups.map(() => [])
@@ -106,7 +103,7 @@ export default function Main({ context }) {
     if (!dragState.dragging) {
       return;
     }
-    const categoryEdges = getCategoryEdges(categoryAssignment.length);
+    const categoryEdges = getCategoryEdges(categoryAssignment.length, categoryRefs);
     let itemOverCategory = -1;
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
@@ -139,7 +136,7 @@ export default function Main({ context }) {
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
-    const categoryEdges = getCategoryEdges(categoryAssignment.length);
+    const categoryEdges = getCategoryEdges(categoryAssignment.length, categoryRefs);
     for (let i = 0; i < categoryAssignment.length; i++) {
       if (
         checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }, categoryEdges) &&
@@ -252,7 +249,8 @@ export default function Main({ context }) {
         focusedTextItem,
         setFocusedTextItem,
         dragState,
-        setDragState
+        setDragState,
+        setCategoryRefs
       }}
     >
       <CategoryList

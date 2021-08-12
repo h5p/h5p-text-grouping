@@ -30,7 +30,7 @@ export default function Category({
 }) {
   const uncategorized = categoryId === 0;
 
-  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions } =
+  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions, setCategoryRefs} =
     useContext(H5PContext);
   const narrowScreen = useScreenType('narrow');
   const mediumScreen = useScreenType('medium');
@@ -46,6 +46,13 @@ export default function Category({
   const categoryHeaderRef = useRef(null);
   const categoryContentRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
+  const categoryRef = useRef(null);
+
+  useEffect(() => {
+    setCategoryRefs(previousCategoryRefs => {
+      return {...previousCategoryRefs, [categoryId]: categoryRef};
+    });
+  }, [categoryRef]);
 
   /**
    * Collapse or expand the category based on how wide the screen is
@@ -237,6 +244,7 @@ export default function Category({
   return (
     <div
       id={`category ${categoryId}`}
+      ref={categoryRef}
       className={getClassNames({
         category: true,
         uncategorized: uncategorized,
