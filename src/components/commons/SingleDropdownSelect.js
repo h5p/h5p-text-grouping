@@ -122,6 +122,10 @@ export default function SingleDropdownSelect({
               key={`option-${id}`}
               className={className}
               onClick={(event) => handleSelectItem(event, id)}
+              onTouchEnd={(event) => {
+                event.preventDefault();
+                handleSelectItem(event, id);
+              }}
               tabIndex={id === selectedOption ? 0 : -1}
               role="option"
               aria-selected={false}

@@ -25,6 +25,10 @@ const Button = forwardRef(
     <button
       ref={ref}
       onClick={onClick}
+      onTouchEnd={(event) => {
+        event.preventDefault();
+        onClick();
+      }}
       className={`h5p-text-grouping-button ${className} ${iconName ? iconName : ''}`}
       aria-label={ariaLabel}
       aria-haspopup={ariaHasPopup || undefined}

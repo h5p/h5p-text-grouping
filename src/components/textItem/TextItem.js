@@ -171,16 +171,14 @@ export default function TextItem({
       }
     >
       <div
-        className={getClassNames(
-          Object.assign(
-            {
-              'text-item-border': true,
-              'show-solution': showSelectedSolutions,
-              'text-item-selected': isDragged,
-              'drag-over-category': isDragged && draggedInfo.itemOverCategory !== -1
-            }
-          )
-        )}
+        className={getClassNames({
+          'text-item-border': true,
+          'show-solution': showSelectedSolutions,
+          'text-item-selected': isDragged,
+          'drag-over-category': isDragged && draggedInfo.itemOverCategory !== -1
+        })}
+        // Prevent dragging when touching the display
+        onTouchEnd={event => event.preventDefault()}
         onMouseDown={(event) => mouseDownHandler(event)}
       >
         <div className="text-item">
