@@ -1,4 +1,5 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
   entry: {
@@ -19,8 +20,11 @@ const config = {
       {
         test:/\.scss$/i,
         include: path.resolve(__dirname, 'src'),
-        exclude: /node_modules/,
-        use: ['style-loader', 'css-loader', 'resolve-url-loader', 'sass-loader']
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
@@ -28,7 +32,12 @@ const config = {
         loader: 'url-loader?limit=1000000',
       },
     ]
-  }
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: `h5p-text-grouping.css`
+    })
+  ]
 };
 
 module.exports = (env, argv) => {
