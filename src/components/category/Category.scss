@@ -111,7 +111,7 @@
     outline: none;
     background-color: inherit;
 
-    &:hover:before {
+    &:hover:not(.disabled):before {
       cursor: pointer;
       color: styles.$action-icon-color-dark;
     }

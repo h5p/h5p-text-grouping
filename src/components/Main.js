@@ -25,6 +25,7 @@ export default function Main({ context }) {
     triggerInteracted
   } = context;
 
+  const [openDropdownCategoryId, setOpenDropdownCategoryId] = useState(-1);
   const [showSelectedSolutions, setShowSelectedSolutions] = useState(false);
   const [showUnselectedSolutions, setShowUnselectedSolutions] = useState(false);
   const [focusedTextItem, setFocusedTextItem] = useState(null);
@@ -250,7 +251,9 @@ export default function Main({ context }) {
         setFocusedTextItem,
         dragState,
         setDragState,
-        setCategoryRefs
+        setCategoryRefs,
+        openDropdownCategoryId,
+        setOpenDropdownCategoryId 
       }}
     >
       <CategoryList
@@ -288,4 +291,5 @@ Main.propTypes = {
     getRandomizedTextItems: PropTypes.func.isRequired,
     triggerInteracted: PropTypes.func.isRequired
   }).isRequired
+
 };

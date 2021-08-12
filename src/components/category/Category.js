@@ -30,8 +30,16 @@ export default function Category({
 }) {
   const uncategorized = categoryId === 0;
 
-  const { instance, l10n, categoryAssignment, showSelectedSolutions, showUnselectedSolutions, setCategoryRefs} =
-    useContext(H5PContext);
+  const {
+    instance,
+    l10n,
+    categoryAssignment,
+    showSelectedSolutions,
+    showUnselectedSolutions,
+    setCategoryRefs,
+    openDropdownCategoryId: openDropdownCategoryId,
+    setOpenDropdownCategoryId: setOpenDropdownCategoryId
+  } = useContext(H5PContext);
   const narrowScreen = useScreenType('narrow');
   const mediumScreen = useScreenType('medium');
 
@@ -39,7 +47,6 @@ export default function Category({
   const [maxHeight, setMaxHeight] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [currentlyOpenTextItem, setCurrentlyOpenTextItem] = useState(null);
-  const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState(!narrowScreen);
 
   const categoryHeaderRef = useRef(null);
@@ -65,7 +72,7 @@ export default function Category({
    */
   useEffect(() => {
     instance.trigger('resize');
-  }, [dropdownSelectOpen, accordionOpen]);
+  }, [openDropdownCategoryId, accordionOpen]);
 
   /**
    * Expand the category if Check or Show Solution has been clicked
@@ -125,7 +132,7 @@ export default function Category({
       assignItemsButtonRef.current.focus();
     }
 
-    setDropdownSelectOpen(false);
+    setOpenDropdownCategoryId(-1);
   };
 
   /**
@@ -241,17 +248,22 @@ export default function Category({
             className="icon-assign-items"
             iconName={getClassNames({
               'button-assign-items ': true,
-              'icon-assign-items-expanded-state': dropdownSelectOpen
+              'icon-assign-items-expanded-state': openDropdownCategoryId === categoryId,
+              disabled: openDropdownCategoryId !== -1
             })}
             ariaLabel={l10n.assignItemsHelpText}
             ariaHasPopup="listbox"
-            ariaExpanded={dropdownSelectOpen}
+            ariaExpanded={openDropdownCategoryId === categoryId}
             hoverText={l10n.assignItemsHelpText}
-            onClick={() => setDropdownSelectOpen(true)}
+            onClick={() => {
+              if (openDropdownCategoryId === -1) {
+                setOpenDropdownCategoryId(categoryId);
+              }
+            }}
           />
         )}
       </div>
-      {dropdownSelectOpen ? (
+      {openDropdownCategoryId === categoryId ? (
         <div className="dropdown-wrapper">
           <MultiDropdownSelect
             label={l10n.assignItemsHelpText}
