@@ -29,6 +29,11 @@ export default function SingleDropdownSelect({
     const dropdownHeight = dropdownRef.current.offsetHeight;
     if (dropdownHeight > 0) {
       setContainerHeight(dropdownHeight);
+
+      // Wait for the changes to take effect before setting focus
+      setTimeout(() => {
+        optionRefs.current[0].current.focus();
+      }, 10);
     }
   }, []);
 
@@ -46,11 +51,6 @@ export default function SingleDropdownSelect({
     return () => {
       window.removeEventListener('click', handleSelectItem);
     };
-  }, []);
-
-  //Set focus to the option list on mount
-  useEffect(() => {
-    optionRefs.current[0].current.focus();
   }, []);
 
   /**

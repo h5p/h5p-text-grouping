@@ -2,6 +2,7 @@
 
 .h5p-text-grouping {
   .category {
+    position: relative;
     padding: 0.5em 0.5em;
     border-style: solid;
     border-width: 2px;
@@ -19,6 +20,7 @@
 
       .category-content {
         position: relative;
+        max-width: 100%; // To ensure the columns don't wrap out of frame when max-height is set
 
         -webkit-column-count: 2;
         -moz-column-count: 2;
@@ -64,8 +66,11 @@
     }
 
     .dropdown-wrapper {
-      top: 0.7em;
-      position: relative;
+      top: calc(50% - 0.8em);
+      right: 0;
+      width: 100%;
+      z-index: 2;
+      position: absolute;
     }
 
     .category-content {

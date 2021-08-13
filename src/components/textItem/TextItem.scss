@@ -95,8 +95,14 @@
 
       .dropdown-wrapper {
         top: calc(50% + 1.2em);
+        right: 0;
         position: absolute;
-        width: calc(100% - 0.75em);
+        width: calc(100% - 0.2em);
+
+        &.dropdown-upwards {
+          top: calc(50% - 1.2em);
+          transform: translateY(-100%);
+        }
       }
     }
 

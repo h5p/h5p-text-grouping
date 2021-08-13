@@ -27,6 +27,7 @@ export default function TextItem({
   isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
+  getContainerHeight,
   draggedInfo
 }) {
   const {
@@ -40,6 +41,7 @@ export default function TextItem({
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [offsetTop, setOffsetTop] = useState(null);
+  const [dropdownUpwards, setDropdownUpwards] = useState(false);
 
   const isDragged = dragState.textItemId === textItemId;
   const textItemRef = useRef(null);
@@ -101,22 +103,31 @@ export default function TextItem({
       );
     }
     setDropdownSelectOpen(false);
+    setDropdownUpwards(false);
     setContainerHeight(0, textItemId);
   };
 
   /**
    * Inform the container of which height is needed to show the text item (with dropdown)
-   * @param {number} height The height needed for the dropdown
+   * @param {number} dropdownHeight The height needed for the dropdown
    */
-  const setHeight = (height) => {
+  const setHeight = (dropdownHeight) => {
     // If the dropdown can't fit in the textItem
-    if (height > textItemRef.current.offsetHeight / 2) {
-      // Set container minHeight
-      const offset =
-        offsetTop +
+    if (dropdownHeight > textItemRef.current.offsetHeight / 2) {
+      const neededSpace = offsetTop +
         textItemRef.current.offsetHeight +
-        (height - textItemRef.current.offsetHeight / 2);
-      setContainerHeight(offset, textItemId, true);
+        (dropdownHeight - textItemRef.current.offsetHeight / 2);
+
+      // If there is not enough space under the textItem
+      if (getContainerHeight() < neededSpace) {
+        // If there is enough space for the dropdown above the textItem
+        if (offsetTop > dropdownHeight) {
+          setDropdownUpwards(true);
+          return;
+        }
+      }
+      // Set container minHeight
+      setContainerHeight(neededSpace, textItemId, true);
     }
   };
 
@@ -155,7 +166,7 @@ export default function TextItem({
    * Prevent MouseEvents from firing on touch
    * Does not cancel the event if swiping has been initiated
    * @param {event} event touchend-event
-   * @param {boolean} applyToChildren True if method should prevent mouseevents for children element as well as this element 
+   * @param {boolean} applyToChildren True if method should prevent mouseevents for children element as well as this element
    */
   const handleTouch = (event, applyToChildren) => {
     if ((event.target === event.currentTarget || applyToChildren) && event.nativeEvent.cancelable) {
@@ -221,7 +232,10 @@ export default function TextItem({
             />
           ) : null}
           {dropdownSelectOpen ? (
-            <div className="dropdown-wrapper">
+            <div className={getClassNames({
+              "dropdown-wrapper": true,
+              "dropdown-upwards": dropdownUpwards,
+            })}>
               <SingleDropdownSelect
                 label={l10n.moveItemsHelpText}
                 setContainerHeight={setHeight}
@@ -251,6 +265,7 @@ TextItem.propTypes = {
   isShowSolutionItem: PropTypes.bool.isRequired,
   removeAnimations: PropTypes.func.isRequired,
   setContainerHeight: PropTypes.func.isRequired,
+  getContainerHeight: PropTypes.func.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     itemOverCategory: PropTypes.number.isRequired

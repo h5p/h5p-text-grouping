@@ -240,6 +240,7 @@ export default function Category({
         isShowSolutionItem={isShowSolutionItem}
         removeAnimations={removeAnimations}
         setContainerHeight={uncategorized ? resizeUncategorized : setContainerHeight}
+        getContainerHeight={() => categoryContentRef.current ? categoryContentRef.current.offsetHeight : 0}
         draggedInfo={draggedInfo}
       />
     ));
