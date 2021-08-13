@@ -110,7 +110,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
       if (correctResponsesPattern) {
         correctResponsesPattern += '[,]'; // Deliminator
       }
-      correctResponsesPattern += textItemId + '[.]' + categoryId;
+      correctResponsesPattern += textItemId + '[.]' + categoryId.toString();
     });
   });
 
@@ -132,7 +132,7 @@ function getResponse(currentCategoryAssignment) {
       if (response) {
         response += '[,]'; // Deliminator
       }
-      response += textItem.id + '[.]' + categoryId;
+      response += textItem.id + '[.]' + categoryId.toString();
     });
   });
 
