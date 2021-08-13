@@ -25,10 +25,10 @@
             "label": "Group name"
           },
           {
-            "label": "Words/paragraphs",
-            "entity": "word/paragraph",
+            "label": "Text segments",
+            "entity": "text segment",
             "field": {
-              "label": "Word/paragraph"
+              "label": "Text segment"
             }
           }
         ]
