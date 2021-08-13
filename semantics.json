@@ -41,7 +41,7 @@
     "type": "text",
     "importance": "high",
     "widget": "html",
-    "label": "Question",
+    "label": "Task description",
     "enterMode": "p",
     "tags": [
       "strong",
@@ -59,7 +59,7 @@
     "type": "list",
     "importance": "high",
     "label": "Text groups",
-    "entity": "option",
+    "entity": "text group",
     "enterMode": "p",
     "min": 2,
     "max": 8,
@@ -81,7 +81,7 @@
           "type": "list",
           "importance": "medium",
           "label": "Words/paragraphs",
-          "entity": "option",
+          "entity": "word/paragraph",
           "enterMode": "p",
           "min": 1,
           "max": 20,
@@ -199,7 +199,7 @@
         "type": "boolean",
         "label": "Give one point for the whole task",
         "importance": "low",
-        "description": "Enable to give a total of one point for multiple correct answers.",
+        "description": "Set the maximum score to one point, where the point is awarded depending on the 'Pass percentage'",
         "default": false
       },
       {
@@ -228,19 +228,11 @@
         "label": "Pass percentage",
         "name": "passPercentage",
         "type": "number",
-        "description": "This setting often won't have any effect. It is the percentage of the total score required for getting 1 point when one point for the entire task is enabled, and for getting result.success in xAPI statements.",
+        "description": "This setting often won't have any effect. It is the percentage of the total score required for getting 1 point when 'Give one point for the whole task' is enabled, and for getting 'result.success' in xAPI statements.",
         "min": 0,
         "max": 100,
         "step": 1,
         "default": 100
-      },
-      {
-        "name": "showScorePoints",
-        "type": "boolean",
-        "label": "Show score points",
-        "description": "Show points earned for each answer. This will not be an option in 'Single answer' mode or if 'Give one point for the whole task' option is enabled.",
-        "importance": "low",
-        "default": true
       }
     ]
   },
@@ -254,49 +246,49 @@
       {
         "name": "uncategorizedLabel",
         "type": "text",
-        "label": "Label for the group of distractor words",
+        "label": "Label for the group with the uncategorized words",
         "importance": "low",
         "default": "Uncategorized"
       },
       {
         "name": "ariaMoveToCategory",
         "type": "text",
-        "label": "Aria label for the Move to Category button",
+        "label": "Aria label for the \"Move to Category\" button",
         "importance": "low",
         "default": "Move to category"
       },
       {
         "name": "hoverMoveToCategory",
         "type": "text",
-        "label": "Hover text for the Move to Category button",
+        "label": "Hover text for the \"Move to Category\" button",
         "importance": "low",
         "default": "Move to category"
       },
       {
         "name": "ariaCollapse",
         "type": "text",
-        "label": "Aria label for the Collapse Category button",
+        "label": "Aria label for the \"Collapse Category\" button",
         "importance": "low",
         "default": "Collapse category"
       },
       {
         "name": "ariaExpand",
         "type": "text",
-        "label": "Aria label for the Expand Category button",
+        "label": "Aria label for the \"Expand Category\" button",
         "importance": "low",
         "default": "Expand category"
       },
       {
         "name": "hoverCollapse",
         "type": "text",
-        "label": "Hover text for the Collapse Category button",
+        "label": "Hover text for the \"Collapse Category\" button",
         "importance": "low",
         "default": "Collapse category"
       },
       {
         "name": "hoverExpand",
         "type": "text",
-        "label": "hover text for the Expand Category button",
+        "label": "Hover text for the \"Expand Category\" button",
         "importance": "low",
         "default": "Expand category"
       },
@@ -340,7 +332,7 @@
         "type": "text",
         "label": "Assistive technology description for \"Show Solution\" button",
         "importance": "low",
-        "default": "Show the solution. The correct options will be marked."
+        "default": "Show the solution. The correct assignment will be displayed."
       },
       {
         "name": "correctCategory",
@@ -433,14 +425,14 @@
             ]
           },
           {
-            "label": "Cancel button label",
+            "label": "\"Cancel\" button label",
             "importance": "low",
             "name": "cancelLabel",
             "type": "text",
             "default": "Cancel"
           },
           {
-            "label": "Confirm button label",
+            "label": "\"Confirm\" button label",
             "importance": "low",
             "name": "confirmLabel",
             "type": "text",
@@ -479,14 +471,14 @@
             ]
           },
           {
-            "label": "Cancel button label",
+            "label": "\"Cancel\" button label",
             "importance": "low",
             "name": "cancelLabel",
             "type": "text",
             "default": "Cancel"
           },
           {
-            "label": "Confirm button label",
+            "label": "\"Confirm\" button label",
             "importance": "low",
             "name": "confirmLabel",
             "type": "text",

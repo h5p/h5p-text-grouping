@@ -13,11 +13,11 @@
       ]
     },
     {
-      "label": "Question"
+      "label": "Task description"
     },
     {
       "label": "Text groups",
-      "entity": "option",
+      "entity": "text group",
       "field": {
         "label": "Group",
         "fields": [
@@ -26,7 +26,7 @@
           },
           {
             "label": "Words/paragraphs",
-            "entity": "option",
+            "entity": "word/paragraph",
             "field": {
               "label": "Word/paragraph"
             }
@@ -75,7 +75,7 @@
         },
         {
           "label": "Give one point for the whole task",
-          "description": "Enable to give a total of one point for multiple correct answers."
+          "description": "Set the maximum score to one point, where the point is awarded depending on the 'Pass percentage'"
         },
         {
           "label": "Require answer before the solution can be viewed"
@@ -88,11 +88,7 @@
         },
         {
           "label": "Pass percentage",
-          "description": "This setting often won't have any effect. It is the percentage of the total score required for getting 1 point when one point for the entire task is enabled, and for getting result.success in xAPI statements."
-        },
-        {
-          "label": "Show score points",
-          "description": "Show points earned for each answer. This will not be an option in 'Single answer' mode or if 'Give one point for the whole task' option is enabled."
+          "description": "This setting often won't have any effect. It is the percentage of the total score required for getting 1 point when 'Give one point for the whole task' is enabled, and for getting 'result.success' in xAPI statements."
         }
       ]
     },
@@ -100,31 +96,31 @@
       "label": "User interface",
       "fields": [
         {
-          "label": "Label for the group of distractor words",
+          "label": "Label for the group with the uncategorized words",
           "default": "Uncategorized"
         },
         {
-          "label": "Aria label for the Move to Category button",
+          "label": "Aria label for the \"Move to Category\" button",
           "default": "Move to category"
         },
         {
-          "label": "Hover text for the Move to Category button",
+          "label": "Hover text for the \"Move to Category\" button",
           "default": "Move to category"
         },
         {
-          "label": "Aria label for the Collapse Category button",
+          "label": "Aria label for the \"Collapse Category\" button",
           "default": "Collapse category"
         },
         {
-          "label": "Aria label for the Expand Category button",
+          "label": "Aria label for the \"Expand Category\" button",
           "default": "Expand category"
         },
         {
-          "label": "Hover text for the Collapse Category button",
+          "label": "Hover text for the \"Collapse Category\" button",
           "default": "Collapse category"
         },
         {
-          "label": "Hover text for the Expand Category button",
+          "label": "Hover text for the \"Expand Category\" button",
           "default": "Expand category"
         },
         {
@@ -149,7 +145,7 @@
         },
         {
           "label": "Assistive technology description for \"Show Solution\" button",
-          "default": "Show the solution. The correct options will be marked."
+          "default": "Show the solution. The correct assignment will be displayed."
         },
         {
           "label": "Correct Category (not displayed)",
@@ -181,11 +177,6 @@
           "default": "You got :num out of :total points"
         },
         {
-          "label": "Placeholder",
-          "description": "Placeholder text for categories without words in them",
-          "default": "Placeholder"
-        },
-        {
           "label": "Category",
           "description": "Placeholder text for categories without names",
           "default": "Category"
@@ -202,11 +193,11 @@
               "default": "Are you sure you want to finish?"
             },
             {
-              "label": "Cancel button label",
+              "label": "\"Cancel\" button label",
               "default": "Cancel"
             },
             {
-              "label": "Confirm button label",
+              "label": "\"Confirm\" button label",
               "default": "Finish"
             }
           ]
@@ -223,11 +214,11 @@
               "default": "Are you sure you wish to retry?"
             },
             {
-              "label": "Cancel button label",
+              "label": "\"Cancel\" button label",
               "default": "Cancel"
             },
             {
-              "label": "Confirm button label",
+              "label": "\"Confirm\" button label",
               "default": "Retry"
             }
           ]
