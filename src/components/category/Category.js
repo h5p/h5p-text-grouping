@@ -309,7 +309,10 @@ export default function Category({
         <ul
           ref={categoryContentRef}
           style={uncategorized && !mediumScreen ? { maxHeight: maxHeight } : {}}
-          className={'category-content'}
+          className={getClassNames({
+            'category-content': true,
+            'single-text-item': textItems.length === 1
+          })}
         >
           {textItems}
           {!showSelectedSolutions ? (
