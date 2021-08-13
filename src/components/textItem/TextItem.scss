@@ -66,7 +66,7 @@
 
       &:hover {
         &:not(.show-solution):not(.text-item-selected) {
-          cursor: pointer;
+          cursor: move;
           border-style: dotted;
           border-color: styles.$text-item-border-color !important; // Ensures value is not overwritten by animation
 
@@ -81,7 +81,7 @@
       }
 
       &.text-item-selected {
-        cursor: pointer;
+        cursor: move;
         border-color: styles.$text-item-border-color;
         border-style: solid;
       }
