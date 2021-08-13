@@ -337,21 +337,21 @@
       {
         "name": "correctCategory",
         "type": "text",
-        "label": "Correct Category (not displayed)",
+        "label": "Aria label for the correct text segments in the check answer/solution view",
         "importance": "low",
         "default": "Correct category."
       },
       {
         "name": "wrongCategory",
         "type": "text",
-        "label": "Wrong Category (not displayed)",
+        "label": "Aria label for the incorrect text segments in the check answer/solution view",
         "importance": "low",
         "default": "Wrong category."
       },
       {
         "name": "shouldHaveBeenPlacedInCategory",
         "type": "text",
-        "label": "Should have been placed in category (not displayed)",
+        "label": "Aria label for the text segments that indicate the correct position of a text item in the solution view",
         "importance": "low",
         "default": "This item should have been placed in this category.",
         "optional": true

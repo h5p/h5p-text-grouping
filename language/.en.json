@@ -148,15 +148,15 @@
           "default": "Show the solution. The correct assignment will be displayed."
         },
         {
-          "label": "Correct Category (not displayed)",
+          "label": "Aria label for the correct text segments in the check answer/solution view",
           "default": "Correct category."
         },
         {
-          "label": "Wrong Category (not displayed)",
+          "label": "Aria label for the incorrect text segments in the check answer/solution view",
           "default": "Wrong category."
         },
         {
-          "label": "Should have been placed in category (not displayed)",
+          "label": "Aria label for the text segments that indicate the correct position of a text item in the solution view",
           "default": "This item should have been placed in this category."
         },
         {
