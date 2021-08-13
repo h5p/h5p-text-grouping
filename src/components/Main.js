@@ -36,7 +36,7 @@ export default function Main({ context }) {
     dragging: false,
     offset: { x: 0, y: 0 }
   });
-  const [categoryRefs, setCategoryRefs] = useState({ 0: null });
+  const categorysRef = useRef([]);
   const refToFocusOn = useRef(null);
   const [categoryAssignment, setCategoryAssignment] = useState([
     getRandomizedTextItems(),
@@ -114,7 +114,7 @@ export default function Main({ context }) {
     if (!dragState.dragging) {
       return;
     }
-    const categoryEdges = getCategoryEdges(categoryAssignment.length, categoryRefs);
+    const categoryEdges = getCategoryEdges(categoryAssignment.length, categorysRef);
     let itemOverCategory = -1;
     for (let i = 0; i < categoryAssignment.length; i++) {
       // If the text item hovers over its current category, do nothing
@@ -147,7 +147,7 @@ export default function Main({ context }) {
 
     // Move text item to new category if it was dropped in a new category
     let insideCategoryIndex = -1;
-    const categoryEdges = getCategoryEdges(categoryAssignment.length, categoryRefs);
+    const categoryEdges = getCategoryEdges(categoryAssignment.length, categorysRef);
     for (let i = 0; i < categoryAssignment.length; i++) {
       if (
         checkIfInsideCategory(i, { x: event.clientX, y: event.clientY }, categoryEdges) &&
@@ -263,7 +263,6 @@ export default function Main({ context }) {
         setFocusedTextItem,
         dragState,
         setDragState,
-        setCategoryRefs,
         openDropdown,
         setOpenDropdown,
         refToFocusOn
@@ -274,12 +273,14 @@ export default function Main({ context }) {
         allTextItems={getRandomizedTextItems()}
         removeAnimations={removeAnimations}
         draggedInfo={draggedInfo}
+        categorysRef={categorysRef}
       />
       {!showUnselectedSolutions && categoryAssignment[0].length !== 0 ? (
         <Category
           categoryId={0}
           moveTextItems={moveTextItems}
           draggedInfo={draggedInfo}
+          categorysRef={categorysRef}
           textItems={{
             categories: [...textGroups, { groupName: l10n.uncategorizedLabel }],
             removeAnimations: removeAnimations

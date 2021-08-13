@@ -4,16 +4,16 @@
  * @param {object} categoryRefs Refs to all categories
  * @returns {object} Object containing coordinates of all edges of all categories
  */
-export default function getCategoryEdges(numberOfCategories, categoryRefs) {
+export default function getCategoryEdges(numberOfCategories, categorysRef) {
   const categoryEdges = {};
   for (let i = 0; i < numberOfCategories; i++) {
     // Set all edges to 0 if category does not exist
-    if (categoryRefs[i].current === null) {
+    if (categorysRef.current[i] === null) {
       categoryEdges[i] = { x1: 0, x2: 0, y1: 0, y2: 0 };
       continue;
     }
 
-    const clientRect = categoryRefs[i].current.getBoundingClientRect();
+    const clientRect = categorysRef.current[i].getBoundingClientRect();
     categoryEdges[i] = {
       x1: clientRect.x,
       x2: clientRect.x + clientRect.width,

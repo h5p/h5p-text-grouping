@@ -26,6 +26,7 @@ export default function Category({
   allTextItems,
   setContainerHeight,
   draggedInfo,
+  categorysRef,
   textItems: { categories, removeAnimations }
 }) {
   const uncategorized = categoryId === 0;
@@ -36,7 +37,6 @@ export default function Category({
     categoryAssignment,
     showSelectedSolutions,
     showUnselectedSolutions,
-    setCategoryRefs,
     openDropdown,
     setOpenDropdown,
     refToFocusOn
@@ -53,13 +53,6 @@ export default function Category({
   const categoryHeaderRef = useRef(null);
   const categoryContentRef = useRef(null);
   const assignItemsButtonRef = useRef(null);
-  const categoryRef = useRef(null);
-
-  useEffect(() => {
-    setCategoryRefs((previousCategoryRefs) => {
-      return { ...previousCategoryRefs, [categoryId]: categoryRef };
-    });
-  }, [categoryRef]);
 
   /**
    * Opens assign items dropdown if the assign items button was clicked while another dropdown was open
@@ -257,7 +250,7 @@ export default function Category({
   return (
     <div
       id={`category ${categoryId}`}
-      ref={categoryRef}
+      ref={categoryRef => categorysRef.current[categoryId] = categoryRef}
       className={getClassNames({
         category: true,
         uncategorized: uncategorized,
@@ -345,6 +338,7 @@ Category.propTypes = {
     style: PropTypes.object.isRequired,
     itemOverCategory: PropTypes.number.isRequired
   }).isRequired,
+  categorysRef: PropTypes.object.isRequired,
   textItems: PropTypes.exact({
     categories: PropTypes.arrayOf(
       PropTypes.shape({

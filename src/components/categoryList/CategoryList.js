@@ -16,7 +16,8 @@ export default function CategoryList({
   moveTextItems,
   allTextItems,
   removeAnimations,
-  draggedInfo
+  draggedInfo,
+  categorysRef
 }) {
   const [marginBottom, setMarginBottom] = useState(null);
   const categoryListRef = useRef(null);
@@ -43,6 +44,7 @@ export default function CategoryList({
           moveTextItems={moveTextItems}
           allTextItems={allTextItems}
           draggedInfo={draggedInfo}
+          categorysRef={categorysRef}
           textItems={{
             categories: [...textGroups, { groupName: 'Uncategorized' }],
             removeAnimations: removeAnimations
@@ -74,6 +76,7 @@ CategoryList.propTypes = {
     })
   ).isRequired,
   removeAnimations: PropTypes.func.isRequired,
+  categorysRef: PropTypes.object.isRequired,
   draggedInfo: PropTypes.shape({
     style: PropTypes.object.isRequired,
     itemOverCategory: PropTypes.number.isRequired
