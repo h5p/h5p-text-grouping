@@ -50,6 +50,7 @@
       padding: 0.5em 1em;
       position: relative;
       line-height: 1.8em;
+      word-break: break-word;
 
       &:hover {
         &:not(.disabled) {
