@@ -1,25 +1,16 @@
-// Creates two placeholder text items at a time with an increasing serial number
-let placeholderOffset = 0;
-const buildPlaceholders = (l10n) => {
-  const placeholders = [
-    `<div>${l10n.placeholderWord} ${++placeholderOffset}</div>\n`,
-    `<div>${l10n.placeholderWord} ${++placeholderOffset}</div>\n`
-  ];
-  return placeholders;
-};
-
-// Builds a placeholder category with two placeholder text items
+// Builds a placeholder category with no text items
 const buildPlaceholderCategory = (id, l10n) => ({
   groupName: `${l10n.placeholderCategory} ${id}`,
-  textElements: buildPlaceholders(l10n)
+  textElements: []
 });
 
 /**
- * Creates placeholder categories and/or text items with
- * the same shape as a category from the editor if missing.
+ * Creates placeholder categories with the same shape as a category
+ * from the editor. If no categories are present, two are created.
+ * If one is missing, then one is created.
  * @param {object[]} textGroups which may or may not contain missing values
- * @param {object} l10n translations object
- * @returns {object[]} textGroups with all missing values replaced
+ * @param {object} l10n translation object
+ * @returns {object[]} textGroups with all missing groupName replaced
  */
 export default function createPlaceholdersIfMissing(textGroups, l10n) {
   // No categories: add two placeholder categories
@@ -33,7 +24,7 @@ export default function createPlaceholdersIfMissing(textGroups, l10n) {
     const id = index + 1;
     newTextGroups[index] = {
       groupName: textGroup.groupName || `${l10n.placeholderCategory} ${id}`,
-      textElements: textGroup.textElements || buildPlaceholders(l10n)
+      textElements: textGroup.textElements || []
     };
   });
 
