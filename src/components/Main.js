@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { H5PContext } from '../context/H5PContext';
@@ -37,6 +37,7 @@ export default function Main({ context }) {
     offset: { x: 0, y: 0 }
   });
   const [categoryRefs, setCategoryRefs] = useState({ 0: null });
+  const refToFocusOn = useRef(null);
   const [categoryAssignment, setCategoryAssignment] = useState([
     getRandomizedTextItems(),
     ...textGroups.map(() => [])
@@ -95,6 +96,15 @@ export default function Main({ context }) {
     instance.on('reset-task', resetTask);
     return () => instance.off('reset-task', resetTask);
   }, []);
+
+  /**
+   * Set focus to refToFocusOn if present
+   */
+  useEffect(() => {
+    if (refToFocusOn !== null && refToFocusOn.current !== null) {
+      refToFocusOn.current.focus();
+    }
+  }, [refToFocusOn]);
 
   /**
    * Handle mouse moved when item is being dragged
@@ -254,8 +264,9 @@ export default function Main({ context }) {
         dragState,
         setDragState,
         setCategoryRefs,
-        openDropdown: openDropdown,
-        setOpenDropdown: setOpenDropdown 
+        openDropdown,
+        setOpenDropdown,
+        refToFocusOn
       }}
     >
       <CategoryList

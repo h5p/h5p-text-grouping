@@ -38,7 +38,8 @@ export default function Category({
     showUnselectedSolutions,
     setCategoryRefs,
     openDropdown,
-    setOpenDropdown
+    setOpenDropdown,
+    refToFocusOn
   } = useContext(H5PContext);
   const narrowScreen = useScreenType('narrow');
   const mediumScreen = useScreenType('medium');
@@ -68,7 +69,7 @@ export default function Category({
       setOpenDropdown({ categoryId: categoryId, nextCategoryId: -1 });
       // Set focus to this assign items button
       if (assignItemsButtonRef.current) {
-        assignItemsButtonRef.current.focus();
+        refToFocusOn.current = assignItemsButtonRef;
       }
     }
   });
@@ -142,7 +143,7 @@ export default function Category({
     ]);
 
     if (assignItemsButtonRef.current) {
-      assignItemsButtonRef.current.focus();
+      refToFocusOn.current = assignItemsButtonRef;
     }
 
     setOpenDropdown((previousOpenDropdown) => {
