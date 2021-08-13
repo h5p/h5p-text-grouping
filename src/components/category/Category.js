@@ -62,7 +62,7 @@ export default function Category({
       setOpenDropdown({ categoryId: categoryId, nextCategoryId: -1 });
       // Set focus to this assign items button
       if (assignItemsButtonRef.current) {
-        refToFocusOn.current = assignItemsButtonRef;
+        refToFocusOn.current = assignItemsButtonRef.current;
       }
     }
   });
@@ -136,7 +136,7 @@ export default function Category({
     ]);
 
     if (assignItemsButtonRef.current) {
-      refToFocusOn.current = assignItemsButtonRef;
+      refToFocusOn.current = assignItemsButtonRef.current;
     }
 
     setOpenDropdown((previousOpenDropdown) => {

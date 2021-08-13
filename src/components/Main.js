@@ -103,8 +103,9 @@ export default function Main({ context }) {
   useEffect(() => {
     if (refToFocusOn !== null && refToFocusOn.current !== null) {
       refToFocusOn.current.focus();
+      refToFocusOn.current = null;
     }
-  }, [refToFocusOn]);
+  }, [refToFocusOn.current]);
 
   /**
    * Handle mouse moved when item is being dragged
