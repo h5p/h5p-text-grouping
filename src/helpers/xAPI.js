@@ -92,7 +92,7 @@ function addQuestionToXAPI(xAPIEvent, textGroups, question) {
 
   textGroups.forEach((category, categoryId) => {
     target.push({
-      id: categoryId,
+      id: categoryId.toString(),
       description: {
         'en-US': htmlDecode(category.groupName)
       }
@@ -147,7 +147,7 @@ function getResponse(currentCategoryAssignment) {
 const htmlDecode = (html) => {
   const element = document.createElement('div');
   element.innerHTML = html;
-  return element.textContent.trim();
+  return element.textContent;
 };
 
 export default { getXAPIData, getCurrentState, getAnsweredXAPIEvent };
