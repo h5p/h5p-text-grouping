@@ -2,8 +2,8 @@
   "name": "h5p-text-grouping",
   "version": "0.0.1",
   "scripts": {
-    "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "build": "cross-env NODE_ENV='production' webpack",
+    "watch": "cross-env NODE_ENV='development' --watch"
   },
   "author": "Joubel AS <contact@joubel.com> (https://joubel.com)",
   "contributors": [],
@@ -31,10 +31,10 @@
     "resolve-url-loader": "^3.1.2",
     "sass": "^1.35.1",
     "sass-loader": "^8.0.0",
-    "style-loader": "^1.0.0",
-    "url-loader": "^2.2.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.10"
+    "style-loader": "^3.3.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
   },
   "babel": {
     "presets": [
