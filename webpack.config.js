@@ -29,7 +29,14 @@ const config = {
       {
         test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
         include: path.resolve(__dirname, 'src'),
-        loader: 'url-loader?limit=1000000',
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
       },
     ]
   },
