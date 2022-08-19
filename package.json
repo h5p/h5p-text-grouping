@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "cross-env NODE_ENV='production' webpack",
-    "watch": "cross-env NODE_ENV='development' --watch"
+    "watch": "cross-env NODE_ENV='development' webpack --watch"
   },
   "author": "Joubel AS <contact@joubel.com> (https://joubel.com)",
   "contributors": [],
