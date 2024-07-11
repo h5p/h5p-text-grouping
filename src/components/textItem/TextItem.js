@@ -120,6 +120,14 @@ export default function TextItem({
     }
   };
 
+  const sanitizeInnerHTML = (str) => {
+    const div = document.createElement('div');
+
+    div.appendChild(document.createTextNode(str));
+
+    return div.innerHTML;
+  }
+
   /**
    * Start dragging text item
    * @param {MouseEvent} event MouseDown event
@@ -214,7 +222,7 @@ export default function TextItem({
                 'icon-move-to-category': true,
                 'icon-move-to-category-expanded': dropdownSelectOpen
               })}
-              ariaLabel={l10n.ariaMoveToCategory}
+              ariaLabel={sanitizeInnerHTML(textElement.replace(/[^a-zA-Z ]/g, "").replace(/div/gi, ''))}
               hoverText={l10n.hoverMoveToCategory}
               onClick={handleDropdownSelectOpen}
               ref={buttonRef}
