@@ -203,7 +203,7 @@ export default function Main({ context }) {
       const newCategories = deepCopy(previousCategoryAssignment);
       let textItem;
   
-      textItems.forEach(({ textItemId, newCategoryId, prevCategoryId }) => {
+      textItems.forEach(({ textItemId, newCategoryId, prevCategoryId, shouldAnimate=true }) => {
         // Reduce looping if the previous category is known
         let i = prevCategoryId === undefined ? 0 : prevCategoryId;
         const limit = prevCategoryId === undefined ? textGroups.length : prevCategoryId;
@@ -215,7 +215,7 @@ export default function Main({ context }) {
           newCategories[i].forEach((item, index) => {
             if (item.id === textItemId) {
               textItem = item;
-              textItem.shouldAnimate = true;
+              textItem.shouldAnimate = shouldAnimate;
               prevCategory = i;
               prevPosition = index;
             }
