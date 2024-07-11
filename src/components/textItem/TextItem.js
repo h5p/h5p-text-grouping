@@ -206,7 +206,7 @@ export default function TextItem({
         dropDownOpen: dropdownSelectOpen,
         dragged: isDragged
       })}
-      id={'text-item-wrapper-'+textItemId}
+      id={'text-item-wrapper-' + textItemId}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       style={isDragged ? { width: dragState.width, ...draggedInfo.style } : {}}
