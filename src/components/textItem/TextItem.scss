@@ -98,6 +98,11 @@
         top: calc(50% + 1.2em);
         position: absolute;
         width: calc(100% - 0.75em);
+
+        &.dropdown-upwards {
+          top: auto;
+          bottom: 80%;
+        }
       }
     }
 
@@ -170,12 +175,27 @@
     &:before {
       @include styles.move-item-icon(styles.$action-icon-color);
     }
-
+    &.icon-dropdown-upwards:before {
+      @include styles.move-item-icon(#ffffff, styles.$action-icon-color);
+    }
     &.icon-move-to-category-expanded:before {
       @include styles.move-item-icon(#ffffff, styles.$action-icon-color);
     }
   }
 
+  .icon-dropdown-upwards {
+    transform: rotate(180deg);
+
+    &:after {
+      top: 0.69em;
+      right: 0.075em;
+      position: absolute;
+      font-family: 'Material Icons';
+      font-size: 2em;
+      content: '\e5c5';
+      color: styles.$action-icon-color;
+    }
+  }
   .icon-move-to-category-expanded {
     transform: rotate(0deg);
 
@@ -189,6 +209,7 @@
       color: styles.$action-icon-color;
     }
   }
+
 
   .offscreen {
     clip: rect(0 0 0 0);

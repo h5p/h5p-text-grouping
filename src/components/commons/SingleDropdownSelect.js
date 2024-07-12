@@ -50,7 +50,9 @@ export default function SingleDropdownSelect({
 
   //Set focus to the option list on mount
   useEffect(() => {
-    optionRefs.current[0].current.focus();
+    setTimeout(() => {
+      optionRefs.current[0].current.focus();
+    }, 10);
   }, []);
 
   /**
