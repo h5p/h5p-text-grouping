@@ -44,6 +44,8 @@ export default function TextItem({
   const isDragged = dragState.textItemId === textItemId;
   const textItemRef = useRef(null);
   const buttonRef = useRef(null);
+  // Milliseconds for the traveling animation
+  const animationTimer = 500;
 
   // Booleans for displaying solution states
   const uncategorized = currentCategoryId === 0;
@@ -88,21 +90,51 @@ export default function TextItem({
       // Converts the received categoryId from the way it is displayed in dropdown, to the datastructure used in the rest of the code
       // (Dropdown displays Uncategorized at the bottom, while Uncategorized is at index 0 everywhere else)
       const newCategoryId = categoryId !== categories.length - 1 ? categoryId + 1 : 0;
-
-      moveTextItems(
-        [
-          {
-            textItemId: textItemId,
-            newCategoryId: newCategoryId,
-            prevCategoryId: currentCategoryId
-          }
-        ],
-        true
-      );
+      animationToCategory(newCategoryId);
+      setTimeout(() =>{
+        moveTextItems(
+                [
+                  {
+                    textItemId: textItemId,
+                    newCategoryId: newCategoryId,
+                    prevCategoryId: currentCategoryId,
+                    shouldAnimate: false
+                  }
+                ],
+                true
+              );
+      }, animationTimer)
     }
     setDropdownSelectOpen(false);
     setContainerHeight(0, textItemId);
   };
+
+  /**
+   * Animates the textItem into the correct category
+   * @param {int} targetId the id of the category
+   */
+  const animationToCategory = (targetId) => {
+    // Get correct item and get its position
+    let obj = document.getElementById('text-item-wrapper-' + textItemId);
+    const position = obj.getBoundingClientRect();
+    // Get the position of the category the element is going to
+    const targetPosition = document.getElementById('category ' + (targetId))
+      .getElementsByClassName('dropzone')[0].getBoundingClientRect();
+
+    const targetX = targetPosition.x;
+    const targetY = targetPosition.y;
+    const distanceX = (targetX - position.x);
+    const distanceY = (targetY - position.y);
+
+    // Match targets width to make it look more naturally
+    obj.width = targetPosition.width;
+    const animation = [
+      { offset: 0, transform: 'translate(0, 0)' },
+      { offset: 1, transform:  'translate(' + distanceX + 'px, ' + distanceY + 'px)' },
+    ]
+
+    obj.animate(animation, animationTimer);
+  }
 
   /**
    * Inform the container of which height is needed to show the text item (with dropdown)
@@ -174,6 +206,7 @@ export default function TextItem({
         dropDownOpen: dropdownSelectOpen,
         dragged: isDragged
       })}
+      id={'text-item-wrapper-' + textItemId}
       ref={textItemRef}
       onAnimationEnd={removeAnimations}
       style={isDragged ? { width: dragState.width, ...draggedInfo.style } : {}}
