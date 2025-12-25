@@ -127,7 +127,7 @@ export default function MultiDropdownSelect({
     <div className="dropdown-select" ref={dropdownRef}>
       <div className="label">{label}</div>
       <hr />
-      <ul role="listbox" tabIndex={-1} aria-multiselectable={true}>
+      <ul role="listbox" tabIndex={-1} aria-hidden='true' aria-multiselectable={true}>
         {options.map((option) => {
           const { id, content } = option;
           return (

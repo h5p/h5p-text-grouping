@@ -214,7 +214,7 @@ export default function TextItem({
                 'icon-move-to-category': true,
                 'icon-move-to-category-expanded': dropdownSelectOpen
               })}
-              ariaLabel={l10n.ariaMoveToCategory}
+              ariaLabel={textElement.replace(/[^a-zA-Z ]/g, "").replace(/div/gi, '')}
               hoverText={l10n.hoverMoveToCategory}
               onClick={handleDropdownSelectOpen}
               ref={buttonRef}
