@@ -27,6 +27,7 @@ export default function TextItem({
   isShowSolutionItem,
   removeAnimations,
   setContainerHeight,
+  getContainerHeight,
   draggedInfo
 }) {
   const {
@@ -40,6 +41,8 @@ export default function TextItem({
   } = useContext(H5PContext);
   const [dropdownSelectOpen, setDropdownSelectOpen] = useState(false);
   const [offsetTop, setOffsetTop] = useState(null);
+  const [dropdownUpwards, setDropdownUpwards] = useState(false);
+  const [heightCheck, setHeightCheck] = useState(false);
 
   const isDragged = dragState.textItemId === textItemId;
   const textItemRef = useRef(null);
@@ -101,6 +104,7 @@ export default function TextItem({
       );
     }
     setDropdownSelectOpen(false);
+    setDropdownUpwards(false);
     setContainerHeight(0, textItemId);
   };
 
@@ -108,16 +112,30 @@ export default function TextItem({
    * Inform the container of which height is needed to show the text item (with dropdown)
    * @param {number} height The height needed for the dropdown
    */
-  const setHeight = (height) => {
+  const setHeight = (dropdownHeight) => {
     // If the dropdown can't fit in the textItem
-    if (height > textItemRef.current.offsetHeight / 2) {
-      // Set container minHeight
-      const offset =
-        offsetTop +
+    if (dropdownHeight > textItemRef.current.offsetHeight / 2) {
+      const neededSpace = offsetTop +
         textItemRef.current.offsetHeight +
-        (height - textItemRef.current.offsetHeight / 2);
-      setContainerHeight(offset, textItemId, true);
-    }
+        (dropdownHeight - textItemRef.current.offsetHeight / 2);
+    
+     // If there is not enough space under the textItem
+      if (getContainerHeight() < neededSpace) {
+        // If there is enough space for the dropdown above the textItem
+        if (offsetTop > dropdownHeight) {
+          setDropdownUpwards(true);
+          return;
+        }
+        // If there is not enough space above or below
+        else{
+          const dropdownMenu = document.getElementsByClassName('dropdown-select')[0];
+          dropdownMenu.style.position = 'absolute';
+        }
+      }
+      setHeightCheck(true);
+     // Set container minHeight
+      setContainerHeight(neededSpace, textItemId, true);
+      }
   };
 
   /**
@@ -212,7 +230,8 @@ export default function TextItem({
               className="button-move-to-category"
               iconName={getClassNames({
                 'icon-move-to-category': true,
-                'icon-move-to-category-expanded': dropdownSelectOpen
+                'icon-dropdown-upwards': dropdownUpwards,
+                'icon-move-to-category-expanded': (heightCheck && !dropdownUpwards && dropdownSelectOpen)
               })}
               ariaLabel={l10n.ariaMoveToCategory}
               hoverText={l10n.hoverMoveToCategory}
@@ -221,7 +240,10 @@ export default function TextItem({
             />
           ) : null}
           {dropdownSelectOpen ? (
-            <div className="dropdown-wrapper">
+             <div className={getClassNames({
+              "dropdown-wrapper": true,
+              "dropdown-upwards": dropdownUpwards,
+            })}>
               <SingleDropdownSelect
                 label={l10n.moveItemsHelpText}
                 setContainerHeight={setHeight}
