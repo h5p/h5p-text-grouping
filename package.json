@@ -13,12 +13,12 @@
     "react-inlinesvg": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
+    "@babel/core": "^8.0.1",
     "@babel/eslint-parser": "^7.14.7",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/preset-react": "^7.7.0",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^10.1.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "eslint": "^7.32.0",
